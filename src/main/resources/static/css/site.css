@@ -129,6 +129,24 @@ body {
 	}
 }
 
+.header-contact-link-visible {
+	display: block;
+}
+	
+.header-contact-visible {
+	display: none;
+}
+
+@media (min-width: 850px) {
+	.header-contact-link-visible {
+		display: none;
+	}
+	
+	.header-contact-visible {
+		display: block;
+	}
+}
+
 /* -------------------------- Navigation Bar CSS -------------------------- */
 
 .navbar-container {
@@ -163,10 +181,6 @@ body {
 	border-width: 0px;
 	
 	background-color: transparent !important;
-}
-
-@media (min-width: 768px) {
-	
 }
 
 /* -------------------------- Footer CSS -------------------------- */
