@@ -136,6 +136,10 @@ body {
 	flex: none;
 }
 
+.navbar-color {
+	background-color: #71a40a;
+}
+
 
 /* -------------------------- Footer CSS -------------------------- */
 
