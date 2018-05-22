@@ -8,10 +8,21 @@
     <link rel="stylesheet" href="css/site.css">
 </head>
 <body>
-	<div class="box">
+	<div class="flex-layout">
 		<div th:replace="header :: header"></div>
-	    <div class="container-fluid welcome-content">
+		<div th:replace="navbar :: navbar"></div>
+	    <div class="page-content">
+	    	<br>
+	    	<br>
+	    	<br>
+	    	<br>
+	    	<br>
+	    	<br>
+	    	<br>
+	    	Page Content
+	    	<!-- 
 	    	<p th:text="'Hello, ' + ${name} + '!'" />
+	    	 -->
 	    </div>
 	    <div th:replace="footer :: footer"></div>
     </div>
