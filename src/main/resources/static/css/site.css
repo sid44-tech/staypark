@@ -51,6 +51,33 @@ body {
 	width:49%;
 }
 
+.white_bg {
+	background: #FFFFFF;
+}
+
+.section-title {
+	font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: #2c2c2c;
+    border-bottom: solid 1px #2c2c2c;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.section-text {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+}
+
+.flex1 {
+	flex: 1;
+}
+
+.flex0 {
+	flex: 0;
+}
+
 /* -------------------------- Main Layout CSS -------------------------- */
 
 .flex-layout {
@@ -254,11 +281,46 @@ body {
 	width: 125px;
 }
 
-/* -------------------------- Homepage CSS -------------------------- */
+/* -------------------------- HomePage CSS -------------------------- */
 
-.page-content {
+.homepage-carousel-content {
 	text-align: center;
 	background: #FFFFFF;
 	flex: 1;
   	height: 100%;
+}
+
+.homepage-text {
+	width:100%; 
+	background: #FFFFFF;
+}
+
+.homepage-text-container {
+	background: #FFFFFF;
+	padding-top: 35px;
+	padding-bottom: 35px;
+}
+
+#homepage_image_carousel .carousel-item-image {
+	height: 450px;
+	object-fit: cover;
+}
+
+#homepage_testimonials {
+	background: #75d2fa;
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
+.homepage-testimonial-text {
+    font-size: 18px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+}
+
+.homepage-testimonial-author {
+	text-align: right;
+    font-weight: 700;
+    font-size: 18px;
+    font-family: 'Roboto', sans-serif;
 }
