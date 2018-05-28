@@ -31,6 +31,16 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <!-- end::actuator[] -->
+        <dependency>
+    		<groupId>mysql</groupId>
+    		<artifactId>mysql-connector-java</artifactId>
+    		<version>6.0.6</version>
+		</dependency>
+		<dependency>
+    		<groupId>org.projectlombok</groupId>
+    		<artifactId>lombok</artifactId>
+    		<version>1.16.20</version>
+		</dependency>
         <!-- tag::tests[] -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

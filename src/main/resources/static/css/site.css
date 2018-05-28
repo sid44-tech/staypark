@@ -70,6 +70,10 @@ body {
 	font-size: 14px;
 }
 
+.flex-display {
+	display: flex;
+}
+
 .flex1 {
 	flex: 1;
 }
@@ -77,6 +81,19 @@ body {
 .flex0 {
 	flex: 0;
 }
+
+.valign-m {
+	vertical-align: middle;
+}
+
+.height-100 {
+	height: 100%;
+}
+
+.width-100 {
+	width: 100%;
+}
+
 
 /* -------------------------- Main Layout CSS -------------------------- */
 
@@ -313,7 +330,7 @@ body {
 }
 
 .homepage-testimonial-text {
-    font-size: 18px;
+    font-size: 14px;
     font-family: 'Roboto', sans-serif;
     font-weight: 300;
 }
@@ -321,6 +338,27 @@ body {
 .homepage-testimonial-author {
 	text-align: right;
     font-weight: 700;
-    font-size: 18px;
+    font-size: 16px;
     font-family: 'Roboto', sans-serif;
+}
+
+#testimonial_image_small {
+	display: none;
+}
+
+.testimonial_image_large {
+	background-image: url("../images/testimonial_icon_opaque.png");
+	background-repeat: no-repeat;
+	background-position: center; 
+	background-size: contain;
+}
+
+@media (min-width: 768px) {
+	#testimonial_image_small {
+		display: block;
+	}
+	
+	.testimonial_image_large {
+		background-image: none;
+	}
 }

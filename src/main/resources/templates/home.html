@@ -12,7 +12,7 @@
 		<div th:replace="header :: header"></div>
 		<div th:replace="navbar :: navbar"></div>
 	    <div class="homepage-carousel-content">
-			<div id="homepage_image_carousel" class="carousel slide" data-ride="carousel">
+			<div id="homepage_image_carousel" class="carousel slide" data-ride="carousel" data-interval="8000">
 			  <div class="carousel-inner">
 			    <div class="carousel-item active">
 			      <img class="d-block w-100 carousel-item-image" src="images/home_slider_1.jpg">
@@ -50,16 +50,36 @@
 		<div id="homepage_testimonials">
 			<div class="container">
 				<div class="row">
-				    <div class="col flex1">
-				    	<div class="homepage-testimonial-text">""This was the first time we used your services and we were very pleased. Would use your company again while traveling. Pick up and return pick up was great. Drivers were helpful, friendly and"</div>
-				    	<div class="homepage-testimonial-author">
-				    		<div class="testimonial-user">by Richard</div>
-				    		<div class="testimonial-user-designation">Retired Computer Technician</div>
-				    	</div>
-				    </div>
-				    <div class="col flex0">
-				    	<img src="images/testimonial_icon.png"></img>
-				    </div>
+					<div id="homepage_review_carousel" class="carousel slide carousel-fade width-100" data-ride="carousel" data-interval="15000">
+						<div class="carousel-item active">
+							<div class="flex-display">
+								<div class="col flex1 testimonial_image_large">
+							    	<div class="homepage-testimonial-text" th:text="${activeTestimonial.comment}"></div>
+							    	<div class="homepage-testimonial-author">
+							    		<div class="testimonial-user" th:text="${activeTestimonial.author}"></div>
+							    		<div class="testimonial-user-designation" th:text="${activeTestimonial.job}"></div>
+							    	</div>
+							  	</div>
+							    <div id="testimonial_image_small" class="col flex0">
+							    	<img src="images/testimonial_icon.png"></img>
+							    </div>
+						    </div>
+					    </div>
+						<div class="carousel-item" th:each="testimonials : ${testimonials}">
+							<div class="flex-display">
+								<div class="col flex1 testimonial_image_large">
+							    	<div class="homepage-testimonial-text" th:text="${testimonials.comment}"></div>
+							    	<div class="homepage-testimonial-author">
+							    		<div class="testimonial-user" th:text="${testimonials.author}"></div>
+							    		<div class="testimonial-user-designation" th:text="${testimonials.job}"></div>
+							    	</div>
+							  	</div>
+							    <div id="testimonial_image_small" class="col flex0">
+							    	<img src="images/testimonial_icon.png"></img>
+							    </div>
+						    </div>
+					    </div>
+					</div>
 				</div>
 			</div>
 		</div>
