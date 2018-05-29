@@ -305,6 +305,7 @@ body {
 	background: #FFFFFF;
 	flex: 1;
   	height: 100%;
+  	position: relative;
 }
 
 .homepage-text {
@@ -361,4 +362,108 @@ body {
 	.testimonial_image_large {
 		background-image: none;
 	}
+}
+
+/* -------------------------- Parking Search Box CSS -------------------------- */
+
+.parking-search-widget-container {
+	position: absolute;
+	max-width: 380px;
+	height: 420px;
+	top: 14px;
+	margin-left: 8px;
+	margin-right: 8px;
+	background: rgba(0,0,0,0.6);
+    border-radius: 5px;
+    border: solid 1px #999690;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.parking-search-widget-container {
+	left: 0px;
+}
+
+@media (min-width: 425px) {
+	.parking-search-widget-container {
+		left: auto;
+	}
+}
+
+.parking-search-widget-container-lp {
+	
+}
+
+.parking-search-widget {
+    margin-top: 15px;
+    text-align: left;    
+}
+
+.parking-search-title-font {
+	font-family: 'Roboto', sans-serif;
+    font-size: 21px;
+    font-weight: bold;
+    color: #FFFFFF;
+    text-align: center;
+}
+
+.parking-search-subtitle-font {
+	font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    color: #FFFFFF;
+    margin-bottom: 5px;
+}
+
+.parking-search-button-custom {
+    color: #fff;
+    border-radius: 6px;
+    font-size: 18px;
+    line-height: 1.33;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.parking-search-button-blue {
+	background-color: #428bca;
+    border-color: #357ebd;
+}
+
+.parking-date-custom {
+	height: 40px;
+}
+
+.parking-time-custom {
+	height: 40px !important;
+	width: 120px;;
+}
+
+.parking-input-right-space {
+	margin-right: 18px;
+}
+
+.parking-select-text {
+	float: left;
+/* 	width: 80%; */
+	height: 40px;
+	border-top-right-radius: 0px;
+	border-bottom-right-radius: 0px;
+}
+
+.parking-select-button {
+	background: #FFFFFF;
+	width: 40px;
+	height: 40px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	padding-left: 5px;
+	padding-right: 5px;
+	border: 1px solid #ced4da;
+	border-top-left-radius: 0px;
+	border-bottom-left-radius: 0px;
+}
+
+.parking-select-button-image {
+	width: 31px;
+	height: 31px;
 }
