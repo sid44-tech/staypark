@@ -7,7 +7,7 @@ html {
 body {
 	height: 100%;
 	margin: 0px;
-	background-image: url("../images/header_bg.jpg");
+	background-image: url("/images/header_bg.jpg");
 }
 
 /* -------------------------- Common CSS -------------------------- */
@@ -92,6 +92,18 @@ body {
 
 .width-100 {
 	width: 100%;
+}
+
+.visible {
+	display: block;
+}
+
+.gone {
+	display: none;
+}
+
+.errorBorder {
+	border-color: red;
 }
 
 
@@ -233,7 +245,7 @@ body {
 	width: 100%;
 	padding-top: 20px;
 	padding-bottom: 15px;
-	background-image: url("../images/footer_bg.jpg");
+	background-image: url("/images/footer_bg.jpg");
 	flex: none;
 }
 
@@ -305,6 +317,7 @@ body {
 	background: #FFFFFF;
 	flex: 1;
   	height: 100%;
+  	min-height: 450px;
   	position: relative;
 }
 
@@ -348,7 +361,7 @@ body {
 }
 
 .testimonial_image_large {
-	background-image: url("../images/testimonial_icon_opaque.png");
+	background-image: url("/images/testimonial_icon_opaque.png");
 	background-repeat: no-repeat;
 	background-position: center; 
 	background-size: contain;
@@ -431,11 +444,13 @@ body {
 
 .parking-date-custom {
 	height: 40px;
+	max-width: 220px;
 }
 
 .parking-time-custom {
 	height: 40px !important;
-	width: 120px;;
+	width: 120px;
+	min-width: 120px;
 }
 
 .parking-input-right-space {
@@ -495,5 +510,24 @@ body {
 
 .airport-select-cities-list {
 	list-style-type: none;
+	padding-left: 3px;
+	padding-top: 16px;
 }
+
+.airport-select-cities-list-item {
+	font-size: 13px;
+    font-weight: 400;
+    color: #428bca;
+    font-family: Arial, Helvetica, sans-serif;
+    margin-top: 16px;
+    cursor: pointer;
+}
+
+.airplane-icon {
+	width: 12px;
+	height: 12px;
+	margin-top: -4px;
+	margin-right: 5px;
+}
+
 

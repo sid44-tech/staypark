@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import staypark.parking.beans.TestimonialBean;
 import staypark.parking.handler.HomeHandler;
+import staypark.parking.util.AirportUtil;
 
 @Controller
 public class HomeController {
@@ -29,6 +30,8 @@ public class HomeController {
         	model.addAttribute("activeTestimonial", new TestimonialBean("", "", ""));
         	model.addAttribute("testimonials", new ArrayList<TestimonialBean>());
         }
+        model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
+        model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
         return "home";
     }
 }
