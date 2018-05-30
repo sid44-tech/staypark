@@ -467,3 +467,33 @@ body {
 	width: 31px;
 	height: 31px;
 }
+
+/* -------------------------- Airport Select Box CSS -------------------------- */
+
+.airport-select-title {
+	color: #428bca;
+	font-family: 'Roboto', sans-serif;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.airport-select-countries-button {
+	font-size: 18px;
+	font-weight: bold;
+	color: #547d00;
+	font-family: Arial, Helvetica, sans-serif;
+	background: rgba(0,0,0,0);
+}
+
+.airport-select-countries-button-selected {
+	font-size: 18px;
+	font-weight: bold;
+	color: #FFFFFF;
+	font-family: Arial, Helvetica, sans-serif;
+	background: #547d00;
+}
+
+.airport-select-cities-list {
+	list-style-type: none;
+}
+
