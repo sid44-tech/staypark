@@ -319,7 +319,6 @@ body {
 .homepage-carousel-content {
 	text-align: center;
 	background: #FFFFFF;
-	flex: 1;
   	height: 100%;
   	min-height: 450px;
   	position: relative;
@@ -371,7 +370,15 @@ body {
 	background-size: contain;
 }
 
+.testimonial-small-image-size {
+	width: 95px;
+	height: 95px;
+	min-width: 95px;
+}
+
+
 @media (min-width: 768px) {
+	
 	#testimonial_image_small {
 		display: block;
 	}
@@ -472,6 +479,7 @@ body {
 .parking-select-button {
 	background: #FFFFFF;
 	width: 40px;
+	min-width: 40px;
 	height: 40px;
 	padding-top: 0px;
 	padding-bottom: 0px;
