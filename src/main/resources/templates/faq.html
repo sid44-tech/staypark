@@ -1,38 +1,118 @@
-<!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>StayPark</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-    <link rel="stylesheet" href="/css/site.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.standalone.min.css"/>
-</head>
-<body>
-	<div class="flex-layout">
-		<div th:replace="header :: header"></div>
-		<div th:replace="navbar :: navbar"></div>
-		<div class="row" style="background-color: rgb(255, 233, 0); width: 100%; height: 100%;margin-left: 0px; margin-right: 0px; min-height: 400px;">
-			<div style="text-align: center;display: block; margin: auto; width: 100%;"><h1>FAQ</h1></div>
-			<br>
-			<img src="/images/construction.jpg" style="width:200px;height:200px;align: center;display: block; margin: auto;"></img>
-			<!-- 
-			<br>
-			<div th:text="${airport}"></div>
-			<div th:text="${dropOffDate}"></div>
-			<div th:text="${dropOffTime}"></div>
-			<div th:text="${pickUpDate}"></div>
-			<div th:text="${pickUpTime}"></div>
-			 -->
-		</div>
-	    <div th:replace="footer :: footer"></div>
-    </div>
-    
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js" crossorigin="anonymous"></script>
-<script src="/js/common.js"></script>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{page-right-nav.html}">
 
-</body>
+<section layout:fragment="page-right-nav-content">
+	<span class="section-title">FAQ</span>
+	<br>
+	<span class="section-title-no-underline">HOW SAFE IS IT TO PAY WITH CREDIT CARD?</span>
+	<br>
+	<span class="section-text">We use industry-standard encryption technologies when transferring and receiving your personal information.</span>
+	<br><br><br>
+	<span class="section-title-no-underline">WHAT EMAIL ADDRESSES DOES STAYPARK USE FOR ALL CORRESPONDENCES TO CUSTOMERS AND AFFILIATES?</span>
+	<span class="section-text">
+        <br>
+        We ONLY, and repeat ONLY use email address extensions that come from @staypark.com. We do NOT use any @gmail.com, @yahoo.com, @hotmail.com, @aol.com, etc.
+        <br/>Again we ONLY use @staypark.com email address extensions to communicate with our customers or affiliates. Any other email extensions are NOT us and please ignore them (especially if they are asking for your credit card info or other private information).
+        </span>
+	<br><br><br>
+	<span class="section-title-no-underline">WHEN MAKING A RESERVATION AND AFTER CLICKING SUBMIT I RECEIVE A MESSAGE SAYING "YOUR RESERVATION HAS BEEN CANCELLED".....WHAT DOES THIS MEAN?</span>
+	<span class="section-text">
+        <br>
+        Almost always the reason for this message is because your billing address, city, zip code you entered does NOT match the address, city, zip code listed on file with your credit/debit card bank. Please make sure the information you have on file with your credit/debit card company matches the information you enter for the billing address.
+        </span><br>
+	<br><br>
+	<span class="section-title-no-underline">DO I HAVE TO STAY IN A ROOM AT THE HOTEL IN ORDER TO PARK MY CAR AND USE YOUR SERVICE?</span>
+	<span class="section-text">
+        <br>
+        NO! You do not have to stay in a hotel room at the hotel you choose to park at. Our service is strictly for parking your car short term/long term in the hotel parking lot.<br/>
+        </span>
+	<br><br>
+	<span class="section-title-no-underline">HOW ARE THE SERVICE FEES CALCULATED FOR MY RESERVATION BOOKING?</span>
+	<span class="section-text">
+        <br>
+        The service fees charged are based on the amount of days booked. For every 10 days booked there is a $4-$10 service fee depending on which city. Please see an example below:<br/>
+        <br>
+        1-9 Days Booked - $5 service fee<br/>
+        10-19 Days Booked - $10 service fee<br/>
+        20-29 Days Booked - $15 service fee<br/>
+        30-39 Days Booked - $20 service fee<br/>
+        <br>
+        Note: This is just a ONE TIME service fee charge at the time of checkout. No additional fees will be charged to the customer.<br/>
+        <br/><br>
+        </span>
+	<span class="section-title-no-underline">HOW DOES THE SHUTTLE SERVICE WORK?</span>
+	<span class="section-text">
+        <br>
+        Once you check in on your departure date with the parking facility front desk, they will inform you when the shuttle will arrive outside to pick you up and transport you to the airport. Before you leave the hotel please check with the front desk on how you get on the shuttle upon your return. Some hotels require you to call them from the designated kiosks at the airport once you are ready to be picked up, while others will have a sign up sheet or may just come pick you up. Please confirm this beforehand do there is no confusion later.<br/>
+        <br/><br>
+        </span>
+	<span class="section-title-no-underline">DO I PAY THE HOTEL ANY ADDITIONAL FEES FOR PARKING?</span>
+	<span class="section-text">
+        <br>
+        Generally NO!! All fees are charged and collected when you book the reservation via www.staypark.com. No additional charges will be made by us or the hotel for your booking, unless it is listed otherwise. Some facilities we partner with have a split payment method where you pay a portion of your booking to us online and the remainder at the facility itself. <br/>
+        <br/><br>
+        </span>
+	<span class="section-title-no-underline">HOW MUCH TIME DO YOU NEED TO ALLOCATE BETWEEN CAR DROP OFF AND FLIGHT TIME?</span>
+	<span class="section-text">
+        <br>
+        Every parking location has a different shuttle frequency. The frequency is shown on the search results for each location. It is up to you to coordinate enough time in between the shuttle frequency and your flight. Generally we would suggest to allow yourself an extra 30 minutes buffer time from the time you drop your car to the time you would like to arrive to the airport.<br/>
+        <br/><br>
+        </span>
+	<span class="section-title-no-underline">ARE THE RATES POSTED FOR EACH HOTEL THE SAME FOR EVERY DAY?</span>
+	<span class="section-text">
+        <br>
+        No. The majority of the days will be the amount listed for each hotel. However during the holiday time, special events, busy season, etc. the charge may be different than what is posted for the hotel per day or what is advertised. When you checkout you will see the total charge for your reservation and you can determine the cost per day.<br/>
+        <br/><br>
+        </span>
+	<span class="section-title-no-underline">WHAT HAPPENS IF I HAVE A DELAY IN TRAVEL, OR EXTEND MY STAY?</span>
+	<span class="section-text">
+        <br>
+        Simply go to our Extend/Cancel Feature button online under the search box or contact us via email at <a href="mailto:support@staypark.com">support@staypark.com</a> or call us and let us know and we can help you. If you fail to extend/cancel online or contact us and you stay beyond your reservation the Facility or StayPark has the right to charge you a premium for parking. You will not get the discounted pricing if you do not contact StayPark.com.
+        <br><br><br>
+        </span>
+	<span class="section-title-no-underline">IS THERE A CANCELLATION FEE? HOW DO I CANCEL?</span>
+	<span class="section-text">
+        <br>
+        Any cancellation made before 24 hours prior to the reservation drop off date and time will be refunded in FULL. Any cancellation requested under 24 hours prior to the reservation drop off date and time will NOT be refunded and is non-refundable. Simply cancel online via the extend/cancel blue button under the search box,&nbsp; send us an email requesting the cancellation to <a href="mailto:support@staypark.com">support@staypark.com</a> or contact us at 1-877-337-4377 for additional assistance.
+        <br><br><br>
+        </span>
+	<span class="section-title-no-underline">HOW DO I GET A HOLD OF STAYPARK.COM CUSTOMER SERVICE?</span>
+	<span class="section-text">
+        <br>
+        staypark.com customer service can be contacted at 1-877-337-4377 or via the info request form on our website under the Contact Us Tab
+        <br><br><br>
+        </span>
+	<span class="section-title-no-underline">DO THE PARKING LOTS HAVE SECURITY?</span>
+	<span class="section-text">
+        <br>
+        The parking facilities have well lighted parking areas and are monitored by the hotel or parking lot staff regularly. As with other airport parking lots, StayPark.com or the parking facility will not be responsible for any theft, damage or loss to any vehicle or its contents.
+        <br><br><br>
+        </span>
+	<span class="section-title-no-underline">WHERE DO I CATCH A SHUTTLE AT THE AIRPORT TO COME BACK TO MY CAR?</span>
+	<span class="section-text">
+        <br>
+        Most Shuttles will arrive at the ground transportation area. When you arrive call the facility and let them know you need to be picked up. They will be happy to tell you where they will pick you up from.
+        <br><br><br>
+        </span>
+	<span class="section-title-no-underline">WHAT IS THE FREQUENCY OF THE SHUTTLES?</span>
+	<span class="section-text">
+        <br>
+        Frequency of the airport shuttle will be clearly printed on the search results, most shuttles will run every 15- 30 minutes.
+        <br><br><br>
+        </span>
+	<span class="section-title-no-underline">WHAT IF I DID NOT RECEIVE MY CONFIRMATION LETTER?</span>
+	<span class="section-text">
+        <br>
+        After making your reservation you will receive your confirmation letter by email, if you do not receive it please first check your spam mail. If it is not there please contact us by via our online info request form under the Contact Us tab or call the 800 number.
+        <br><br><br>
+        </span>
+	<span class="section-title-no-underline">WHAT IS YOUR REFUND POLICY/TIME FRAME?</span>
+	<span class="section-text">
+        <br>
+        When a reservation is canceled it is usually refunded within 24 hours of cancellation. Once it is processed it could take up to 2-3 business days to credit back into your credit card/bank account.<br/>
+        <br><br><br>
+        </span>
+</section>
 </html>

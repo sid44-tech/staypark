@@ -1,38 +1,32 @@
-<!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>StayPark</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-    <link rel="stylesheet" href="/css/site.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.standalone.min.css"/>
-</head>
-<body>
-	<div class="flex-layout">
-		<div th:replace="header :: header"></div>
-		<div th:replace="navbar :: navbar"></div>
-		<div class="row" style="background-color: rgb(255, 233, 0); width: 100%; height: 100%;margin-left: 0px; margin-right: 0px; min-height: 400px;">
-			<div style="text-align: center;display: block; margin: auto; width: 100%;"><h1>About</h1></div>
-			<br>
-			<img src="/images/construction.jpg" style="width:200px;height:200px;align: center;display: block; margin: auto;"></img>
-			<!-- 
-			<br>
-			<div th:text="${airport}"></div>
-			<div th:text="${dropOffDate}"></div>
-			<div th:text="${dropOffTime}"></div>
-			<div th:text="${pickUpDate}"></div>
-			<div th:text="${pickUpTime}"></div>
-			 -->
-		</div>
-	    <div th:replace="footer :: footer"></div>
-    </div>
-    
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js" crossorigin="anonymous"></script>
-<script src="/js/common.js"></script>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{page-right-nav.html}">
 
-</body>
+<section layout:fragment="page-right-nav-content">
+	<span class="section-title">ABOUT US</span>
+	<br>
+	<span class="section-text">
+				StayPark.com is the connection between consumers and parking vacancies in close proximity to major airports and seaports.  The parking spaces are very affordable because we have negotiated discounted rates with major hotel chains for the parking spaces that are not currently occupied.
+				<br><br>
+				We put the available inventory of parking spaces on our website to be reserved by you, the consumer.  This alternative method for finding parking equates to significant savings for you.  These savings are sometimes as much as 75% less than parking at the airport or seaport.
+				<br><br>
+				</span>
+	<span class="section-title">Simple, Quick & Easy Process When Booking A Reservation With Us:</span>
+	<br>
+	<span class="about-instruction-font">
+				1. Search your dates/times. Click "Book Now" & Fill out the customer information and make your payment via Credit Card on our secure site.
+				<br><br>
+				2. Receive your email confirmation. Print out your confirmation email.
+				<br><br>
+				3. On your drop off date, proceed to the hotel/parking facility and park your vehicle in their parking lot.
+				<br><br>
+				4. Proceed inside to the Front Desk/Attendant and show them your confirmation email. At this time please obtain the phone number for the front desk (You will need this for Step 6). The hotel phone number is also located on your confirmation email.
+				<br><br>
+				5. Get on the next shuttle out to the Airport.
+				<br><br>
+				6. Upon arrival back into town, CALL the hotel/parking facility and inform them you are ready for pick up. They will send their shuttle to pick you up and transport you back to the hotel/parking facility. Once you are back, simply get in your car and head home.
+				</span>
+	<br><br>
+</section>
 </html>

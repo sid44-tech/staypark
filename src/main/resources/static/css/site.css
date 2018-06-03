@@ -65,9 +65,24 @@ body {
     margin-bottom: 20px;
 }
 
+.section-title-no-underline {
+	font-family: 'Roboto', sans-serif;
+	font-size: 15px;
+	font-weight: bold;
+	color: #2c2c2c;
+	display: inline-block;
+	margin-bottom: 10px;
+}
+
 .section-text {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 14px;
+}
+
+.section-text-bold {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	font-weight: bold;
 }
 
 .flex-display {
@@ -108,6 +123,15 @@ body {
 
 .pointer {
 	cursor: pointer;
+}
+
+.center-div-max-width {
+	max-width: 1150px;
+	margin: 0 auto;
+}
+
+.white-bg {
+	background: #FFFFFF;
 }
 
 
@@ -395,6 +419,7 @@ body {
 	max-width: 380px;
 	height: 420px;
 	top: 14px;
+	left: 0px;
 	margin-left: 8px;
 	margin-right: 8px;
 	background: rgba(0,0,0,0.6);
@@ -404,18 +429,35 @@ body {
     padding-right: 10px;
 }
 
-.parking-search-widget-container {
-	left: 0px;
+.parking-search-widget-container-non-abs {
+	max-width: 325px;
+	min-width: 325px;
+	height: 420px;
+	margin-left: 8px;
+	margin-right: 8px;
+	background: #333333;
+	border-radius: 5px;
+	border: solid 1px #999690;
+	padding-left: 10px;
+	padding-right: 10px;
 }
 
 @media (min-width: 425px) {
 	.parking-search-widget-container {
+		position: absolute;
+		max-width: 380px;
+		min-width: 380px;
+		height: 420px;
+		top: 14px;
 		left: auto;
+		margin-left: 8px;
+		margin-right: 8px;
+		background: rgba(0,0,0,0.6);
+		border-radius: 5px;
+		border: solid 1px #999690;
+		padding-left: 10px;
+		padding-right: 10px;
 	}
-}
-
-.parking-search-widget-container-lp {
-	
 }
 
 .parking-search-widget {
@@ -543,3 +585,37 @@ body {
 }
 
 
+
+
+/* -------------------------- About Page CSS -------------------------- */
+
+.about-container {
+	padding-left: 16px;
+	padding-right: 16px;
+	padding-top: 16px;
+	padding-bottom: 16px;
+
+}
+
+.about-instruction-font {
+	font-size: 14px;
+	font-weight: bold;
+	font-family: Arial;
+}
+
+
+/* -------------------------- FAQ Select Box CSS -------------------------- */
+
+.about-container {
+	padding-left: 16px;
+	padding-right: 16px;
+	padding-top: 16px;
+	padding-bottom: 16px;
+
+}
+
+.about-instruction-font {
+	font-size: 14px;
+	font-weight: bold;
+	font-family: Arial;
+}

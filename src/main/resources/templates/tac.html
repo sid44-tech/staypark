@@ -1,38 +1,64 @@
-<!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>StayPark</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-    <link rel="stylesheet" href="/css/site.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.standalone.min.css"/>
-</head>
-<body>
-	<div class="flex-layout">
-		<div th:replace="header :: header"></div>
-		<div th:replace="navbar :: navbar"></div>
-		<div class="row" style="background-color: rgb(255, 233, 0); width: 100%; height: 100%;margin-left: 0px; margin-right: 0px; min-height: 400px;">
-			<div style="text-align: center;display: block; margin: auto; width: 100%;"><h1>Terms and Conditions</h1></div>
-			<br>
-			<img src="/images/construction.jpg" style="width:200px;height:200px;align: center;display: block; margin: auto;"></img>
-			<!-- 
-			<br>
-			<div th:text="${airport}"></div>
-			<div th:text="${dropOffDate}"></div>
-			<div th:text="${dropOffTime}"></div>
-			<div th:text="${pickUpDate}"></div>
-			<div th:text="${pickUpTime}"></div>
-			 -->
-		</div>
-	    <div th:replace="footer :: footer"></div>
-    </div>
-    
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js" crossorigin="anonymous"></script>
-<script src="/js/common.js"></script>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{page-right-nav.html}">
 
-</body>
+	<section layout:fragment="page-right-nav-content">
+		<span class="section-title">TERMS & CONDITIONS</span>
+		<br><br>
+		<span class="section-title-no-underline">Parking Rental Agreement</span>
+		<br><br><br>
+		<span class="section-text">IMPORTANT! PLEASE READ CAREFULLY. CLICKING ON THE “I ACCEPT” ICON BELOW, THIS PARKING RENTAL AGREEMENT (this “Agreement”) CREATES A BINDING LEGAL AGREEMENT BETWEEN YOU (the “Customer”) AND STAYPARK.COM (“StayPark.com”). IF YOU DO NOT AGREE TO ALL TERMS SET FORTH IN THIS AGREEMENT AND TO PAY STAYPARK.COM IN FULL FOR THE PARKING YOU HAVE SELECTED, CLICK ON THE “I DO NOT ACCEPT” ICON TO CANCEL.</span>
+		<br><br><br>
+		<span class="section-text">StayPark.com provides parking solutions to travelers and Customer, as further defined below, desires to use StayPark.com’s parking solutions, as detailed herein.</span>
+		<br><br><br>
+		<span class="section-title-no-underline">1. Parking</span><br>
+		<span class="section-text">Customer has selected the dates and times Customer requests parking accommodations at the facility as selected by Customer at www.staypark.com (“Parking”). Customer agrees to park at Customer’s selected location and adhere to all applicable restrictions, as detailed under Customer’s Parking online selection.  Customer shall present Customer’s verification email from Geenbeeparking.com to the selected location, as received from StayPark.com, at time of Parking.  Depending on the type of Parking selected by Customer, Customer understands and acknowledges that any shuttle transport may have to be initiated by Customer with the Hotel or Parking Facility.
+		<br><br>
+		Customer understands and agrees that Parking reservations are non-transferrable and Customer may not assign, sublet, or otherwise transfer Customer’s rights or obligations under this Agreement.  Any attempt to transfer will be null and void.
+		<br><br>
+		Customer’s Parking rights hereunder are limited to the passenger vehicle(s) identified on the Reservation Form, located online at: www.staypark.com.  Customer agrees to utilize Parking only for vehicles that are fully functional and that do not leak fluid(s) onto Parking area.  Customer understands and agrees that Customer may not park trailers, trailer trucks, motor homes, or any other large item in Parking area.  Customer acknowledges and agrees that only a license to park a passenger motor vehicle is granted hereby.
+		<br><br>
+		The parking of unlicensed or uninsured vehicles and the repair or maintenance of vehicles is strictly prohibited. Further, the parking of vehicles that pose any kind of hazard or have hazardous contents is also strictly prohibited.  Any Customer parking that exceeds the limitations and restrictions detailed herein may subject Customer to Customer’s vehicle being towed at Customer’s sole expense, including all applicable fines, penalties, and/or other costs.
+		</span><br><br><br>
+		<span class="section-title-no-underline">2. Consideration and Payment</span><br>
+		<span class="section-text">Customer agrees to pay the rate(s) detailed on www.staypark.com for Parking selected by Customer, a per-transaction Service Fee in the amount of four dollars ($4.00) up to ten dollars ($10.00) for every 10 days booked depending on which city is booked(i.e. - 1-9 days $5, 10-19 days $10, 20-29 days $15, etc.) and any and all applicable taxes that may apply to Parking.  Where available, as indicated on www.staypark.com, valet parking service may be available to Customer for Parking, at a premium price and additional charge.  Charges for Parking do not include gratuities of any type.  By clicking “accept” of this Agreement, Customer further acknowledges and agrees that Customer will be held solely liable for all costs associated with Customer’s failure to remove Customer’s vehicle on Customer’s scheduled date.</span><br><br><br>
+		<span class="section-title-no-underline">3. Cancelation</span><br>
+		<span class="section-text">Customer understands and agrees that StayPark.com requires a minimum of 24 hours notice for any cancelation of Parking reservations.  Customer agrees to our 24 hour policy which states that NO reservation will be refunded under 24 hours of the drop off date and time, even if the reservation was booked less than 24 hours in advance.  By clicking “accept” to this Agreement, Customer agrees to abide by the Cancellation Policy detailed at www.staypark.com.</span><br><br><br>
+		<span class="section-title-no-underline">4. Changes</span><br>
+		<span class="section-text">Customer agrees to provide at least fourteen (14) days written notice to StayPark.com of any requested change to Customer’s Parking reservation.  Changes not made within the required time frame will be charged to Customer’s credit card as originally booked.</span><br><br><br>
+		<span class="section-title-no-underline">5. Indemnification</span><br>
+		<span class="section-text">Customer shall indemnify, defend and hold harmless StayPark.com and its officers, directors, shareholders, members, agents, servants, employees, heirs, personal and legal representatives, guardians, successors and assigns (collectively, “Indemnitee(s)”) from and against any and all claims, liabilities, taxes, interest, fines, penalties, suits, actions, proceedings, demands, damages, losses, costs and expenses (including reasonable attorneys’ and experts’ fees and court costs) of every kind and nature (collectively, “Expenses and Liabilities”) incurred or paid by StayPark.com or any other StayPark.com Indemnitee arising out of, resulting from or in connection with: (a) any breach by Customer of any representation or warranty made by Customer in this Agreement; and (b) any nonperformance, failure to comply or breach by Customer of any covenant, promise, or agreement made by Customer in this Agreement.  Customer represents and warrants that Customer’s vehicle is fully insured.</span><br><br><br>
+		<span class="section-title-no-underline">6. DISCLAIMER OF LIABILITY</span><br>
+		<span class="section-title-no-underline">StayPark.com specifically disclaims any responsibility for injury, loss or damage to Customer or Customer’s vehicle or its contents while Customer’s vehicle is utilizing the Parking.  Customer agrees to utilize Parking “as is” and “where is” at Customer’s sole risk of loss.</span>  <span class="section-text">By accepting this Agreement, Customer agrees that any liability on the part of StayPark.com shall be limited exclusively to a monetary refund of the purchase price of the Parking.  StayPark.com SHALL NOT BE LIABLE FOR ANY (A) SPECIAL, INDIRECT, EXEMPLARY, INCIDENTAL, PUNITIVE, OR CONSEQUENTIAL DAMAGES, INCLUDING LOSS OF PROFITS, ARISING FROM OR RELATED TO A BREACH OF THIS AGREEMENT, EVEN IF StayPark.com HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, LOSS, OR CLAIM; (B) DAMAGES (REGARDLESS OF THEIR NATURE) FOR ANY DELAY OR FAILURE BY StayPark.com TO PERFORM ITS OBLIGATIONS UNDER THIS AGREEMENT DUE TO ANY CAUSE BEYOND StayPark.com’s REASONABLE CONTROL; OR (C) CLAIMS MADE A SUBJECT OF A LEGAL PROCEEDING AGAINST StayPark.com MORE THAN ONE YEAR AFTER ANY SUCH CAUSE OF ACTION FIRST AROSE.  Except for its intentional acts or gross negligence, StayPark.com shall have no liability whatsoever for (a) any damage to property or any other items located in Parking, (b) theft or vandalism to any vehicle or property or other items located in Parking, or (c) any personal injuries or death arising out of any matter relating to Parking, and in all events, Customer agrees to look first to its insurance carrier for payment of any losses sustained in connection with any use of the Parking. Customer hereby waives on behalf of its insurance carriers all rights of subrogation against StayPark.com or StayPark.com’s agents and/or affiliates. StayPark.com and its affiliates reserve the right to assign specific spaces, and to reserve space for visitors, small cars, handicapped persons, large vehicles, and Customer and persons designated by Customer hereunder shall not park in any such assigned or reserved spaces unless authorized by StayPark.com or its affiliate(s) to do so. StayPark.com and its affiliates reserve the right to close all or any portion of the Parking area in order to make repairs or perform maintenance services, and to alter, modify, re-stripe or renovate the Parking area, or as may be required by casualty, strike, condemnation, act of God, governmental law or requirement or other reason beyond StayPark.com’s or its affiliate’s reasonable control.</span><br><br><br>
+		<span class="section-title-no-underline">7. LIMITATION OF LIABILITY</span><br>
+		<span class="section-text">NOTWITHSTANDING ANY OTHER PROVISION OF THIS AGREEMENT StayPark.com’s TOTAL CUMULATIVE LIABILITIES ARISING OUT OF OR RELATING TO THIS AGREEMENT, WHETHER UNDER CONTRACT LAW, TORT LAW, WARRANTY, OR OTHERWISE SHALL BE LIMITED <span class="section-title-no-underline">EXCLUSIVELY</span> TO AND WILL IN NO EVENT EXCEED THE AMOUNT(S) ACTUALLY RECEIVED BY StayPark.com UNDER THIS AGREEMENT FOR PARKING THAT IS THE SUBJECT MATTER OF, OR IS DIRECTLY RELATED TO THE CAUSE OF ACTION.  CUSTOMER ACKNOWLEDGES THAT THE FEES REFLECT THE ALLOCATION OF RISK SET FORTH IN THIS AGREEMENT AND THAT StayPark.com WOULD NOT ENTER INTO THIS AGREEMENT WITHOUT THESE LIMITATIONS ON LIABILITY.  NO ACTION, REGARDLESS OF FORM, ARISING OUT OF OR RELATING TO THIS AGREEMENT MAY BE BROUGHT BY CUSTOMER MORE THAN ONE YEAR AFTER THE CAUSE OF ACTION ACCRUED.  TO THE EXTENT ANY APPLICABLE LAW LIMITS THE SCOPE OF THIS SECTION, THIS AGREEMENT SHALL BE INTERPRETED TO CONFORM TO SUCH LAW IN A MANNER THAT LIMITS StayPark.com’s LIABILITY TO THE FULLEST EXTENT ALLOWED BY LAW.</span><br><br><br>
+		<span class="section-title-no-underline">8. Arbitration</span><br>
+		<span class="section-text">Any controversy or claim arising out of or related to this Agreement, or the breach of this Agreement, shall be settled by arbitration before a single arbitrator to be held in the county in which our principal place of business is located, in accordance with the rules of the American Arbitration Association. The award of the arbitrator shall be final and judgment upon the award rendered may be entered in any court having jurisdiction. Notwithstanding the above, either of us may seek injunctive relief against the other party in any court of proper jurisdiction with respect to any and all preliminary injunctive or restraining procedures pertaining to this Agreement or the breach of this Agreement.</span><br><br><br>
+		<span class="section-title-no-underline">9. No Third-Party Beneficiaries</span><br>
+		<span class="section-text">This Agreement is made solely and specifically among and for the benefit of the parties hereto and their respective successors and assigns and is not intended to benefit any creditor nor grant any rights to or confer any benefits on any creditor or any other person.</span><br><br><br>
+		<span class="section-title-no-underline">10. Survival</span><br>
+		<span class="section-text">The rights, obligations, guarantees, warranties, representations and agreements set forth in Sections 5, 6, 7, 8, and 12 shall survive termination of this Agreement and shall be binding on and inure to the benefit of the heirs, personal representatives, successors and assigns of all the parties hereto.</span><br><br><br><span class="section-title-no-underline">11. Amendment; Waiver</span><br>
+		<span class="section-text">Each of the parties hereto agrees that no provision of this Agreement may be amended, waived, changed or modified except by a writing signed by all of the parties hereto.  The failure of any party to insist upon strict compliance with any provision of this Agreement, or the failure to assert any right, shall not be deemed to be a waiver of such provision or right to any other provision or right of this Agreement.  No action or failure to act by parties hereto shall constitute a waiver of any right or duty afforded them hereunder, nor shall any such action or failure to act constitute an approval of or acquiescence in any breach hereunder, except as may be specifically agreed in writing.</span><br><br><br>
+		<span class="section-title-no-underline">12. Governing Law; Venue</span><br>
+		<span class="section-text">The interpretation and enforcement of the terms of this Agreement and all actions arising out of or in connection with this Agreement shall be governed by and construed in accordance with the internal laws of the State of Colorado, without regard to conflict of laws provisions of the State of Colorado or of any other state.</span><br><br><br>
+		<span class="section-title-no-underline">13. Notices</span><br>
+		<span class="section-text">All notices required or permitted hereunder shall be communicated via electronic mail (“email”).  Notices sent to Customer shall be to the email address contained within the reservation made online on <a href="/">www.staypark.com</a>.  Notices to StayPark.com shall be sent to <a href="mailto:info@staypark.com">info@staypark.com</a>.</span><br><br><br>
+		<span class="section-title-no-underline">14. Severability</span><br>
+		<span class="section-text">If any provision of this Agreement is held illegal, invalid or unenforceable, in whole or in part, by any court or other authority of competent jurisdiction, the Parties acknowledge and agree that each and every other provision of this Agreement shall remain valid and enforceable and that such illegal, invalid or unenforceable provision or portion thereof shall be limited so as to effect the intent of the Parties to the fullest extent permitted by applicable law.</span><br><br><br>
+		<span class="section-title-no-underline">15. Successors and Assigns; Assignment</span><br>
+		<span class="section-text">This Agreement and the provisions herein shall inure to the benefit of, and be binding upon, each of the parties hereto and their respective successors, assigns, heirs, executors and administrators.  No party hereto shall have any right to assign any of its rights or obligations hereunder except with the prior written consent of each of the other parties hereto.</span><br><br><br>
+		<span class="section-title-no-underline">16. Acknowledgment</span><br>
+		<span class="section-text">The parties agree that in entering into the transaction described in this Agreement, they are relying upon their own judgment, belief and knowledge as to this Agreement and further acknowledge that no promise, inducement or agreement, or any representations and warranties not expressed herein, have been made to procure their agreement hereto.  The parties further acknowledge and agree that they have obtained independent legal advice to the extent each has deemed necessary and are entering into this Agreement and the transactions contemplated hereby knowingly and voluntarily.</span><br><br><br>
+		<span class="section-title-no-underline">17. Contract Construction</span><br>
+		<span class="section-text">The rule of construction which provides that ambiguities in a contract shall be construed against the drafter shall not apply to this Agreement and the parties waive any such defense to the terms of this Agreement.  The headings herein are inserted only as a matter of convenience and reference, and in no way define or describe the scope of this Agreement or the intent of any provisions hereof.  Where the context of this Agreement requires such an interpretation, this Agreement shall survive termination.</span><br><br><br>
+		<span class="section-title-no-underline">18. Compliance with Laws</span><br>
+		<span class="section-text">Customer shall at all times comply with all applicable ordinances, rules, regulations, codes, laws, statutes and requirements of all federal, state, county and municipal governmental bodies or their subdivisions in regard to Parking.  StayPark.com reserves the right to adopt, modify and enforce reasonable rules pertaining to Parking rights granted hereunder from time to time, including any parking sticker or other identification or entrance system, and hours of operation.</span><br><br><br>
+		<span class="section-title-no-underline">19. Force Majeure</span><br>
+		<span class="section-text">Neither party shall be liable in the case of force majeure including, without limitation, civil war, insurrections, riots, fires, floods, explosions, earthquakes, acts of God, acts of the public enemy, or any statute, order, regulation, proclamation, ordinance, demand or requirement of any governmental agency imposed after the effective date of this Agreement.</span><br><br><br>
+		<span class="section-title-no-underline">20. Entire Agreement</span><br>
+		<span class="section-text">This Agreement, together with the exhibits hereto, constitutes the full and entire understanding and agreement between and among the parties hereto, and supersedes and replaces any and all prior or contemporaneous negotiations, conversations, understandings and/or agreements, written, oral, implied or otherwise, with regard to the subject matter hereof.</span><br><br><br>
+		<span class="section-title-no-underline">21. Jurisdiction</span><br>
+		<span class="section-text">This Agreement will be governed by and interpreted in accordance with the laws of the state of Colorado without regard to the conflicts of laws principles thereof.  You consent to the exclusive jurisdiction in the state and/or Denver, Colorado with respect to any dispute involving this agreement.</span><br><br><br>
+	</section>
 </html>

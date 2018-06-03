@@ -26,7 +26,7 @@ public class NavBarController {
     public String faq(Model model) {
         return "faq";
     }
-	
+
 	@GetMapping("/contact-us")
     public String contactUs(Model model) {
         return "contact-us";
