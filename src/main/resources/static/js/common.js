@@ -5,4 +5,42 @@
  function openHome() {
 	 location.href = "/";
  }
- 
+
+ function todayString() {
+     var today = new Date();
+     var dd = today.getDate();
+     var mm = today.getMonth()+1; //January is 0!
+
+     var yyyy = today.getFullYear();
+     if(dd<10){
+         dd='0'+dd;
+     }
+     if(mm<10){
+         mm='0'+mm;
+     }
+     var today = mm+'/'+dd+'/'+yyyy;
+     return today;
+ }
+
+ function tomorrowString() {
+     var today = new Date();
+     today.setDate(today.getDate() + 1);
+     var dd = today.getDate();
+     var mm = today.getMonth()+1; //January is 0!
+
+     var yyyy = today.getFullYear();
+     if(dd<10){
+         dd='0'+dd;
+     }
+     if(mm<10){
+         mm='0'+mm;
+     }
+     var today = mm+'/'+dd+'/'+yyyy;
+     return today;
+ }
+
+ function tomorrow() {
+     var today = new Date();
+     today.setDate(today.getDate() + 1);
+     return today;
+ }

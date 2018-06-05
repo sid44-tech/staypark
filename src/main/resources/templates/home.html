@@ -62,8 +62,8 @@
 							    		<div class="testimonial-user-designation" th:text="${activeTestimonial.job}"></div>
 							    	</div>
 							  	</div>
-							    <div id="testimonial_image_small" class="col flex0 testimonial-small-image-size">
-							    	<img class="testimonial-small-image-size" src="/images/testimonial_icon.png"></img>
+							    <div class="col flex0 testimonial_image_small testimonial-small-image-size">
+							    	<img class="testimonial_image_small testimonial-small-image-size" src="/images/testimonial_icon.png"></img>
 							    </div>
 						    </div>
 					    </div>
@@ -76,7 +76,7 @@
 							    		<div class="testimonial-user-designation" th:text="${testimonials.job}"></div>
 							    	</div>
 							  	</div>
-							    <div id="testimonial_image_small" class="col flex0 testimonial-small-image-size">
+							    <div class="col flex0 testimonial-small-image-size">
 							    	<img class="testimonial-small-image-size" src="/images/testimonial_icon.png"></img>
 							    </div>
 						    </div>
@@ -175,45 +175,6 @@ function handleCanadaDepartSelected() {
 function handleDepartAirportSelect(e) {
  	$("#parking_city").val(e.textContent);
  	$('#parking_selection_modal').modal('hide');
-}
-	
-function todayString() {
-	var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth()+1; //January is 0!
-
-    var yyyy = today.getFullYear();
-    if(dd<10){
-        dd='0'+dd;
-    } 
-    if(mm<10){
-        mm='0'+mm;
-    } 
-    var today = mm+'/'+dd+'/'+yyyy;
-    return today;
-}
-
-function tomorrowString() {
-	var today = new Date();
-	today.setDate(today.getDate() + 1);
-    var dd = today.getDate();
-    var mm = today.getMonth()+1; //January is 0!
-
-    var yyyy = today.getFullYear();
-    if(dd<10){
-        dd='0'+dd;
-    } 
-    if(mm<10){
-        mm='0'+mm;
-    } 
-    var today = mm+'/'+dd+'/'+yyyy;
-    return today;
-}
-
-function tomorrow() {
-	var today = new Date();
-	today.setDate(today.getDate() + 1);
-    return today;
 }
 
 function doParkingSearch() {

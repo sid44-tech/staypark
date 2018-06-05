@@ -27,6 +27,37 @@
         </div>
     </div>
     <div th:replace="footer :: footer"></div>
+    <div id="parking_selection_modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="modal-title airport-select-title">Departure Location</span>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="airport-select-countries-container">
+                        <button id="usButton" class="btn airport-select-countries-button-selected" onclick="handleUSDepartSelected()">United States</button>
+                        <button id="canadaButton" class="btn airport-select-countries-button" onclick="handleCanadaDepartSelected()">Canada</button>
+                    </div>
+                    <div id="usDepartDiv" class="visible">
+                        <ul class="airport-select-cities-list">
+                            <li class="airport-select-cities-list-item" onclick="handleDepartAirportSelect(this)" th:each="usDepart : ${usDepart}"><img class="airplane-icon" src="/images/plane_icon.png" th:text=" ${usDepart}"></img></li>
+                        </ul>
+                    </div>
+                    <div id="canadaDepartDiv" class="gone">
+                        <ul class="airport-select-cities-list">
+                            <li class="airport-select-cities-list-item" onclick="handleDepartAirportSelect(this)" th:each="canadaDepart : ${canadaDepart}"><img class="airplane-icon" src="/images/plane_icon.png" th:text=" ${canadaDepart}"></img></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -34,6 +65,113 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js" crossorigin="anonymous"></script>
 <script src="/js/common.js"></script>
+
+<script>
+    $(document).ready(function(){
+        var dropoff_date_input=$('input[name="drop_off_date"]'); //our date input has the name "date"
+
+        dropoff_date_input.datepicker({
+            format: 'mm/dd/yyyy',
+            todayHighlight: true,
+            autoclose: true,
+            disableTouchKeyboard: true,
+            clearBtn: true,
+            startDate: new Date()
+        })
+        dropoff_date_input.val(todayString());
+        dropoff_date_input.datepicker("setDate", new Date());
+
+        var pickup_date_input=$('input[name="pick_up_date"]'); //our date input has the name "date"
+        pickup_date_input.datepicker({
+            format: 'mm/dd/yyyy',
+            todayHighlight: true,
+            autoclose: true,
+            disableTouchKeyboard: true,
+            clearBtn: true,
+            startDate: new Date()
+        })
+        pickup_date_input.val(tomorrowString());
+        pickup_date_input.datepicker("setDate", tomorrow());
+    })
+
+    function handleUSDepartSelected() {
+        $("#usDepartDiv").css("display", "block");
+        $("#canadaDepartDiv").css("display", "none");
+        $("#usButton").removeClass("airport-select-countries-button");
+        $("#usButton").addClass("airport-select-countries-button-selected");
+        $("#canadaButton").removeClass("airport-select-countries-button-selected");
+        $("#canadaButton").addClass("airport-select-countries-button");
+    }
+
+    function handleCanadaDepartSelected() {
+        $("#usDepartDiv").css( "display", "none" );
+        $("#canadaDepartDiv").css( "display", "block" );
+        $("#usButton").removeClass("airport-select-countries-button-selected");
+        $("#usButton").addClass("airport-select-countries-button");
+        $("#canadaButton").removeClass("airport-select-countries-button");
+        $("#canadaButton").addClass("airport-select-countries-button-selected");
+    }
+
+    function handleDepartAirportSelect(e) {
+        $("#parking_city").val(e.textContent);
+        $('#parking_selection_modal').modal('hide');
+    }
+
+    function doParkingSearch() {
+        if (validateParkingFields() == true) {
+            var parkingCity = getCodeFromDepartString($("#parking_city").val());
+            var dropOffDate = $("#drop_off_date").val().replace(/\//g, "-");
+            var pickUpDate = $("#pick_up_date").val().replace(/\//g, "-");
+            var dropOffTime = $("#drop_off_time").val();
+            var pickUpTime = $("#pick_up_time").val();
+            var props = "dropOffDate=" + dropOffDate + "&dropOffTime=" + dropOffTime + "&pickUpDate=" + pickUpDate + "&pickUpTime=" + pickUpTime;
+            location.href = "/parking/" + parkingCity +"?" + props;
+        }
+    }
+
+    function getCodeFromDepartString(cityStringer) {
+        var matches = cityStringer.match(/\((.*?)\)/);
+
+        if (matches) {
+            return matches[1];
+        }
+
+        return "";
+    }
+
+    function doCancelReservation() {
+        location.href = "/parking/cancel";
+    }
+
+    function validateParkingFields() {
+        var parkingCity = $("#parking_city").val();
+        var dropOffDate = $("#drop_off_date").val();
+        var pickUpDate = $("#pick_up_date").val();
+        var validationPassed = true;
+        if (parkingCity == "") {
+            validationPassed = false;
+            $("#parking_city").addClass("errorBorder");
+        } else {
+            $("#parking_city").removeClass("errorBorder");
+        }
+        if (dropOffDate == "") {
+            validationPassed = false;
+            $("#drop_off_date").addClass("errorBorder");
+        } else {
+            $("#drop_off_date").removeClass("errorBorder");
+        }
+        if (pickUpDate == "") {
+            validationPassed = false;
+            $("#pick_up_date").addClass("errorBorder");
+        } else {
+            $("#pick_up_date").removeClass("errorBorder");
+        }
+        if (validationPassed) {
+            return true;
+        }
+        return false;
+    }
+</script>
 
 </body>
 </html>

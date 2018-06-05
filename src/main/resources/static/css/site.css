@@ -383,7 +383,7 @@ body {
     font-family: 'Roboto', sans-serif;
 }
 
-#testimonial_image_small {
+.testimonial_image_small {
 	display: none;
 }
 
@@ -403,7 +403,7 @@ body {
 
 @media (min-width: 768px) {
 	
-	#testimonial_image_small {
+	.testimonial_image_small {
 		display: block;
 	}
 	
@@ -497,6 +497,7 @@ body {
 
 .parking-date-custom {
 	height: 40px;
+	min-width: 150px;
 	max-width: 220px;
 }
 

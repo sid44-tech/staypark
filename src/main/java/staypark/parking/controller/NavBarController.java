@@ -1,5 +1,6 @@
 package staypark.parking.controller;
 
+import staypark.parking.util.AirportUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +10,9 @@ public class NavBarController {
 
 	@GetMapping("/about")
     public String about(Model model) {
-        return "about";
+        model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
+        model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
+	    return "about";
     }
 	
 	@GetMapping("/airport-parking")
@@ -24,7 +27,9 @@ public class NavBarController {
 	
 	@GetMapping("/faq")
     public String faq(Model model) {
-        return "faq";
+        model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
+        model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
+	    return "faq";
     }
 
 	@GetMapping("/contact-us")
