@@ -13,7 +13,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,14 +51,27 @@ public class AirportHandler {
     			AirportBean ab = new AirportBean();
     			ab.setCode(list.get(i).getCode());
     			ab.setSimpleText(list.get(i).getText());
-    			ab.setName(list.get(i).getTitle());
-    			//add airport to state list
+    			ab.setName(AIRPORT_CODE_TO_NAME.get(list.get(i).getCode()));
+    			ab.setLink(list.get(i).getLink());
+                ba.addAirport(ab);
     		} else {
-    			//add a new item to master list
-    			//new state found, create a new airport list and add airport to it
+                ba.setState(currentTitle);
+                AIRPORT_INFO_BY_STATE.add(ba);
+
+                ba = new BrowseAirports();
+
+                AirportBean ab = new AirportBean();
+                ab.setCode(list.get(i).getCode());
+                ab.setSimpleText(list.get(i).getText());
+                ab.setName(AIRPORT_CODE_TO_NAME.get(list.get(i).getCode()));
+                ab.setLink(list.get(i).getLink());
+                ba.addAirport(ab);
+
     			currentTitle = list.get(i).getTitle();
     		}
     	}
+        //AIRPORT_INFO_BY_STATE.add(ba);
+
     	
     	return AIRPORT_INFO_BY_STATE;
     }
@@ -82,7 +94,9 @@ public class AirportHandler {
                         bean.setText(codeText[1].replace("##", codeText[0]));
                         bean.setLink("/" + getStateFromAirportCode(codeText[0]).replace(" ", "_") + "/" + codeText[0]);
                         bean.setTitle(getStateFromAirportCode(codeText[0]) + " Airport Parking");
-                        beans.add(bean);
+                        if (!getStateFromAirportCode(codeText[0]).trim().equals("")) {
+                            beans.add(bean);
+                        }
                     }
                 }
             }

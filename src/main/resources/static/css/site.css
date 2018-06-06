@@ -51,10 +51,6 @@ body {
 	width:49%;
 }
 
-.white_bg {
-	background: #FFFFFF;
-}
-
 .section-title {
 	font-family: 'Roboto', sans-serif;
     font-size: 16px;
@@ -131,9 +127,12 @@ body {
 }
 
 .white-bg {
-	background: #FFFFFF;
+	background-color: #FFFFFF;
 }
 
+.gray-bg {
+	background-color: #e2e1e0;
+}
 
 /* -------------------------- Main Layout CSS -------------------------- */
 
@@ -342,7 +341,7 @@ body {
 
 .homepage-carousel-content {
 	text-align: center;
-	background: #FFFFFF;
+	background-color: #FFFFFF;
   	height: 100%;
   	min-height: 450px;
   	position: relative;
@@ -350,11 +349,10 @@ body {
 
 .homepage-text {
 	width:100%; 
-	background: #FFFFFF;
+	background-color: #FFFFFF;
 }
 
 .homepage-text-container {
-	background: #FFFFFF;
 	padding-top: 35px;
 	padding-bottom: 35px;
 }
@@ -365,7 +363,7 @@ body {
 }
 
 #homepage_testimonials {
-	background: #75d2fa;
+	background-color: #75d2fa;
 	padding-top: 20px;
 	padding-bottom: 20px;
 }
@@ -612,11 +610,64 @@ body {
 	padding-right: 16px;
 	padding-top: 16px;
 	padding-bottom: 16px;
-
 }
 
 .about-instruction-font {
 	font-size: 14px;
 	font-weight: bold;
 	font-family: Arial;
+}
+
+
+/* -------------------------- Browse Airports CSS -------------------------- */
+
+.ba-state-block {
+	margin-top: 16px;
+	margin-bottom: 32px;
+}
+
+.ba-airport-block {
+	margin-top: 8px;
+	margin-bottom: 16px;
+	padding-top: 4px;
+	padding-bottom: 8px;
+	padding-left: 8px;
+	padding-right: 8px;
+	background: #FFFFFF;
+	box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+	transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+	cursor: pointer;
+}
+
+.ba-airport-block:hover {
+	margin-top: 8px;
+	margin-bottom: 16px;
+	padding-top: 4px;
+	padding-bottom: 8px;
+	padding-left: 8px;
+	padding-right: 8px;
+	background: #FFFFFF;
+	box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+	cursor: pointer;
+}
+
+.ba-state-title {
+	color: #547d00;
+	font-size: 14px;
+	font-family: 'Roboto', sans-serif;
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
+.ba-airport-title {
+	color: #000000;
+	font-size: 12px;
+	font-family: 'Roboto', sans-serif;
+	font-weight: bold;
+}
+
+.ba-airport-text {
+	color: #000000;
+	font-size: 12px;
+	font-family: 'Roboto', sans-serif;
 }

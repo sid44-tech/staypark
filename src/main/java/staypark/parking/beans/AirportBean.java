@@ -7,4 +7,5 @@ public class AirportBean {
 	private String code;
 	private String name;
 	private String simpleText;
+	private String link;
 }

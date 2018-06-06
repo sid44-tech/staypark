@@ -1,11 +1,14 @@
 package staypark.parking.controller;
 
+import staypark.parking.beans.BrowseAirports;
 import staypark.parking.handler.AirportHandler;
 import staypark.parking.util.AirportUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.List;
 
 @Controller
 public class FooterLinksController {
@@ -39,7 +42,7 @@ public class FooterLinksController {
 	
 	@GetMapping("/browse-airports")
     public String browseAirports(Model model) {
-        airportHandler.getBrowseAirportsPageInfo();
+        model.addAttribute("stateAirports", airportHandler.getBrowseAirportsPageInfo());
 	    return "browse-airports";
     }
 	
