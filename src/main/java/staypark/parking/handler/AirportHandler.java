@@ -92,7 +92,7 @@ public class AirportHandler {
                         StateAirportBean bean = new StateAirportBean();
                         bean.setCode(codeText[0]);
                         bean.setText(codeText[1].replace("##", codeText[0]));
-                        bean.setLink("/" + getStateFromAirportCode(codeText[0]).replace(" ", "_") + "/" + codeText[0]);
+                        bean.setLink("/airport/" + getStateFromAirportCode(codeText[0]).replace(" ", "_") + "/" + codeText[0]);
                         bean.setTitle(getStateFromAirportCode(codeText[0]) + " Airport Parking");
                         if (!getStateFromAirportCode(codeText[0]).trim().equals("")) {
                             beans.add(bean);

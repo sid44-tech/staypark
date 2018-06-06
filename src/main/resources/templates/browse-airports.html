@@ -8,11 +8,15 @@
 	<div class="ba-state-block" th:each="stateAirport : ${stateAirports}">
 		<img class="airplane-icon" src="/images/airport_icon_md.png">
 		<span class="ba-state-title" th:text="${stateAirport.state}"></span>
-		<div class="ba-airport-block" th:each="airport : ${stateAirport.airports}">
-			<a th:href="${airport.link}">
-			<span class="ba-airport-title"><span th:text="${airport.name}"></span> (<span th:text="${airport.code}"></span>)</span>
-			<br>
-			<span class="ba-airport-text" th:text="${airport.simpleText}"></span>
+		<div  th:each="airport : ${stateAirport.airports}">
+			<a style="text-decoration : none" th:href="${airport.link}">
+				<div class="ba-airport-block">
+					<span class="ba-airport-title"><span th:text="${airport.name}"></span> (<span th:text="${airport.code}"></span>)</span>
+					<br>
+					<span class="ba-airport-text" th:text="${airport.simpleText}"></span>
+					<br>
+					<div class="ba-button-div"><img src="/images/left-arrow-green.png" class="ba-button-image"/></div>
+				</div>
 			</a>
 		</div>
 	</div>

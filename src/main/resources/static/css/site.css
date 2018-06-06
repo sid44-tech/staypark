@@ -671,3 +671,16 @@ body {
 	font-size: 12px;
 	font-family: 'Roboto', sans-serif;
 }
+
+.ba-button-image {
+	width: 31px;
+	height: 31px;
+}
+
+.ba-button-div {
+	width: 100%;
+	text-align: right;
+	padding-top: 8px;
+	padding-right: 8px;
+	padding-bottom: 8px;
+}
