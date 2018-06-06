@@ -39,7 +39,7 @@ public class FooterLinksController {
 	
 	@GetMapping("/browse-airports")
     public String browseAirports(Model model) {
-        airportHandler.parseAirportsInStateString();
+        airportHandler.getBrowseAirportsPageInfo();
 	    return "browse-airports";
     }
 	
