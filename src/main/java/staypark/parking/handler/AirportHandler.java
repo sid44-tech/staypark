@@ -1,9 +1,11 @@
 package staypark.parking.handler;
 
 import staypark.parking.beans.AirportBean;
+import staypark.parking.beans.AirportDetailBean;
 import staypark.parking.beans.BrowseAirports;
 import staypark.parking.beans.StateAirportBean;
 import staypark.parking.util.DBUtil;
+import staypark.parking.util.FileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,10 @@ public class AirportHandler {
             "from dbstaypark.gp_deperture_location as d " +
             "left join dbstaypark.gp_state as s on d.gdl_state_id = s.gps_id " +
             "where d.gdl_status = 'Active' ";
+    private static String GET_AIRPORT_DETAILS = "select d.gdl_location, s.gps_title, d.gdl_des, d.gdl_logo, s.gps_state " +
+            "from dbstaypark.gp_deperture_location as d " +
+            "left join dbstaypark.gp_state as s on d.gdl_state_id = s.gps_id " +
+            "where d.gdl_scode = ? ";
     
     static {
     	initializeAirportToStateMaps();
@@ -76,6 +82,38 @@ public class AirportHandler {
     	return AIRPORT_INFO_BY_STATE;
     }
 
+    public AirportDetailBean getAirportDetails(final String airportCode) {
+        AirportDetailBean bean = new AirportDetailBean();
+
+        if (airportCode == null || airportCode.trim().equals("") || airportCode.trim().length() > 3) {
+            return bean;
+        }
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(GET_AIRPORT_DETAILS);
+            ps.setString(1, airportCode);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                bean.setImageLink("/images/airport-logo/" + rs.getString("gdl_logo"));
+                bean.setText(Jsoup.parse(rs.getString("gdl_des")).text());
+                bean.setTitle(rs.getString("gps_title"));
+                bean.setAirport(rs.getString("gdl_location"));
+                bean.setState(rs.getString("gps_state"));
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            DBUtil.closeResources(conn, ps, rs);
+        }
+
+        return bean;
+    }
+
     private List<StateAirportBean> parseAirportsInStateString() {
         String str = getAirportsInStateInfoFromDB();
 
@@ -92,7 +130,7 @@ public class AirportHandler {
                         StateAirportBean bean = new StateAirportBean();
                         bean.setCode(codeText[0]);
                         bean.setText(codeText[1].replace("##", codeText[0]));
-                        bean.setLink("/airport/" + getStateFromAirportCode(codeText[0]).replace(" ", "_") + "/" + codeText[0]);
+                        bean.setLink("/airport/" + codeText[0]);
                         bean.setTitle(getStateFromAirportCode(codeText[0]) + " Airport Parking");
                         if (!getStateFromAirportCode(codeText[0]).trim().equals("")) {
                             beans.add(bean);

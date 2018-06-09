@@ -51,6 +51,11 @@
             <artifactId>jsoup</artifactId>
             <version>1.11.3</version>
         </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.6</version>
+        </dependency>
         <!-- tag::tests[] -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

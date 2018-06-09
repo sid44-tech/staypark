@@ -684,3 +684,40 @@ body {
 	padding-right: 8px;
 	padding-bottom: 8px;
 }
+
+
+/* -------------------------- Airport Detail (ad) CSS -------------------------- */
+
+.ad-card-img-top {
+	height: 200px;
+	object-fit: cover;
+	opacity: .9;
+}
+
+.ad-card-custom {
+	margin-bottom: 24px;
+	box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+	border: none;
+}
+
+.ad-card-img-text {
+	height: 200px;
+	color: #ffffff;
+	font-size: 22px;
+	font-weight: bold;
+	font-family: 'Roboto', sans-serif;
+	text-shadow: 2px 2px 8px #000000;
+	opacity: 1;
+}
+
+.ad-card-title-custom {
+	color: #29b8fa;
+	font-family: 'Roboto', sans-serif;
+	font-size: 1rem;
+	font-weight: bold;
+}
+
+.ad-card-text-custom {
+	font-family: 'Roboto', sans-serif;
+	font-size: 0.90rem;
+}

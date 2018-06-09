@@ -4,6 +4,14 @@
 	  layout:decorate="~{page-right-nav.html}">
 
 <section layout:fragment="page-right-nav-content">
-	Airport Detail
+	<div class="card ad-card-custom">
+		<img class="card-img-top ad-card-img-top" th:src="${airport.imageLink}" alt="Card image cap">
+		<div class="card-img-overlay ad-card-img-text d-flex flex-column justify-content-end" th:text="${airport.airport}">
+		</div>
+		<div class="card-body">
+			<h5 class="card-title ad-card-title-custom" th:text="${airport.title}"></h5>
+			<p class="card-text ad-card-text-custom" th:text="${airport.text}"></p>
+		</div>
+	</div>
 </section>
 </html>
