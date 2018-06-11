@@ -1,9 +1,12 @@
 package staypark.parking.controller;
 
+import staypark.parking.beans.ContactUs;
 import staypark.parking.util.AirportUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class NavBarController {
@@ -34,6 +37,15 @@ public class NavBarController {
 
 	@GetMapping("/contact-us")
     public String contactUs(Model model) {
-        return "contact-us";
+        model.addAttribute("status", "");
+        model.addAttribute("contactUsMessage", new ContactUs());
+	    return "contact-us";
+    }
+
+    @PostMapping("/contact-us")
+    public String contactUsPost(Model model, @ModelAttribute ContactUs contactUsMessage) {
+	    model.addAttribute("status", "bu-sent");
+        model.addAttribute("contactUsMessage", new ContactUs());
+	    return "contact-us";
     }
 }

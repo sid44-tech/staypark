@@ -55,8 +55,7 @@ body {
 	font-family: 'Roboto', sans-serif;
     font-size: 16px;
     font-weight: bold;
-    color: #2c2c2c;
-    border-bottom: solid 1px #2c2c2c;
+    color: #428bca;
     display: inline-block;
     margin-bottom: 20px;
 }
@@ -132,6 +131,27 @@ body {
 
 .gray-bg {
 	background-color: #e2e1e0;
+}
+
+.form-div-container {
+	border-radius: 8px;
+	border: 1px solid #71a40a;
+	overflow: auto;
+}
+
+.form-div-container-header {
+	text-align: center;
+	padding: 8px 8px 8px 8px;
+	background-color: #71a40a;
+	font-size: 14px;
+	font-family: 'Roboto', sans-serif;
+	font-weight: bold;
+	color: #ffffff;
+}
+
+.form-div-container-body {
+	background-color: #f5f3f4;
+	padding: 16px 16px 16px 16px;
 }
 
 /* -------------------------- Main Layout CSS -------------------------- */
