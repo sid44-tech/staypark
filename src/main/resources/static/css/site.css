@@ -154,6 +154,11 @@ body {
 	padding: 16px 16px 16px 16px;
 }
 
+.check-icon {
+	width: 24px;
+	height: 24px;
+}
+
 /* -------------------------- Main Layout CSS -------------------------- */
 
 .flex-layout {
@@ -740,4 +745,24 @@ body {
 .ad-card-text-custom {
 	font-family: 'Roboto', sans-serif;
 	font-size: 0.90rem;
+}
+
+/* -------------------------- CONTACT US CSS -------------------------- */
+
+.bu-sent {
+	display: block;
+}
+
+.bu-sent-div {
+	width: 100%;
+	color: #FFFFFF;
+	text-align: center;
+	font-size: 16px;
+	font-weight: bold;
+	font-family: 'Roboto', sans-serif;
+	margin-bottom: 16px;
+	background-color: #428bca;
+	border-radius: 6px;
+	padding-top: 8px;
+	padding-bottom: 8px;
 }

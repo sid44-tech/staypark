@@ -2,6 +2,8 @@ package staypark.parking.controller;
 
 import staypark.parking.beans.ContactUs;
 import staypark.parking.util.AirportUtil;
+import staypark.parking.util.EmailUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
+@Slf4j
 public class NavBarController {
 
 	@GetMapping("/about")
@@ -46,6 +49,18 @@ public class NavBarController {
     public String contactUsPost(Model model, @ModelAttribute ContactUs contactUsMessage) {
 	    model.addAttribute("status", "bu-sent");
         model.addAttribute("contactUsMessage", new ContactUs());
-	    return "contact-us";
+        try {
+            String BODY = EmailUtil.CONTACT_US_BODY
+                    .replace("[EMAIL]", contactUsMessage.getEmail())
+                    .replace("[NAME]", contactUsMessage.getName())
+                    .replace("[PHONE]", contactUsMessage.getPhone());
+            if (contactUsMessage.getComment() != null && !contactUsMessage.getComment().trim().equals("")) {
+                BODY = BODY.replace("[COMMENT]", contactUsMessage.getComment());
+            }
+            EmailUtil.sendEmail(EmailUtil.INFO_EMAIL, "Contact Details from User", BODY);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        return "contact-us";
     }
 }

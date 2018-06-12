@@ -12,6 +12,7 @@
 		Below please provide us with your recommendations or comments on how we can best service you in the future. We would greatly appreciate it!  We will generally get back to you within a 24-hour period.
 	</span>
 	<br><br><br>
+	<div class="bu-sent-div bu-sent">Message Sent! <img class="check-icon" src="/images/check_icon.png"></div>
 	<form class="needs-validation" novalidate action="#" th:action="@{/contact-us}" th:object="${contactUsMessage}" method="post">
 		<div class="form-div-container">
 			<div class="form-div-container-header">Send us a message</div>
@@ -28,7 +29,7 @@
 				<div class="form-group row">
 					<label for="phone" class="col-sm-4 col-form-label">Phone Number *</label>
 					<div class="col-sm-8">
-						<input type="text" class="form-control" id="phone" th:field="*{phone}" placeholder="" required>
+						<input type="text" class="form-control" id="phone" th:field="*{phone}" placeholder="" maxlength="12" required>
 						<div class="invalid-feedback">
 							Phone number is required.
 						</div>
