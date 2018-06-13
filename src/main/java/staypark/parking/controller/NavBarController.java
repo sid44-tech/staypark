@@ -23,12 +23,16 @@ public class NavBarController {
 	
 	@GetMapping("/airport-parking")
     public String airportParking(Model model) {
-        return "airport-parking";
+        model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
+        model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
+	    return "airport-parking";
     }
 	
 	@GetMapping("/room-park")
     public String roomPark(Model model) {
-        return "room-park";
+        model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
+        model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
+	    return "room-park";
     }
 	
 	@GetMapping("/faq")
@@ -40,13 +44,18 @@ public class NavBarController {
 
 	@GetMapping("/contact-us")
     public String contactUs(Model model) {
+        model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
+        model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
         model.addAttribute("status", "");
         model.addAttribute("contactUsMessage", new ContactUs());
+        model.addAttribute("messageVisible", "bu-sent-div");
 	    return "contact-us";
     }
 
     @PostMapping("/contact-us")
     public String contactUsPost(Model model, @ModelAttribute ContactUs contactUsMessage) {
+        model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
+        model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
 	    model.addAttribute("status", "bu-sent");
         model.addAttribute("contactUsMessage", new ContactUs());
         try {
@@ -57,7 +66,12 @@ public class NavBarController {
             if (contactUsMessage.getComment() != null && !contactUsMessage.getComment().trim().equals("")) {
                 BODY = BODY.replace("[COMMENT]", contactUsMessage.getComment());
             }
-            EmailUtil.sendEmail(EmailUtil.INFO_EMAIL, "Contact Details from User", BODY);
+            boolean result = EmailUtil.sendEmail(EmailUtil.INFO_EMAIL, "Contact Details from User", BODY);
+            if (result) {
+                model.addAttribute("messageVisible", "bu-sent-div bu-message-visible");
+            } else {
+                model.addAttribute("messageVisible", "bu-sent-div");
+            }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }

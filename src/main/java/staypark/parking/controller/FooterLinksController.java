@@ -18,12 +18,16 @@ public class FooterLinksController {
 
 	@GetMapping("/affiliates")
     public String affiliates(Model model) {
-        return "affiliates";
+        model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
+        model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
+	    return "affiliates";
     }
 	
 	@GetMapping("/affiliates-login")
     public String affiliatesLogin(Model model) {
-        return "affiliates-login";
+        model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
+        model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
+	    return "affiliates-login";
     }
 	
 	@GetMapping("/privacy")
@@ -42,12 +46,16 @@ public class FooterLinksController {
 	
 	@GetMapping("/browse-airports")
     public String browseAirports(Model model) {
+        model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
+        model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
         model.addAttribute("stateAirports", airportHandler.getBrowseAirportsPageInfo());
 	    return "browse-airports";
     }
 	
 	@GetMapping("/sitemap")
     public String sitemap(Model model) {
-        return "sitemap";
+        model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
+        model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
+	    return "sitemap";
     }
 }

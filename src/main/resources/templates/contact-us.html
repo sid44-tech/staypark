@@ -4,6 +4,7 @@
 	  layout:decorate="~{page-right-nav.html}">
 
 <section layout:fragment="page-right-nav-content">
+	<div class="bu-sent-div" th:class="${messageVisible}"><img class="check-icon" src="/images/check_icon.png"> Message Sent!</div>
 	<span class="section-title">CONTACT US</span>
 	<br>
 	<span class="section-text">
@@ -12,7 +13,6 @@
 		Below please provide us with your recommendations or comments on how we can best service you in the future. We would greatly appreciate it!  We will generally get back to you within a 24-hour period.
 	</span>
 	<br><br><br>
-	<div class="bu-sent-div bu-sent">Message Sent! <img class="check-icon" src="/images/check_icon.png"></div>
 	<form class="needs-validation" novalidate action="#" th:action="@{/contact-us}" th:object="${contactUsMessage}" method="post">
 		<div class="form-div-container">
 			<div class="form-div-container-header">Send us a message</div>
@@ -73,7 +73,7 @@
 		<br>
 		Littleton, CO 80161
 	</span>
-
+	<br><br><br>
 </section>
 
 </html>

@@ -20,7 +20,7 @@ public class EmailUtil {
     static final String HOST = "";
     static final int PORT = 587;
 
-    public static void sendEmail(final String to, final String subject, final String body) throws Exception {
+    public static boolean sendEmail(final String to, final String subject, final String body) throws Exception {
 
         // Create a Properties object to contain connection configuration information.
         Properties props = System.getProperties();
@@ -52,9 +52,12 @@ public class EmailUtil {
         } catch (Exception ex) {
             log.error("The email was not sent.");
             log.error("Error message: " + ex.getMessage());
+            return false;
         } finally {
             transport.close();
         }
+
+        return true;
     }
 
 

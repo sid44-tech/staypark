@@ -753,7 +753,12 @@ body {
 	display: block;
 }
 
+.bu-notsent {
+	display: none;
+}
+
 .bu-sent-div {
+	display: none;
 	width: 100%;
 	color: #FFFFFF;
 	text-align: center;
@@ -765,4 +770,8 @@ body {
 	border-radius: 6px;
 	padding-top: 8px;
 	padding-bottom: 8px;
+}
+
+.bu-message-visible {
+	display: block;
 }
