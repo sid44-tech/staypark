@@ -8,49 +8,22 @@
 	<br>
 	<span class="section-text">Thank you for choosing the NEW StayPark Room + Park service. We have several options catered to every traveler. Whether one is looking for a hotel room with parking or just simply a hotel room only, we can provide these options at affordable and discounted rates.</span>
 	<br><br><br>
-	<form class="needs-validation" novalidate action="#" th:action="@{/contact-us}" th:object="${contactUsMessage}" method="post">
+	<form class="needs-validation" novalidate action="#" th:action="@{/room-park-results}" method="get">
 		<div class="form-div-container">
 			<div class="form-div-container-header">Send us a message</div>
 			<div class="form-div-container-body">
 				<div class="form-group row">
-					<label for="contact" class="col-sm-4 col-form-label">Name *</label>
-					<div class="col-sm-8">
-						<input type="text" class="form-control" id="contact" th:field="*{name}" placeholder="" required>
+					<div class="col-sm-4">
+						<input type="text" class="form-control" id="contact" placeholder="" required>
 						<div class="invalid-feedback">
 							Name is required.
 						</div>
 					</div>
-				</div>
-				<div class="form-group row">
-					<label for="phone" class="col-sm-4 col-form-label">Phone Number *</label>
 					<div class="col-sm-8">
-						<input type="text" class="form-control" id="phone" th:field="*{phone}" placeholder="" maxlength="12" required>
+						<input type="text" class="form-control" id="contact" placeholder="" required>
 						<div class="invalid-feedback">
-							Phone number is required.
+							Name is required.
 						</div>
-					</div>
-				</div>
-				<div class="form-group row">
-					<label for="email" class="col-sm-4 col-form-label">Email *</label>
-					<div class="col-sm-8">
-						<input type="email" class="form-control" id="email" th:field="*{email}" placeholder="" required>
-						<div class="invalid-feedback">
-							Email is required.
-						</div>
-					</div>
-				</div>
-				<div class="form-group row">
-					<label for="comment" class="col-sm-4 col-form-label">Comment *</label>
-					<div class="col-sm-8">
-						<textarea class="form-control" id="comment" th:field="*{comment}" rows="5" required></textarea>
-						<div class="invalid-feedback">
-							Comment is required.
-						</div>
-					</div>
-				</div>
-				<div class="form-group row">
-					<div class="col-sm-9">
-						<button type="submit" class="btn btn-primary">Submit</button>
 					</div>
 				</div>
 			</div>
