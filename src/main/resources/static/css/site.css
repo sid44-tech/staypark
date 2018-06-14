@@ -159,6 +159,29 @@ body {
 	height: 24px;
 }
 
+.bold {
+	font-weight: bold;
+}
+
+.no-li-padding {
+	padding-left: 16px;
+}
+
+.message-bar {
+	width: 100%;
+	color: #FFFFFF;
+	text-align: center;
+	font-size: 16px;
+	font-weight: bold;
+	font-family: 'Roboto', sans-serif;
+	margin-top: 32px;
+	margin-bottom: 16px;
+	background-color: #428bca;
+	border-radius: 6px;
+	padding-top: 8px;
+	padding-bottom: 8px;
+}
+
 /* -------------------------- Main Layout CSS -------------------------- */
 
 .flex-layout {
@@ -774,4 +797,20 @@ body {
 
 .bu-message-visible {
 	display: block;
+}
+
+
+/* -------------------------- ROOM AND PARK CSS -------------------------- */
+
+.rap-fine-print {
+	font-size: 12px;
+	font-family: 'Roboto', sans-serif;
+}
+
+.rap-hotel-title-custom {
+	margin-bottom: 16px;
+	color: #D50000;
+	text-align: center;
+	width: 100%;
+	font-weight: bolder;
 }
