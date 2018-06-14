@@ -13,16 +13,112 @@
 			<div class="form-div-container-header">Send us a message</div>
 			<div class="form-div-container-body">
 				<div class="form-group row">
-					<div class="col-sm-4">
-						<input type="text" class="form-control" id="contact" placeholder="" required>
-						<div class="invalid-feedback">
-							Name is required.
+					<div class="col-sm-5">
+						<span>Select Your Option</span>
+						<br>
+						<div class="form-check">
+						  <input class="form-check-input" type="radio" name="hotelOptions" id="hotelOption1" value="RP" checked>
+						  <label class="form-check-label" for="hotelOption1">
+						    Hotel Room & Parking
+						  </label>
+						</div>
+						<div class="form-check">
+						  <input class="form-check-input" type="radio" name="hotelOptions" id="hotelOption2" value="R">
+						  <label class="form-check-label" for="hotelOption2">
+						    Hotel Room Only
+						  </label>
+						</div>
+						<br>
+						<span>Select Your Hotel Room Option</span>
+						<br>
+						<div class="form-check">
+						  <input class="form-check-input" type="radio" name="hotelTimeOptions" id="hotelTimeOption1" value="S" checked>
+						  <label class="form-check-label" for="hotelTimeOption1">
+						    Start of Trip
+						  </label>
+						</div>
+						<div class="form-check">
+						  <input class="form-check-input" type="radio" name="hotelTimeOptions" id="hotelTimeOption2" value="E">
+						  <label class="form-check-label" for="hotelTimeOption2">
+						    End of Trip
+						  </label>
+						</div>
+						<div class="form-check">
+						  <input class="form-check-input" type="radio" name="hotelTimeOptions" id="hotelTimeOption3" value="B">
+						  <label class="form-check-label" for="hotelTimeOption3">
+						    Start & End of Trip
+						  </label>
 						</div>
 					</div>
-					<div class="col-sm-8">
-						<input type="text" class="form-control" id="contact" placeholder="" required>
-						<div class="invalid-feedback">
-							Name is required.
+					<div class="col-sm-7">
+						<div class="form-group">
+							<label for="city">Select City *</label>
+							<input type="text" class="form-control" id="city" placeholder="" required>
+							<div class="invalid-feedback">
+								City is required.
+							</div>
+						</div>
+						<div class="form-row">
+							<div class="form-group col-md-6">
+								<label for="check_in_date">Hotel Check In Date *</label>
+								<input type="text" class="form-control" id="check_in_date" name="check_in_date"  placeholder="mm/dd/yyyy" required/>
+							</div>
+							<div class="form-group col-md-6">
+								<label for="check_out_date">Hotel Check Out Date *</label>
+								<input type="text" class="form-control" id="check_out_date" name="check_out_date"  placeholder="mm/dd/yyyy" required/>
+							</div>
+						</div>
+						<div class="form-row">
+							<div class="form-group col-md-4">
+								<label for="rooms">Rooms</label>
+							    <select class="form-control" id="rooms">
+                        			<option value="1">1</option>
+                        			<option value="2">2</option>
+                        			<option value="3">3</option>
+                        			<option value="4">4</option>
+                        			<option value="5">5</option>
+                        			<option value="6">6</option>
+                        			<option value="7">7</option>
+                        			<option value="8">8</option>
+                        			<option value="9">9</option>
+                        			<option value="10">10</option>
+                    			</select>
+							</div>
+							<div class="form-group col-md-4">
+								<label for=""adults"">Adults</label>
+								<select class="form-control" id="adults">
+                        			<option value="1">1</option>
+                        			<option value="2">2</option>
+                        			<option value="3">3</option>
+                        			<option value="4">4</option>
+                        			<option value="5">5</option>
+                        			<option value="6">6</option>
+                        			<option value="7">7</option>
+                        			<option value="8">8</option>
+                        			<option value="9">9</option>
+                        			<option value="10">10</option>
+                    			</select>
+							</div>
+							<div class="form-group col-md-4">
+								<label for="children">Children</label>
+								<select class="form-control" id="children">
+                        			<option value="1">1</option>
+                        			<option value="2">2</option>
+                        			<option value="3">3</option>
+                        			<option value="4">4</option>
+                        			<option value="5">5</option>
+                        			<option value="6">6</option>
+                        			<option value="7">7</option>
+                        			<option value="8">8</option>
+                        			<option value="9">9</option>
+                        			<option value="10">10</option>
+                    			</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<div class="col-sm-9">
+								<button type="submit" class="btn btn-primary">Search</button>
+							</div>
 						</div>
 					</div>
 				</div>
