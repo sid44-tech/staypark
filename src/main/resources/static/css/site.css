@@ -176,10 +176,24 @@ body {
 	font-family: 'Roboto', sans-serif;
 	margin-top: 32px;
 	margin-bottom: 16px;
-	background-color: #428bca;
-	border-radius: 6px;
+	background-color: #428bcabb;
+	border-radius: 6px 6px 0px 0px;
+	
 	padding-top: 8px;
 	padding-bottom: 8px;
+}
+
+.radio-button-font {
+	font-size: 14px;
+	font-family: 'Roboto', sans-serif;
+}
+
+.radio-custom {
+	margin-top: .5rem;
+}
+
+.radio-section-margin {
+	margin-top: 8px;
 }
 
 /* -------------------------- Main Layout CSS -------------------------- */
@@ -814,3 +828,12 @@ body {
 	width: 100%;
 	font-weight: bolder;
 }
+
+.rap-radio-title {
+	font-size: 14px;
+	font-weight: bold;
+	font-family: 'Roboto', sans-serif;
+	color: #428bca;
+	margin-bottom: 16px;
+}
+

@@ -113,6 +113,10 @@ public class AirportHandler {
 
         return bean;
     }
+    
+    public void getRoomAndParkLocations() {
+    	
+    }
 
     private List<StateAirportBean> parseAirportsInStateString() {
         String str = getAirportsInStateInfoFromDB();

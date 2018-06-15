@@ -13,47 +13,45 @@
 			<div class="form-div-container-header">Search For Hotel Room & Parking</div>
 			<div class="form-div-container-body">
 				<div class="form-group row">
-					<div class="col-sm-5">
-						<span>Type of stay</span>
-						<br>
+					<div class="col-sm-4">
+						<div class='rap-radio-title'>Type of stay</div>
 						<div class="form-check">
-						  <input class="form-check-input" type="radio" name="hotelOptions" id="hotelOption1" value="RP" checked>
-						  <label class="form-check-label" for="hotelOption1">
+						  <input class="form-check-input radio-custom" type="radio" name="hotelOptions" id="hotelOption1" value="RP" checked>
+						  <label class="form-check-label radio-button-font" for="hotelOption1">
 						    Hotel Room & Parking
 						  </label>
 						</div>
-						<div class="form-check">
-						  <input class="form-check-input" type="radio" name="hotelOptions" id="hotelOption2" value="R">
-						  <label class="form-check-label" for="hotelOption2">
+						<div class="form-check radio-section-margin">
+						  <input class="form-check-input radio-custom" type="radio" name="hotelOptions" id="hotelOption2" value="R">
+						  <label class="form-check-label radio-button-font" for="hotelOption2">
 						    Hotel Room Only
 						  </label>
 						</div>
 						<br>
-						<span>When do you want to stay?</span>
-						<br>
+						<div class='rap-radio-title'>When do you want to stay?</div>
 						<div class="form-check">
-						  <input class="form-check-input" type="radio" name="hotelTimeOptions" id="hotelTimeOption1" value="S" checked>
-						  <label class="form-check-label" for="hotelTimeOption1">
+						  <input class="form-check-input radio-custom" type="radio" name="hotelTimeOptions" id="hotelTimeOption1" value="S" checked>
+						  <label class="form-check-label radio-button-font" for="hotelTimeOption1">
 						    At the start of my trip
 						  </label>
 						</div>
-						<div class="form-check">
-						  <input class="form-check-input" type="radio" name="hotelTimeOptions" id="hotelTimeOption2" value="E">
-						  <label class="form-check-label" for="hotelTimeOption2">
+						<div class="form-check radio-section-margin">
+						  <input class="form-check-input radio-custom" type="radio" name="hotelTimeOptions" id="hotelTimeOption2" value="E">
+						  <label class="form-check-label radio-button-font" for="hotelTimeOption2">
 						    At the end of my trip
 						  </label>
 						</div>
-						<div class="form-check">
-						  <input class="form-check-input" type="radio" name="hotelTimeOptions" id="hotelTimeOption3" value="B">
-						  <label class="form-check-label" for="hotelTimeOption3">
+						<div class="form-check radio-section-margin">
+						  <input class="form-check-input radio-custom" type="radio" name="hotelTimeOptions" id="hotelTimeOption3" value="B">
+						  <label class="form-check-label radio-button-font" for="hotelTimeOption3">
 						    At the start and end of my trip
 						  </label>
 						</div>
 						<br><br>
 					</div>
-					<div class="col-sm-7">
+					<div class="col-sm-8">
+						<div class="message-bar">Select City</div>
 						<div class="form-group">
-							<label for="city">Select City *</label>
 							<input type="text" class="form-control" id="city" placeholder="" required>
 							<div class="invalid-feedback">
 								City is required.
