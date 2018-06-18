@@ -14,149 +14,168 @@
 			<div class="form-div-container-body">
 				<div class="form-group row">
 					<div class="col-sm-4">
-						<div class='rap-radio-title'>Type of stay</div>
-						<div class="form-check">
-						  <input class="form-check-input radio-custom" type="radio" name="hotelOptions" id="hotelOption1" value="RP" checked>
-						  <label class="form-check-label radio-button-font" for="hotelOption1">
-						    Hotel Room & Parking
-						  </label>
-						</div>
-						<div class="form-check radio-section-margin">
-						  <input class="form-check-input radio-custom" type="radio" name="hotelOptions" id="hotelOption2" value="R">
-						  <label class="form-check-label radio-button-font" for="hotelOption2">
-						    Hotel Room Only
-						  </label>
+						<div id="hotel_type_selection">
+							<div class='rap-radio-title'>Type of stay</div>
+							<div class="form-check">
+								<input class="form-check-input radio-custom" type="radio" name="hotelOptions" id="hotelOption1" value="R" checked>
+								<label class="form-check-label radio-button-font" for="hotelOption1">
+									Hotel Room Only
+								</label>
+							</div>
+							<div class="form-check radio-section-margin">
+							  <input class="form-check-input radio-custom" type="radio" name="hotelOptions" id="hotelOption2" value="RP">
+							  <label class="form-check-label radio-button-font" for="hotelOption2">
+								Hotel Room & Parking
+							  </label>
+							</div>
 						</div>
 						<br>
-						<div class='rap-radio-title'>When do you want to stay?</div>
-						<div class="form-check">
-						  <input class="form-check-input radio-custom" type="radio" name="hotelTimeOptions" id="hotelTimeOption1" value="S" checked>
-						  <label class="form-check-label radio-button-font" for="hotelTimeOption1">
-						    At the start of my trip
-						  </label>
-						</div>
-						<div class="form-check radio-section-margin">
-						  <input class="form-check-input radio-custom" type="radio" name="hotelTimeOptions" id="hotelTimeOption2" value="E">
-						  <label class="form-check-label radio-button-font" for="hotelTimeOption2">
-						    At the end of my trip
-						  </label>
-						</div>
-						<div class="form-check radio-section-margin">
-						  <input class="form-check-input radio-custom" type="radio" name="hotelTimeOptions" id="hotelTimeOption3" value="B">
-						  <label class="form-check-label radio-button-font" for="hotelTimeOption3">
-						    At the start and end of my trip
-						  </label>
+						<div id="hotel_when_selection" class="gone">
+							<div class='rap-radio-title'>When do you want to stay?</div>
+							<div class="form-check">
+							  <input class="form-check-input radio-custom" type="radio" name="hotelTimeOptions" id="hotelTimeOption1" value="S" checked>
+							  <label class="form-check-label radio-button-font" for="hotelTimeOption1">
+								At the start of my trip
+							  </label>
+							</div>
+							<div class="form-check radio-section-margin">
+							  <input class="form-check-input radio-custom" type="radio" name="hotelTimeOptions" id="hotelTimeOption2" value="E">
+							  <label class="form-check-label radio-button-font" for="hotelTimeOption2">
+								At the end of my trip
+							  </label>
+							</div>
+							<div class="form-check radio-section-margin">
+							  <input class="form-check-input radio-custom" type="radio" name="hotelTimeOptions" id="hotelTimeOption3" value="B">
+							  <label class="form-check-label radio-button-font" for="hotelTimeOption3">
+								At the start and end of my trip
+							  </label>
+							</div>
 						</div>
 						<br><br>
 					</div>
 					<div class="col-sm-8">
 						<div class="message-bar">Select City</div>
 						<div class="form-group">
-							<input type="text" class="form-control" id="city" placeholder="" required>
+							<select class="form-control" id="city">
+								<option th:each="location : ${locations}" th:text="${location}" th:value="${location}"></option>
+							</select>
 							<div class="invalid-feedback">
 								City is required.
 							</div>
 						</div>
-						<div class="message-bar">Hotel Information</div>
-						<div>
+						<div id="hotel_section">
+							<div class="message-bar">Hotel Information</div>
+							<div id="primary_checkin_section">
+								<div id="start_trip" class="rap-inner-section-title gone">Start of Trip</div>
+								<div class="form-row">
+									<div class="form-group col-md-6">
+										<label for="primary_check_in_date">Hotel Check In Date *</label>
+										<input type="text" class="form-control" id="primary_check_in_date" name="primary_check_in_date"  placeholder="mm/dd/yyyy" required/>
+									</div>
+									<div class="form-group col-md-6">
+										<label for="primary_check_out_date">Hotel Check Out Date *</label>
+										<input type="text" class="form-control" id="primary_check_out_date" name="primary_check_out_date"  placeholder="mm/dd/yyyy" required/>
+									</div>
+								</div>
+							</div>
+							<div id="secondary_checkin_section" class="gone">
+								<div id="end_trip" class="rap-inner-section-title">End of Trip</div>
+								<div class="form-row">
+									<div class="form-group col-md-6">
+										<label for="secondary_check_in_date">Hotel Check In Date *</label>
+										<input type="text" class="form-control" id="secondary_check_in_date" name="secondary_check_in_date"  placeholder="mm/dd/yyyy" required/>
+									</div>
+									<div class="form-group col-md-6">
+										<label for="secondary_check_out_date">Hotel Check Out Date *</label>
+										<input type="text" class="form-control" id="secondary_check_out_date" name="secondary_check_out_date"  placeholder="mm/dd/yyyy" required/>
+									</div>
+								</div>
+							</div>
 							<div class="form-row">
-								<div class="form-group col-md-6">
-									<label for="start_check_in_date">Hotel Check In Date *</label>
-									<input type="text" class="form-control" id="start_check_in_date" name="start_check_in_date"  placeholder="mm/dd/yyyy" required/>
+								<div class="form-group col-md-4">
+									<label for="rooms">Rooms</label>
+									<select class="form-control" id="rooms">
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+										<option value="6">6</option>
+										<option value="7">7</option>
+										<option value="8">8</option>
+										<option value="9">9</option>
+										<option value="10">10</option>
+									</select>
 								</div>
-								<div class="form-group col-md-6">
-									<label for="start_check_out_date">Hotel Check Out Date *</label>
-									<input type="text" class="form-control" id="start_check_out_date" name="start_heck_out_date"  placeholder="mm/dd/yyyy" required/>
+								<div class="form-group col-md-4">
+									<label for="adults">Adults</label>
+									<select class="form-control" id="adults">
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+										<option value="6">6</option>
+										<option value="7">7</option>
+										<option value="8">8</option>
+										<option value="9">9</option>
+										<option value="10">10</option>
+									</select>
+								</div>
+								<div class="form-group col-md-4">
+									<label for="children">Children</label>
+									<select class="form-control" id="children">
+										<option value="0">0</option>
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+										<option value="6">6</option>
+										<option value="7">7</option>
+										<option value="8">8</option>
+										<option value="9">9</option>
+										<option value="10">10</option>
+									</select>
 								</div>
 							</div>
 						</div>
-						<div>
-							<div class="form-row">
-								<div class="form-group col-md-6">
-									<label for="end_check_in_date">Hotel Check In Date *</label>
-									<input type="text" class="form-control" id="end_check_in_date" name="end_check_in_date"  placeholder="mm/dd/yyyy" required/>
+						<div id="parking_section" class="gone">
+							<div class="message-bar">Parking Information</div>
+							<div id="total_parking_time_div" class="form-group gone">
+								<label for="total_parking_time">Total Parking Days</label>
+								<input type="text" class="form-control" id="total_parking_time" name="total_parking_time"  placeholder="" disabled/>
+							</div>
+							<div id='car_date_input_section' class="car_dates_div">
+								<div id='car_drop_div 'class="form-row">
+									<div id="car_drop_date_div" class="form-group col-md-6">
+										<label for="drop_off_date">Car Drop Off Date</label>
+										<input type="text" class="form-control" id="drop_off_date" name="drop_off_date"  placeholder="mm/dd/yyyy" required/>
+									</div>
+									<div id="car_drop_time_div" class="form-group col-md-6 gone">
+										<label for="drop_off_time">Car Drop Off Time</label>
+										<select class="form-control" id="drop_off_time">
+											<option value="12:00 AM">12:00 AM</option><option value="12:15 AM">12:15 AM</option><option value="12:30 AM">12:30 AM</option><option value="12:45 AM">12:45 AM</option><option value="01:00 AM">01:00 AM</option><option value="01:15 AM">01:15 AM</option><option value="01:30 AM">01:30 AM</option><option value="01:45 AM">01:45 AM</option><option value="02:00 AM">02:00 AM</option><option value="02:15 AM">02:15 AM</option><option value="02:30 AM">02:30 AM</option><option value="02:45 AM">02:45 AM</option><option value="03:00 AM">03:00 AM</option><option value="03:15 AM">03:15 AM</option><option value="03:30 AM">03:30 AM</option><option value="03:45 AM">03:45 AM</option><option value="04:00 AM">04:00 AM</option><option value="04:15 AM">04:15 AM</option><option value="04:30 AM">04:30 AM</option><option value="04:45 AM">04:45 AM</option><option value="05:00 AM">05:00 AM</option><option value="05:15 AM">05:15 AM</option><option value="05:30 AM">05:30 AM</option><option value="05:45 AM">05:45 AM</option><option value="06:00 AM">06:00 AM</option><option value="06:15 AM">06:15 AM</option><option value="06:30 AM">06:30 AM</option><option value="06:45 AM">06:45 AM</option><option value="07:00 AM">07:00 AM</option><option value="07:15 AM">07:15 AM</option><option value="07:30 AM">07:30 AM</option><option value="07:45 AM">07:45 AM</option><option value="08:00 AM" selected="selected">08:00 AM</option><option value="08:15 AM">08:15 AM</option><option value="08:30 AM">08:30 AM</option><option value="08:45 AM">08:45 AM</option><option value="09:00 AM">09:00 AM</option><option value="09:15 AM">09:15 AM</option><option value="09:30 AM">09:30 AM</option><option value="09:45 AM">09:45 AM</option><option value="10:00 AM">10:00 AM</option><option value="10:15 AM">10:15 AM</option><option value="10:30 AM">10:30 AM</option><option value="10:45 AM">10:45 AM</option><option value="11:00 AM">11:00 AM</option><option value="11:15 AM">11:15 AM</option><option value="11:30 AM">11:30 AM</option><option value="11:45 AM">11:45 AM</option><option value="12:00 PM">12:00 PM</option><option value="12:15 PM">12:15 PM</option><option value="12:30 PM">12:30 PM</option><option value="12:45 PM">12:45 PM</option><option value="01:00 PM">01:00 PM</option><option value="01:15 PM">01:15 PM</option><option value="01:30 PM">01:30 PM</option><option value="01:45 PM">01:45 PM</option><option value="02:00 PM">02:00 PM</option><option value="02:15 PM">02:15 PM</option><option value="02:30 PM">02:30 PM</option><option value="02:45 PM">02:45 PM</option><option value="03:00 PM">03:00 PM</option><option value="03:15 PM">03:15 PM</option><option value="03:30 PM">03:30 PM</option><option value="03:45 PM">03:45 PM</option><option value="04:00 PM">04:00 PM</option><option value="04:15 PM">04:15 PM</option><option value="04:30 PM">04:30 PM</option><option value="04:45 PM">04:45 PM</option><option value="05:00 PM">05:00 PM</option><option value="05:15 PM">05:15 PM</option><option value="05:30 PM">05:30 PM</option><option value="05:45 PM">05:45 PM</option><option value="06:00 PM">06:00 PM</option><option value="06:15 PM">06:15 PM</option><option value="06:30 PM">06:30 PM</option><option value="06:45 PM">06:45 PM</option><option value="07:00 PM">07:00 PM</option><option value="07:15 PM">07:15 PM</option><option value="07:30 PM">07:30 PM</option><option value="07:45 PM">07:45 PM</option><option value="08:00 PM">08:00 PM</option><option value="08:15 PM">08:15 PM</option><option value="08:30 PM">08:30 PM</option><option value="08:45 PM">08:45 PM</option><option value="09:00 PM">09:00 PM</option><option value="09:15 PM">09:15 PM</option><option value="09:30 PM">09:30 PM</option><option value="09:45 PM">09:45 PM</option><option value="10:00 PM">10:00 PM</option><option value="10:15 PM">10:15 PM</option><option value="10:30 PM">10:30 PM</option><option value="10:45 PM">10:45 PM</option><option value="11:00 PM">11:00 PM</option><option value="11:15 PM">11:15 PM</option><option value="11:30 PM">11:30 PM</option><option value="11:45 PM">11:45 PM</option>
+										</select>
+									</div>
 								</div>
-								<div class="form-group col-md-6">
-									<label for="end_check_out_date">Hotel Check Out Date *</label>
-									<input type="text" class="form-control" id="end_check_out_date" name="end_check_out_date"  placeholder="mm/dd/yyyy" required/>
+								<div id="car_pikcup_div" class="form-row">
+									<div class="form-group col-md-6">
+										<label for="pick_up_date">Car Pick Up Date</label>
+										<input type="text" class="form-control" id="pick_up_date" name="pick_up_date"  placeholder="mm/dd/yyyy" required/>
+									</div>
+									<div class="form-group col-md-6">
+										<label for="pick_up_time">Car Pick Up Time</label>
+										<select class="form-control" id="pick_up_time">
+											<option value="12:00 AM">12:00 AM</option><option value="12:15 AM">12:15 AM</option><option value="12:30 AM">12:30 AM</option><option value="12:45 AM">12:45 AM</option><option value="01:00 AM">01:00 AM</option><option value="01:15 AM">01:15 AM</option><option value="01:30 AM">01:30 AM</option><option value="01:45 AM">01:45 AM</option><option value="02:00 AM">02:00 AM</option><option value="02:15 AM">02:15 AM</option><option value="02:30 AM">02:30 AM</option><option value="02:45 AM">02:45 AM</option><option value="03:00 AM">03:00 AM</option><option value="03:15 AM">03:15 AM</option><option value="03:30 AM">03:30 AM</option><option value="03:45 AM">03:45 AM</option><option value="04:00 AM">04:00 AM</option><option value="04:15 AM">04:15 AM</option><option value="04:30 AM">04:30 AM</option><option value="04:45 AM">04:45 AM</option><option value="05:00 AM">05:00 AM</option><option value="05:15 AM">05:15 AM</option><option value="05:30 AM">05:30 AM</option><option value="05:45 AM">05:45 AM</option><option value="06:00 AM">06:00 AM</option><option value="06:15 AM">06:15 AM</option><option value="06:30 AM">06:30 AM</option><option value="06:45 AM">06:45 AM</option><option value="07:00 AM">07:00 AM</option><option value="07:15 AM">07:15 AM</option><option value="07:30 AM">07:30 AM</option><option value="07:45 AM">07:45 AM</option><option value="08:00 AM" selected="selected">08:00 AM</option><option value="08:15 AM">08:15 AM</option><option value="08:30 AM">08:30 AM</option><option value="08:45 AM">08:45 AM</option><option value="09:00 AM">09:00 AM</option><option value="09:15 AM">09:15 AM</option><option value="09:30 AM">09:30 AM</option><option value="09:45 AM">09:45 AM</option><option value="10:00 AM">10:00 AM</option><option value="10:15 AM">10:15 AM</option><option value="10:30 AM">10:30 AM</option><option value="10:45 AM">10:45 AM</option><option value="11:00 AM">11:00 AM</option><option value="11:15 AM">11:15 AM</option><option value="11:30 AM">11:30 AM</option><option value="11:45 AM">11:45 AM</option><option value="12:00 PM">12:00 PM</option><option value="12:15 PM">12:15 PM</option><option value="12:30 PM">12:30 PM</option><option value="12:45 PM">12:45 PM</option><option value="01:00 PM">01:00 PM</option><option value="01:15 PM">01:15 PM</option><option value="01:30 PM">01:30 PM</option><option value="01:45 PM">01:45 PM</option><option value="02:00 PM">02:00 PM</option><option value="02:15 PM">02:15 PM</option><option value="02:30 PM">02:30 PM</option><option value="02:45 PM">02:45 PM</option><option value="03:00 PM">03:00 PM</option><option value="03:15 PM">03:15 PM</option><option value="03:30 PM">03:30 PM</option><option value="03:45 PM">03:45 PM</option><option value="04:00 PM">04:00 PM</option><option value="04:15 PM">04:15 PM</option><option value="04:30 PM">04:30 PM</option><option value="04:45 PM">04:45 PM</option><option value="05:00 PM">05:00 PM</option><option value="05:15 PM">05:15 PM</option><option value="05:30 PM">05:30 PM</option><option value="05:45 PM">05:45 PM</option><option value="06:00 PM">06:00 PM</option><option value="06:15 PM">06:15 PM</option><option value="06:30 PM">06:30 PM</option><option value="06:45 PM">06:45 PM</option><option value="07:00 PM">07:00 PM</option><option value="07:15 PM">07:15 PM</option><option value="07:30 PM">07:30 PM</option><option value="07:45 PM">07:45 PM</option><option value="08:00 PM">08:00 PM</option><option value="08:15 PM">08:15 PM</option><option value="08:30 PM">08:30 PM</option><option value="08:45 PM">08:45 PM</option><option value="09:00 PM">09:00 PM</option><option value="09:15 PM">09:15 PM</option><option value="09:30 PM">09:30 PM</option><option value="09:45 PM">09:45 PM</option><option value="10:00 PM">10:00 PM</option><option value="10:15 PM">10:15 PM</option><option value="10:30 PM">10:30 PM</option><option value="10:45 PM">10:45 PM</option><option value="11:00 PM">11:00 PM</option><option value="11:15 PM">11:15 PM</option><option value="11:30 PM">11:30 PM</option><option value="11:45 PM">11:45 PM</option>
+										</select>
+									</div>
 								</div>
-							</div>
-						</div>
-						<div class="form-row">
-							<div class="form-group col-md-4">
-								<label for="rooms">Rooms</label>
-							    <select class="form-control" id="rooms">
-                        			<option value="1">1</option>
-                        			<option value="2">2</option>
-                        			<option value="3">3</option>
-                        			<option value="4">4</option>
-                        			<option value="5">5</option>
-                        			<option value="6">6</option>
-                        			<option value="7">7</option>
-                        			<option value="8">8</option>
-                        			<option value="9">9</option>
-                        			<option value="10">10</option>
-                    			</select>
-							</div>
-							<div class="form-group col-md-4">
-								<label for=""adults"">Adults</label>
-								<select class="form-control" id="adults">
-                        			<option value="1">1</option>
-                        			<option value="2">2</option>
-                        			<option value="3">3</option>
-                        			<option value="4">4</option>
-                        			<option value="5">5</option>
-                        			<option value="6">6</option>
-                        			<option value="7">7</option>
-                        			<option value="8">8</option>
-                        			<option value="9">9</option>
-                        			<option value="10">10</option>
-                    			</select>
-							</div>
-							<div class="form-group col-md-4">
-								<label for="children">Children</label>
-								<select class="form-control" id="children">
-                        			<option value="1">1</option>
-                        			<option value="2">2</option>
-                        			<option value="3">3</option>
-                        			<option value="4">4</option>
-                        			<option value="5">5</option>
-                        			<option value="6">6</option>
-                        			<option value="7">7</option>
-                        			<option value="8">8</option>
-                        			<option value="9">9</option>
-                        			<option value="10">10</option>
-                    			</select>
-							</div>
-						</div>
-						<div class="message-bar">Parking Information</div>
-						<div class="form-row">
-							<div class="form-group col-md-6">
-								<label for="drop_off_date">Car Drop Off Date</label>
-								<input type="text" class="form-control" id="drop_off_date" name="drop_off_date"  placeholder="mm/dd/yyyy" required/>
-							</div>
-							<div class="form-group col-md-6">
-								<label for="drop_off_time">Car Drop Off Time</label>
-								<select class="form-control" id="drop_off_time">
-									<option value="12:00 AM">12:00 AM</option><option value="12:15 AM">12:15 AM</option><option value="12:30 AM">12:30 AM</option><option value="12:45 AM">12:45 AM</option><option value="01:00 AM">01:00 AM</option><option value="01:15 AM">01:15 AM</option><option value="01:30 AM">01:30 AM</option><option value="01:45 AM">01:45 AM</option><option value="02:00 AM">02:00 AM</option><option value="02:15 AM">02:15 AM</option><option value="02:30 AM">02:30 AM</option><option value="02:45 AM">02:45 AM</option><option value="03:00 AM">03:00 AM</option><option value="03:15 AM">03:15 AM</option><option value="03:30 AM">03:30 AM</option><option value="03:45 AM">03:45 AM</option><option value="04:00 AM">04:00 AM</option><option value="04:15 AM">04:15 AM</option><option value="04:30 AM">04:30 AM</option><option value="04:45 AM">04:45 AM</option><option value="05:00 AM">05:00 AM</option><option value="05:15 AM">05:15 AM</option><option value="05:30 AM">05:30 AM</option><option value="05:45 AM">05:45 AM</option><option value="06:00 AM">06:00 AM</option><option value="06:15 AM">06:15 AM</option><option value="06:30 AM">06:30 AM</option><option value="06:45 AM">06:45 AM</option><option value="07:00 AM">07:00 AM</option><option value="07:15 AM">07:15 AM</option><option value="07:30 AM">07:30 AM</option><option value="07:45 AM">07:45 AM</option><option value="08:00 AM" selected="selected">08:00 AM</option><option value="08:15 AM">08:15 AM</option><option value="08:30 AM">08:30 AM</option><option value="08:45 AM">08:45 AM</option><option value="09:00 AM">09:00 AM</option><option value="09:15 AM">09:15 AM</option><option value="09:30 AM">09:30 AM</option><option value="09:45 AM">09:45 AM</option><option value="10:00 AM">10:00 AM</option><option value="10:15 AM">10:15 AM</option><option value="10:30 AM">10:30 AM</option><option value="10:45 AM">10:45 AM</option><option value="11:00 AM">11:00 AM</option><option value="11:15 AM">11:15 AM</option><option value="11:30 AM">11:30 AM</option><option value="11:45 AM">11:45 AM</option><option value="12:00 PM">12:00 PM</option><option value="12:15 PM">12:15 PM</option><option value="12:30 PM">12:30 PM</option><option value="12:45 PM">12:45 PM</option><option value="01:00 PM">01:00 PM</option><option value="01:15 PM">01:15 PM</option><option value="01:30 PM">01:30 PM</option><option value="01:45 PM">01:45 PM</option><option value="02:00 PM">02:00 PM</option><option value="02:15 PM">02:15 PM</option><option value="02:30 PM">02:30 PM</option><option value="02:45 PM">02:45 PM</option><option value="03:00 PM">03:00 PM</option><option value="03:15 PM">03:15 PM</option><option value="03:30 PM">03:30 PM</option><option value="03:45 PM">03:45 PM</option><option value="04:00 PM">04:00 PM</option><option value="04:15 PM">04:15 PM</option><option value="04:30 PM">04:30 PM</option><option value="04:45 PM">04:45 PM</option><option value="05:00 PM">05:00 PM</option><option value="05:15 PM">05:15 PM</option><option value="05:30 PM">05:30 PM</option><option value="05:45 PM">05:45 PM</option><option value="06:00 PM">06:00 PM</option><option value="06:15 PM">06:15 PM</option><option value="06:30 PM">06:30 PM</option><option value="06:45 PM">06:45 PM</option><option value="07:00 PM">07:00 PM</option><option value="07:15 PM">07:15 PM</option><option value="07:30 PM">07:30 PM</option><option value="07:45 PM">07:45 PM</option><option value="08:00 PM">08:00 PM</option><option value="08:15 PM">08:15 PM</option><option value="08:30 PM">08:30 PM</option><option value="08:45 PM">08:45 PM</option><option value="09:00 PM">09:00 PM</option><option value="09:15 PM">09:15 PM</option><option value="09:30 PM">09:30 PM</option><option value="09:45 PM">09:45 PM</option><option value="10:00 PM">10:00 PM</option><option value="10:15 PM">10:15 PM</option><option value="10:30 PM">10:30 PM</option><option value="10:45 PM">10:45 PM</option><option value="11:00 PM">11:00 PM</option><option value="11:15 PM">11:15 PM</option><option value="11:30 PM">11:30 PM</option><option value="11:45 PM">11:45 PM</option>
-								</select>
-							</div>
-						</div>
-						<div class="form-row">
-							<div class="form-group col-md-6">
-								<label for="pick_up_date">Car Pick Up Date</label>
-								<input type="text" class="form-control" id="pick_up_date" name="pick_up_date"  placeholder="mm/dd/yyyy" required/>
-							</div>
-							<div class="form-group col-md-6">
-								<label for="pick_up_time">Car Pick Up Time</label>
-								<select class="form-control" id="pick_up_time">
-									<option value="12:00 AM">12:00 AM</option><option value="12:15 AM">12:15 AM</option><option value="12:30 AM">12:30 AM</option><option value="12:45 AM">12:45 AM</option><option value="01:00 AM">01:00 AM</option><option value="01:15 AM">01:15 AM</option><option value="01:30 AM">01:30 AM</option><option value="01:45 AM">01:45 AM</option><option value="02:00 AM">02:00 AM</option><option value="02:15 AM">02:15 AM</option><option value="02:30 AM">02:30 AM</option><option value="02:45 AM">02:45 AM</option><option value="03:00 AM">03:00 AM</option><option value="03:15 AM">03:15 AM</option><option value="03:30 AM">03:30 AM</option><option value="03:45 AM">03:45 AM</option><option value="04:00 AM">04:00 AM</option><option value="04:15 AM">04:15 AM</option><option value="04:30 AM">04:30 AM</option><option value="04:45 AM">04:45 AM</option><option value="05:00 AM">05:00 AM</option><option value="05:15 AM">05:15 AM</option><option value="05:30 AM">05:30 AM</option><option value="05:45 AM">05:45 AM</option><option value="06:00 AM">06:00 AM</option><option value="06:15 AM">06:15 AM</option><option value="06:30 AM">06:30 AM</option><option value="06:45 AM">06:45 AM</option><option value="07:00 AM">07:00 AM</option><option value="07:15 AM">07:15 AM</option><option value="07:30 AM">07:30 AM</option><option value="07:45 AM">07:45 AM</option><option value="08:00 AM" selected="selected">08:00 AM</option><option value="08:15 AM">08:15 AM</option><option value="08:30 AM">08:30 AM</option><option value="08:45 AM">08:45 AM</option><option value="09:00 AM">09:00 AM</option><option value="09:15 AM">09:15 AM</option><option value="09:30 AM">09:30 AM</option><option value="09:45 AM">09:45 AM</option><option value="10:00 AM">10:00 AM</option><option value="10:15 AM">10:15 AM</option><option value="10:30 AM">10:30 AM</option><option value="10:45 AM">10:45 AM</option><option value="11:00 AM">11:00 AM</option><option value="11:15 AM">11:15 AM</option><option value="11:30 AM">11:30 AM</option><option value="11:45 AM">11:45 AM</option><option value="12:00 PM">12:00 PM</option><option value="12:15 PM">12:15 PM</option><option value="12:30 PM">12:30 PM</option><option value="12:45 PM">12:45 PM</option><option value="01:00 PM">01:00 PM</option><option value="01:15 PM">01:15 PM</option><option value="01:30 PM">01:30 PM</option><option value="01:45 PM">01:45 PM</option><option value="02:00 PM">02:00 PM</option><option value="02:15 PM">02:15 PM</option><option value="02:30 PM">02:30 PM</option><option value="02:45 PM">02:45 PM</option><option value="03:00 PM">03:00 PM</option><option value="03:15 PM">03:15 PM</option><option value="03:30 PM">03:30 PM</option><option value="03:45 PM">03:45 PM</option><option value="04:00 PM">04:00 PM</option><option value="04:15 PM">04:15 PM</option><option value="04:30 PM">04:30 PM</option><option value="04:45 PM">04:45 PM</option><option value="05:00 PM">05:00 PM</option><option value="05:15 PM">05:15 PM</option><option value="05:30 PM">05:30 PM</option><option value="05:45 PM">05:45 PM</option><option value="06:00 PM">06:00 PM</option><option value="06:15 PM">06:15 PM</option><option value="06:30 PM">06:30 PM</option><option value="06:45 PM">06:45 PM</option><option value="07:00 PM">07:00 PM</option><option value="07:15 PM">07:15 PM</option><option value="07:30 PM">07:30 PM</option><option value="07:45 PM">07:45 PM</option><option value="08:00 PM">08:00 PM</option><option value="08:15 PM">08:15 PM</option><option value="08:30 PM">08:30 PM</option><option value="08:45 PM">08:45 PM</option><option value="09:00 PM">09:00 PM</option><option value="09:15 PM">09:15 PM</option><option value="09:30 PM">09:30 PM</option><option value="09:45 PM">09:45 PM</option><option value="10:00 PM">10:00 PM</option><option value="10:15 PM">10:15 PM</option><option value="10:30 PM">10:30 PM</option><option value="10:45 PM">10:45 PM</option><option value="11:00 PM">11:00 PM</option><option value="11:15 PM">11:15 PM</option><option value="11:30 PM">11:30 PM</option><option value="11:45 PM">11:45 PM</option>
-								</select>
-							</div>
-						</div>
-						<div class="form-group row">
-							<div class="col-sm-9">
-								<button type="submit" class="btn btn-primary">Search</button>
+								<div class="form-group row">
+									<div class="col-sm-9">
+										<button type="submit" class="btn btn-primary">Search</button>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -167,7 +186,7 @@
 	<br><br>
 	<span class="section-title">HOW IT WORKS</span>
 	<br>
-	<span class="section-text"><span class="bold">Hotel Room + Parking</span>
+	<span class="section-text"><span class="bold">Hotel Room + Parking</span></span>
 	<br><br>
 	<ul class="no-li-padding">
 		<li>This option allows the customer to book a hotel room along with parking for their vehicle. For example, if your trip is 7 days long and you need to park your car for this duration while you are away, BUT you need a hotel room the day before you depart, you would select the Hotel Room + Parking: Start of Trip option.</li>
@@ -187,5 +206,84 @@
 		<br>
 			*Looking for PARKING ONLY with NO hotel room? <a href="/airport-parking">CLICK HERE</a> to use our StayPark Parking Only Service.</span>
 	<br><br>
+
+	<script>
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                //Hotel Primary Date Fields
+                var primary_check_in_date = $('input[name="primary_check_in_date"]');
+                var primary_check_out_date = $('input[name="primary_check_out_date"]');
+                var secondary_check_in_date = $('input[name="secondary_check_in_date"]');
+                var secondary_check_out_date = $('input[name="secondary_check_out_date"]');
+
+                initDatePicker(primary_check_in_date, new Date());
+                initDatePicker(primary_check_out_date, addDaysToDate(new Date(), 1));
+                initDatePicker(secondary_check_in_date, addDaysToDate(new Date(), 2));
+                initDatePicker(secondary_check_out_date, addDaysToDate(new Date(), 3));
+
+                updateMinValues(primary_check_in_date, primary_check_out_date, secondary_check_in_date, secondary_check_out_date);
+                //linkDateFields(primary_check_in_date, primary_check_out_date, secondary_check_in_date, secondary_check_out_date);
+
+                document.getElementById("drop_off_date").disabled = true;
+
+                $( "#hotelOption1" ).click(function() {
+                    $('#hotel_when_selection').hide();
+                    $('#parking_section').hide();
+                    $('#secondary_checkin_section').hide();
+                    $('#parking_section').hide();
+                    $('#start_trip').hide();
+                    $('#total_parking_time_div').hide();
+                    $('#car_drop_date_div').disabled = true;
+                    $('#car_drop_time_div').hide();
+                    $('#car_pikcup_div').show();
+                    $('#car_date_input_section').show();
+
+                    document.getElementById('hotelTimeOption1').checked = true;
+                    document.getElementById("drop_off_date").disabled = true;
+                });
+
+                $( "#hotelOption2" ).click(function() {
+                    $('#hotel_when_selection').show();
+                    $('#parking_section').show();
+                    $('#start_trip').hide();
+                });
+
+                $('#hotelTimeOption1').click(function() {
+                    $('#secondary_checkin_section').hide();
+                    $('#car_pikcup_div').show();
+                    $('#car_dates_div').show();
+                    $('#car_date_input_section').show();
+                    $('#start_trip').hide();
+                    $('#car_drop_time_div').hide();
+                    $('#total_parking_time_div').hide();
+                    document.getElementById("drop_off_date").disabled = true;
+				});
+
+                $('#hotelTimeOption2').click(function() {
+                    $('#secondary_checkin_section').hide();
+                    $('#car_dates_div').show();
+                    $('#car_date_input_section').show();
+                    $('#start_trip').hide();
+                    $('#car_drop_time_div').show();
+                    $('#total_parking_time_div').hide();
+                    document.getElementById("drop_off_date").disabled = false;
+                    $('#car_pikcup_div').hide();
+                });
+
+                $('#hotelTimeOption3').click(function() {
+                    $('#secondary_checkin_section').show();
+                    $('#car_pikcup_div').show();
+                    $('#car_dates_div').hide();
+                    $('#car_date_input_section').hide();
+                    $('#start_trip').show();
+                    $('#car_drop_time_div').show();
+                    $('#total_parking_time_div').show();
+                    document.getElementById("drop_off_date").disabled = false;
+                });
+
+            }, false);
+        })();
+	</script>
 </section>
 </html>

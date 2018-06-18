@@ -44,3 +44,68 @@
      today.setDate(today.getDate() + 1);
      return today;
  }
+
+ function addDaysToDate(date, days) {
+     date.setDate(date.getDate() + days);
+     return date;
+ }
+
+ function initDatePicker(pickup_date_input, date) {
+     pickup_date_input.datepicker({
+         format: 'mm/dd/yyyy',
+         todayHighlight: true,
+         autoclose: true,
+         disableTouchKeyboard: true,
+         clearBtn: true
+     })
+     pickup_date_input.datepicker("setDate", date);
+ }
+
+ function updateMinValues(datefield1, datefield2, datefield3, datefield4) {
+     datefield1.datepicker("setStartDate", new Date());
+     datefield2.datepicker("setStartDate", addDaysToDate(new Date(), 1));
+     datefield3.datepicker("setStartDate", addDaysToDate(new Date(), 2));
+     datefield4.datepicker("setStartDate", addDaysToDate(new Date(), 3));
+ }
+
+ function linkDateFields(datefield1, datefield2, datefield3, datefield4) {
+     datefield1.on('changeDate', function() {
+         var indate = datefield1.datepicker("getDate");
+         var outdate = datefield2.datepicker("getDate");
+
+         if (indate > outdate) {
+             indate.setDate(indate.getDate() + 1);
+             datefield2.datepicker("setDate", indate);
+         }
+     });
+
+     datefield2.on('changeDate', function() {
+         var indate = datefield1.datepicker("getDate");
+         var outdate = datefield2.datepicker("getDate");
+
+         if (outdate < indate) {
+             indate.setDate(outdate.getDate() - 1);
+             datefield1.datepicker("setDate", indate);
+         }
+     });
+
+     datefield3.on('changeDate', function() {
+         var indate = datefield3.datepicker("getDate");
+         var outdate = datefield4.datepicker("getDate");
+
+         if (indate > outdate) {
+             indate.setDate(indate.getDate() + 1);
+             datefield4.datepicker("setDate", indate);
+         }
+     });
+
+     datefield4.on('changeDate', function() {
+         var indate = datefield3.datepicker("getDate");
+         var outdate = datefield4.datepicker("getDate");
+
+         if (outdate < indate) {
+             indate.setDate(outdate.getDate() - 1);
+             datefield3.datepicker("setDate", indate);
+         }
+     });
+ }

@@ -1,9 +1,11 @@
 package staypark.parking.controller;
 
 import staypark.parking.beans.ContactUs;
+import staypark.parking.handler.AirportHandler;
 import staypark.parking.util.AirportUtil;
 import staypark.parking.util.EmailUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 @Slf4j
 public class NavBarController {
+
+    @Autowired
+    private AirportHandler airportHandler;
 
 	@GetMapping("/about")
     public String about(Model model) {
@@ -30,6 +35,7 @@ public class NavBarController {
 	
 	@GetMapping("/room-park")
     public String roomPark(Model model) {
+	    model.addAttribute("locations", airportHandler.getRoomAndParkLocations());
         model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
         model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
 	    return "room-park";
