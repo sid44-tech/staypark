@@ -8,7 +8,7 @@
 	<br>
 	<span class="section-text">Thank you for choosing the NEW StayPark Room & Park service. We have several options catered to every traveler. Whether one is looking for a hotel room with parking or just simply a hotel room only, we can provide these options at affordable and discounted rates.</span>
 	<br><br><br>
-	<form class="needs-validation" novalidate action="#" th:action="@{/room-park-results}" method="get">
+	<form class="needs-validation" novalidate action="#" th:action="@{/room-park-results}" method="post">
 		<div class="form-div-container">
 			<div class="form-div-container-header">Search For Hotel Room & Parking</div>
 			<div class="form-div-container-body">
@@ -56,7 +56,7 @@
 					<div class="col-sm-8">
 						<div class="message-bar">Select City</div>
 						<div class="form-group">
-							<select class="form-control" id="city">
+							<select class="form-control" id="city" name="city">
 								<option th:each="location : ${locations}" th:text="${location}" th:value="${location}"></option>
 							</select>
 							<div class="invalid-feedback">
@@ -70,11 +70,11 @@
 								<div class="form-row">
 									<div class="form-group col-md-6">
 										<label for="primary_check_in_date">Hotel Check In Date *</label>
-										<input type="text" class="form-control" id="primary_check_in_date" name="primary_check_in_date"  placeholder="mm/dd/yyyy" required/>
+										<input type="text" class="form-control" id="primary_check_in_date" name="primaryCheckInDate"  placeholder="mm/dd/yyyy" required/>
 									</div>
 									<div class="form-group col-md-6">
 										<label for="primary_check_out_date">Hotel Check Out Date *</label>
-										<input type="text" class="form-control" id="primary_check_out_date" name="primary_check_out_date"  placeholder="mm/dd/yyyy" required/>
+										<input type="text" class="form-control" id="primary_check_out_date" name="primaryCheckOutDate"  placeholder="mm/dd/yyyy" required/>
 									</div>
 								</div>
 							</div>
@@ -83,18 +83,18 @@
 								<div class="form-row">
 									<div class="form-group col-md-6">
 										<label for="secondary_check_in_date">Hotel Check In Date *</label>
-										<input type="text" class="form-control" id="secondary_check_in_date" name="secondary_check_in_date"  placeholder="mm/dd/yyyy" required/>
+										<input type="text" class="form-control" id="secondary_check_in_date" name="secondaryCheckInDate"  placeholder="mm/dd/yyyy" required/>
 									</div>
 									<div class="form-group col-md-6">
 										<label for="secondary_check_out_date">Hotel Check Out Date *</label>
-										<input type="text" class="form-control" id="secondary_check_out_date" name="secondary_check_out_date"  placeholder="mm/dd/yyyy" required/>
+										<input type="text" class="form-control" id="secondary_check_out_date" name="secondaryCheckOutDate"  placeholder="mm/dd/yyyy" required/>
 									</div>
 								</div>
 							</div>
 							<div class="form-row">
 								<div class="form-group col-md-4">
 									<label for="rooms">Rooms</label>
-									<select class="form-control" id="rooms">
+									<select class="form-control" id="rooms" name="rooms">
 										<option value="1">1</option>
 										<option value="2">2</option>
 										<option value="3">3</option>
@@ -109,7 +109,7 @@
 								</div>
 								<div class="form-group col-md-4">
 									<label for="adults">Adults</label>
-									<select class="form-control" id="adults">
+									<select class="form-control" id="adults" name="adults">
 										<option value="1">1</option>
 										<option value="2">2</option>
 										<option value="3">3</option>
@@ -124,7 +124,7 @@
 								</div>
 								<div class="form-group col-md-4">
 									<label for="children">Children</label>
-									<select class="form-control" id="children">
+									<select class="form-control" id="children" name="children">
 										<option value="0">0</option>
 										<option value="1">1</option>
 										<option value="2">2</option>
@@ -144,17 +144,17 @@
 							<div class="message-bar">Parking Information</div>
 							<div id="total_parking_time_div" class="form-group gone">
 								<label for="total_parking_time">Total Parking Days</label>
-								<input type="text" class="form-control" id="total_parking_time" name="total_parking_time"  placeholder="" disabled/>
+								<input type="text" class="form-control" id="total_parking_time" name="total_parking_time" value="1" placeholder="" disabled/>
 							</div>
 							<div id='car_date_input_section' class="car_dates_div">
 								<div id='car_drop_div 'class="form-row">
 									<div id="car_drop_date_div" class="form-group col-md-6">
 										<label for="drop_off_date">Car Drop Off Date</label>
-										<input type="text" class="form-control" id="drop_off_date" name="drop_off_date"  placeholder="mm/dd/yyyy" required/>
+										<input type="text" class="form-control" id="drop_off_date" name="dropOffDate"  placeholder="mm/dd/yyyy" required/>
 									</div>
 									<div id="car_drop_time_div" class="form-group col-md-6 gone">
 										<label for="drop_off_time">Car Drop Off Time</label>
-										<select class="form-control" id="drop_off_time">
+										<select class="form-control" id="drop_off_time" name="dropOffTime">
 											<option value="12:00 AM">12:00 AM</option><option value="12:15 AM">12:15 AM</option><option value="12:30 AM">12:30 AM</option><option value="12:45 AM">12:45 AM</option><option value="01:00 AM">01:00 AM</option><option value="01:15 AM">01:15 AM</option><option value="01:30 AM">01:30 AM</option><option value="01:45 AM">01:45 AM</option><option value="02:00 AM">02:00 AM</option><option value="02:15 AM">02:15 AM</option><option value="02:30 AM">02:30 AM</option><option value="02:45 AM">02:45 AM</option><option value="03:00 AM">03:00 AM</option><option value="03:15 AM">03:15 AM</option><option value="03:30 AM">03:30 AM</option><option value="03:45 AM">03:45 AM</option><option value="04:00 AM">04:00 AM</option><option value="04:15 AM">04:15 AM</option><option value="04:30 AM">04:30 AM</option><option value="04:45 AM">04:45 AM</option><option value="05:00 AM">05:00 AM</option><option value="05:15 AM">05:15 AM</option><option value="05:30 AM">05:30 AM</option><option value="05:45 AM">05:45 AM</option><option value="06:00 AM">06:00 AM</option><option value="06:15 AM">06:15 AM</option><option value="06:30 AM">06:30 AM</option><option value="06:45 AM">06:45 AM</option><option value="07:00 AM">07:00 AM</option><option value="07:15 AM">07:15 AM</option><option value="07:30 AM">07:30 AM</option><option value="07:45 AM">07:45 AM</option><option value="08:00 AM" selected="selected">08:00 AM</option><option value="08:15 AM">08:15 AM</option><option value="08:30 AM">08:30 AM</option><option value="08:45 AM">08:45 AM</option><option value="09:00 AM">09:00 AM</option><option value="09:15 AM">09:15 AM</option><option value="09:30 AM">09:30 AM</option><option value="09:45 AM">09:45 AM</option><option value="10:00 AM">10:00 AM</option><option value="10:15 AM">10:15 AM</option><option value="10:30 AM">10:30 AM</option><option value="10:45 AM">10:45 AM</option><option value="11:00 AM">11:00 AM</option><option value="11:15 AM">11:15 AM</option><option value="11:30 AM">11:30 AM</option><option value="11:45 AM">11:45 AM</option><option value="12:00 PM">12:00 PM</option><option value="12:15 PM">12:15 PM</option><option value="12:30 PM">12:30 PM</option><option value="12:45 PM">12:45 PM</option><option value="01:00 PM">01:00 PM</option><option value="01:15 PM">01:15 PM</option><option value="01:30 PM">01:30 PM</option><option value="01:45 PM">01:45 PM</option><option value="02:00 PM">02:00 PM</option><option value="02:15 PM">02:15 PM</option><option value="02:30 PM">02:30 PM</option><option value="02:45 PM">02:45 PM</option><option value="03:00 PM">03:00 PM</option><option value="03:15 PM">03:15 PM</option><option value="03:30 PM">03:30 PM</option><option value="03:45 PM">03:45 PM</option><option value="04:00 PM">04:00 PM</option><option value="04:15 PM">04:15 PM</option><option value="04:30 PM">04:30 PM</option><option value="04:45 PM">04:45 PM</option><option value="05:00 PM">05:00 PM</option><option value="05:15 PM">05:15 PM</option><option value="05:30 PM">05:30 PM</option><option value="05:45 PM">05:45 PM</option><option value="06:00 PM">06:00 PM</option><option value="06:15 PM">06:15 PM</option><option value="06:30 PM">06:30 PM</option><option value="06:45 PM">06:45 PM</option><option value="07:00 PM">07:00 PM</option><option value="07:15 PM">07:15 PM</option><option value="07:30 PM">07:30 PM</option><option value="07:45 PM">07:45 PM</option><option value="08:00 PM">08:00 PM</option><option value="08:15 PM">08:15 PM</option><option value="08:30 PM">08:30 PM</option><option value="08:45 PM">08:45 PM</option><option value="09:00 PM">09:00 PM</option><option value="09:15 PM">09:15 PM</option><option value="09:30 PM">09:30 PM</option><option value="09:45 PM">09:45 PM</option><option value="10:00 PM">10:00 PM</option><option value="10:15 PM">10:15 PM</option><option value="10:30 PM">10:30 PM</option><option value="10:45 PM">10:45 PM</option><option value="11:00 PM">11:00 PM</option><option value="11:15 PM">11:15 PM</option><option value="11:30 PM">11:30 PM</option><option value="11:45 PM">11:45 PM</option>
 										</select>
 									</div>
@@ -162,20 +162,20 @@
 								<div id="car_pikcup_div" class="form-row">
 									<div class="form-group col-md-6">
 										<label for="pick_up_date">Car Pick Up Date</label>
-										<input type="text" class="form-control" id="pick_up_date" name="pick_up_date"  placeholder="mm/dd/yyyy" required/>
+										<input type="text" class="form-control" id="pick_up_date" name="pickUpDate"  placeholder="mm/dd/yyyy" required/>
 									</div>
 									<div class="form-group col-md-6">
 										<label for="pick_up_time">Car Pick Up Time</label>
-										<select class="form-control" id="pick_up_time">
+										<select class="form-control" id="pick_up_time" name="pickUpTime">
 											<option value="12:00 AM">12:00 AM</option><option value="12:15 AM">12:15 AM</option><option value="12:30 AM">12:30 AM</option><option value="12:45 AM">12:45 AM</option><option value="01:00 AM">01:00 AM</option><option value="01:15 AM">01:15 AM</option><option value="01:30 AM">01:30 AM</option><option value="01:45 AM">01:45 AM</option><option value="02:00 AM">02:00 AM</option><option value="02:15 AM">02:15 AM</option><option value="02:30 AM">02:30 AM</option><option value="02:45 AM">02:45 AM</option><option value="03:00 AM">03:00 AM</option><option value="03:15 AM">03:15 AM</option><option value="03:30 AM">03:30 AM</option><option value="03:45 AM">03:45 AM</option><option value="04:00 AM">04:00 AM</option><option value="04:15 AM">04:15 AM</option><option value="04:30 AM">04:30 AM</option><option value="04:45 AM">04:45 AM</option><option value="05:00 AM">05:00 AM</option><option value="05:15 AM">05:15 AM</option><option value="05:30 AM">05:30 AM</option><option value="05:45 AM">05:45 AM</option><option value="06:00 AM">06:00 AM</option><option value="06:15 AM">06:15 AM</option><option value="06:30 AM">06:30 AM</option><option value="06:45 AM">06:45 AM</option><option value="07:00 AM">07:00 AM</option><option value="07:15 AM">07:15 AM</option><option value="07:30 AM">07:30 AM</option><option value="07:45 AM">07:45 AM</option><option value="08:00 AM" selected="selected">08:00 AM</option><option value="08:15 AM">08:15 AM</option><option value="08:30 AM">08:30 AM</option><option value="08:45 AM">08:45 AM</option><option value="09:00 AM">09:00 AM</option><option value="09:15 AM">09:15 AM</option><option value="09:30 AM">09:30 AM</option><option value="09:45 AM">09:45 AM</option><option value="10:00 AM">10:00 AM</option><option value="10:15 AM">10:15 AM</option><option value="10:30 AM">10:30 AM</option><option value="10:45 AM">10:45 AM</option><option value="11:00 AM">11:00 AM</option><option value="11:15 AM">11:15 AM</option><option value="11:30 AM">11:30 AM</option><option value="11:45 AM">11:45 AM</option><option value="12:00 PM">12:00 PM</option><option value="12:15 PM">12:15 PM</option><option value="12:30 PM">12:30 PM</option><option value="12:45 PM">12:45 PM</option><option value="01:00 PM">01:00 PM</option><option value="01:15 PM">01:15 PM</option><option value="01:30 PM">01:30 PM</option><option value="01:45 PM">01:45 PM</option><option value="02:00 PM">02:00 PM</option><option value="02:15 PM">02:15 PM</option><option value="02:30 PM">02:30 PM</option><option value="02:45 PM">02:45 PM</option><option value="03:00 PM">03:00 PM</option><option value="03:15 PM">03:15 PM</option><option value="03:30 PM">03:30 PM</option><option value="03:45 PM">03:45 PM</option><option value="04:00 PM">04:00 PM</option><option value="04:15 PM">04:15 PM</option><option value="04:30 PM">04:30 PM</option><option value="04:45 PM">04:45 PM</option><option value="05:00 PM">05:00 PM</option><option value="05:15 PM">05:15 PM</option><option value="05:30 PM">05:30 PM</option><option value="05:45 PM">05:45 PM</option><option value="06:00 PM">06:00 PM</option><option value="06:15 PM">06:15 PM</option><option value="06:30 PM">06:30 PM</option><option value="06:45 PM">06:45 PM</option><option value="07:00 PM">07:00 PM</option><option value="07:15 PM">07:15 PM</option><option value="07:30 PM">07:30 PM</option><option value="07:45 PM">07:45 PM</option><option value="08:00 PM">08:00 PM</option><option value="08:15 PM">08:15 PM</option><option value="08:30 PM">08:30 PM</option><option value="08:45 PM">08:45 PM</option><option value="09:00 PM">09:00 PM</option><option value="09:15 PM">09:15 PM</option><option value="09:30 PM">09:30 PM</option><option value="09:45 PM">09:45 PM</option><option value="10:00 PM">10:00 PM</option><option value="10:15 PM">10:15 PM</option><option value="10:30 PM">10:30 PM</option><option value="10:45 PM">10:45 PM</option><option value="11:00 PM">11:00 PM</option><option value="11:15 PM">11:15 PM</option><option value="11:30 PM">11:30 PM</option><option value="11:45 PM">11:45 PM</option>
 										</select>
 									</div>
 								</div>
-								<div class="form-group row">
-									<div class="col-sm-9">
-										<button type="submit" class="btn btn-primary">Search</button>
-									</div>
-								</div>
+							</div>
+						</div>
+						<div class="form-group row">
+							<div class="col-sm-9">
+								<button type="submit" class="btn btn-primary">Search</button>
 							</div>
 						</div>
 					</div>
@@ -212,18 +212,27 @@
             'use strict';
             window.addEventListener('load', function() {
                 //Hotel Primary Date Fields
-                var primary_check_in_date = $('input[name="primary_check_in_date"]');
-                var primary_check_out_date = $('input[name="primary_check_out_date"]');
-                var secondary_check_in_date = $('input[name="secondary_check_in_date"]');
-                var secondary_check_out_date = $('input[name="secondary_check_out_date"]');
+                var primary_check_in_date = $('input[name="primaryCheckInDate"]');
+                var primary_check_out_date = $('input[name="primaryCheckOutDate"]');
+                var secondary_check_in_date = $('input[name="secondaryCheckInDate"]');
+                var secondary_check_out_date = $('input[name="secondaryCheckOutDate"]');
+                var drop_off_date = $('input[name="dropOffDate"]');
+                var pick_up_date = $('input[name="pickUpDate"]');
 
                 initDatePicker(primary_check_in_date, new Date());
+                if (document.getElementById('hotelTimeOption1').checked) {
+                    initDatePicker(drop_off_date, addDaysToDate(new Date(), 1));
+                } else if (document.getElementById('hotelTimeOption2').checked) {
+                    initDatePicker(drop_off_date, new Date());
+                } else {
+                	initDatePicker(drop_off_date, new Date());
+                }
                 initDatePicker(primary_check_out_date, addDaysToDate(new Date(), 1));
+                initDatePicker(pick_up_date, addDaysToDate(new Date(), 1));
                 initDatePicker(secondary_check_in_date, addDaysToDate(new Date(), 2));
                 initDatePicker(secondary_check_out_date, addDaysToDate(new Date(), 3));
-
-                updateMinValues(primary_check_in_date, primary_check_out_date, secondary_check_in_date, secondary_check_out_date);
-                //linkDateFields(primary_check_in_date, primary_check_out_date, secondary_check_in_date, secondary_check_out_date);
+                updateMinValues(primary_check_in_date, primary_check_out_date, secondary_check_in_date, secondary_check_out_date, drop_off_date, pick_up_date);
+                addListenersForDateFields(primary_check_in_date, primary_check_out_date, secondary_check_in_date, secondary_check_out_date, drop_off_date, pick_up_date);
 
                 document.getElementById("drop_off_date").disabled = true;
 
@@ -258,6 +267,14 @@
                     $('#car_drop_time_div').hide();
                     $('#total_parking_time_div').hide();
                     document.getElementById("drop_off_date").disabled = true;
+                    
+                    var pri_indate = primary_check_in_date.datepicker("getDate");
+                    var pri_outdate = primary_check_out_date.datepicker("getDate");
+                    var sec_indate = secondary_check_in_date.datepicker("getDate");
+                    var sec_outdate = secondary_check_out_date.datepicker("getDate");
+                    var cardrop_date = drop_off_date.datepicker("getDate");
+                    drop_off_date.datepicker("setDate", pri_outdate);
+                    
 				});
 
                 $('#hotelTimeOption2').click(function() {
@@ -269,6 +286,13 @@
                     $('#total_parking_time_div').hide();
                     document.getElementById("drop_off_date").disabled = false;
                     $('#car_pikcup_div').hide();
+                    
+                    var pri_indate = primary_check_in_date.datepicker("getDate");
+                    var pri_outdate = primary_check_out_date.datepicker("getDate");
+                    var sec_indate = secondary_check_in_date.datepicker("getDate");
+                    var sec_outdate = secondary_check_out_date.datepicker("getDate");
+                    var cardrop_date = drop_off_date.datepicker("getDate");
+                    drop_off_date.datepicker("setDate", pri_indate);
                 });
 
                 $('#hotelTimeOption3').click(function() {
@@ -284,6 +308,121 @@
 
             }, false);
         })();
+        
+        function updateMinValues(datefield1, datefield2, datefield3, datefield4, datefield5, datefield6) {
+            datefield1.datepicker("setStartDate", new Date());
+            datefield2.datepicker("setStartDate", addDaysToDate(new Date(), 1));
+            datefield3.datepicker("setStartDate", addDaysToDate(new Date(), 2));
+            datefield4.datepicker("setStartDate", addDaysToDate(new Date(), 3));
+            
+            datefield5.datepicker("setStartDate", new Date());
+            datefield6.datepicker("setStartDate", addDaysToDate(new Date(), 1));
+        }
+
+        function addListenersForDateFields(datefield1, datefield2, datefield3, datefield4, cardrop, carpickup) {
+            datefield1.on('changeDate', function() {
+                var pri_indate = datefield1.datepicker("getDate");
+                var pri_outdate = datefield2.datepicker("getDate");
+                var sec_indate = datefield3.datepicker("getDate");
+                var sec_outdate = datefield4.datepicker("getDate");
+                var cardrop_date = cardrop.datepicker("getDate");
+
+                if (pri_indate > pri_outdate) {
+                	pri_indate.setDate(pri_indate.getDate() + 1);
+                    datefield2.datepicker("setDate", pri_indate);
+                    
+                    if (document.getElementById('hotelTimeOption1').checked) {
+                    	cardrop.datepicker("setDate", pri_indate);
+                    }
+                }
+                
+                if (sec_indate <= pri_indate) {
+                	pri_indate.setDate(pri_indate.getDate() + 1);
+                	datefield3.datepicker("setDate", pri_indate);
+                	
+                	pri_indate.setDate(pri_indate.getDate() + 1);
+                	datefield4.datepicker("setDate", pri_indate);
+                }
+                
+                updateTotalParkingDays(datefield2.datepicker("getDate"), datefield3.datepicker("getDate"));
+                
+                if (document.getElementById('hotelTimeOption2').checked) {
+                	if (pri_indate <= cardrop_date) {
+                		cardrop.datepicker("setDate", pri_indate);
+                	}
+                }
+            });
+
+            datefield2.on('changeDate', function() {
+                var pri_indate = datefield1.datepicker("getDate");
+                var pri_outdate = datefield2.datepicker("getDate");
+                var sec_indate = datefield3.datepicker("getDate");
+                var sec_outdate = datefield4.datepicker("getDate");
+
+                if (pri_outdate < pri_indate) {
+                	pri_indate.setDate(pri_outdate.getDate() - 1);
+                    datefield1.datepicker("setDate", pri_indate);
+                }
+                
+                updateTotalParkingDays(datefield2.datepicker("getDate"), datefield3.datepicker("getDate"));
+            });
+
+            datefield3.on('changeDate', function() {
+                var pri_indate = datefield1.datepicker("getDate");
+                var pri_outdate = datefield2.datepicker("getDate");
+                var sec_indate = datefield3.datepicker("getDate");
+                var sec_outdate = datefield4.datepicker("getDate");
+
+                if (sec_indate > sec_outdate) {
+                	sec_indate.setDate(sec_indate.getDate() + 1);
+                    datefield4.datepicker("setDate", sec_indate);
+                }
+                
+                if (sec_indate < pri_outdate) {
+                	alert('Check In Date should be greater than Start of Trip Check Out Date');
+                	pri_outdate.setDate(pri_outdate.getDate() + 1);
+                	datefield3.datepicker("setDate", pri_outdate);
+                	pri_outdate.setDate(pri_outdate.getDate() + 1);
+                	datefield4.datepicker("setDate", pri_outdate);
+                }
+                
+                updateTotalParkingDays(datefield2.datepicker("getDate"), datefield3.datepicker("getDate"));
+            });
+
+            datefield4.on('changeDate', function() {
+                var pri_indate = datefield1.datepicker("getDate");
+                var pri_outdate = datefield2.datepicker("getDate");
+                var sec_indate = datefield3.datepicker("getDate");
+                var sec_outdate = datefield4.datepicker("getDate");
+
+                if (sec_outdate < sec_indate) {
+                	sec_indate.setDate(sec_outdate.getDate() - 1);
+                    datefield3.datepicker("setDate", sec_indate);
+                }
+                
+                updateTotalParkingDays(datefield2.datepicker("getDate"), datefield3.datepicker("getDate"));
+            });
+            
+            cardrop.on('changeDate', function() {
+            	var cardrop_date = cardrop.datepicker("getDate");
+                var pri_indate = datefield1.datepicker("getDate");
+                var pri_outdate = datefield2.datepicker("getDate");
+
+                if (document.getElementById('hotelTimeOption2').checked) {
+                	if (pri_indate < cardrop_date) {
+                		datefield1.datepicker("setDate", cardrop_date);
+                		cardrop_date.setDate(cardrop_date.getDate() + 1);
+                		datefield2.datepicker("setDate", cardrop_date);
+                	}
+                }
+            });
+        }
+        
+        function updateTotalParkingDays(date1, date2) {
+        	var oneDay = 24*60*60*1000;
+        	var days = Math.round(Math.abs((date1.getTime() - date2.getTime())/(oneDay)));
+        	$('#total_parking_time').val(days);
+        }
 	</script>
 </section>
 </html>
