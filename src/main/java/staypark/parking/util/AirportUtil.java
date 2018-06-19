@@ -18,6 +18,18 @@ public class AirportUtil {
 			"where gdl_country = ? and gdl_status = 'Active' " + 
 			"order by gdl_country, gdl_location";
 
+	public static String getAirportCodeFromSearchCityString(final String in) {
+		String[] str = in.split("\\(");
+		if (str.length == 2) {
+			String[] codearr = str[1].split("\\)");
+			if (codearr.length == 1) {
+				return codearr[0];
+			}
+		}
+
+		return "";
+	}
+
 	public static List<String> getDepartureLocations(final int countryCode) {
 		if (countryCode == 1 && usDepartureLocations != null) {
 			return usDepartureLocations;
@@ -58,4 +70,5 @@ public class AirportUtil {
 	private static String buildDepartureLocation(final String airportName, final String airportCode) {
 		return airportName + " (" + airportCode + ")"; 
 	}
+
 }

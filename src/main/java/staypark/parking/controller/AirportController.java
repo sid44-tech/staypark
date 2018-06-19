@@ -3,6 +3,7 @@ package staypark.parking.controller;
 import staypark.parking.beans.ContactUs;
 import staypark.parking.beans.RoomParkSearch;
 import staypark.parking.handler.AirportHandler;
+import staypark.parking.handler.HotelHandler;
 import staypark.parking.util.AirportUtil;
 import staypark.parking.util.EmailUtil;
 
@@ -20,6 +21,9 @@ public class AirportController {
     @Autowired
     private AirportHandler airportHandler;
 
+    @Autowired
+    private HotelHandler hotelHandler;
+
 	@GetMapping("/airport/{airport}")
     public String airportDetails(@PathVariable("airport") String airport, Model model) {
         model.addAttribute("airport", airportHandler.getAirportDetails(airport));
@@ -29,7 +33,8 @@ public class AirportController {
 	
     @PostMapping("/room-park-results")
     public String roomParkResults(Model model, @ModelAttribute RoomParkSearch search) {
-    	
+        String code = AirportUtil.getAirportCodeFromSearchCityString(search.getCity());
+        model.addAttribute("hotels", hotelHandler.getHotelslForSearch(code));
         return "room-park-results";
     }
 }

@@ -5,5 +5,10 @@
 
 <section layout:fragment="page-content">
 	<span class="section-title">ROOM & PARK RESULTS</span>
+	<div  th:each="hotel : ${hotels}">
+		<span th:text="${hotel.hotelTitle}"></span>
+		<br>
+		<span th:text="${hotel.cityState}"></span>
+	</div>
 </section>
 </html>
