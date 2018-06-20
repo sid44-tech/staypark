@@ -35,6 +35,7 @@ public class AirportController {
     public String roomParkResults(Model model, @ModelAttribute RoomParkSearch search) {
         String code = AirportUtil.getAirportCodeFromSearchCityString(search.getCity());
         model.addAttribute("hotels", hotelHandler.getHotelslForSearch(code));
+
         return "room-park-results";
     }
 }

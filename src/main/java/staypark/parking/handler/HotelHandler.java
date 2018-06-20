@@ -23,6 +23,18 @@ public class HotelHandler {
             "left join dbstaypark.gp_state as state on deptloc.gdl_state_id = state.gps_id " +
             "where deptloc.gdl_scode = ? and cost.drc_status = 'Active'";
 
+    //parm is drc_htl_id from above query
+    private static String GET_HOTEL_IMAGES =
+            "select * from dbstaypark.gp_parking_image " +
+            "where gppi_p_id = ? " +
+            "order by gppi_id desc ";
+
+    //parm is drc_htl_id from above query'
+    private static String GET_ROOMS_AVAILABLE =
+            "select * from dbstaypark.gp_room " +
+            "where rm_htl_id = ? and rm_status = 'Active' " +
+            "order by rm_cost, rm_id ";
+
     public List<RoomParkSearchResults> getHotelslForSearch(final String airportCode) {
         List<RoomParkSearchResults> results = new ArrayList<>();
         Connection conn = null;
@@ -38,6 +50,8 @@ public class HotelHandler {
                 RoomParkSearchResults bean = new RoomParkSearchResults();
                 bean.setHotelTitle(rs.getString("drc_gpi_inn_name") + " - " + rs.getString("gdl_logo_title"));
                 bean.setCityState(rs.getString("gpc_city") + ", " + rs.getString("gps_state"));
+                bean.setHotelText(rs.getString("drc_gpi_desc"));
+
                 results.add(bean);
             }
         } catch (Exception e) {
