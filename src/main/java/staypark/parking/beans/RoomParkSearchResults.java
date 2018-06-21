@@ -6,10 +6,11 @@ import java.util.List;
 
 @Data
 public class RoomParkSearchResults {
+    private int hotelId;
     private String hotelTitle;
     private String cityState;
-    private List<String> imageLinks;
-    private List<String> roomList;
+    private List<ImageLink> imageLinks;
+    private List<Room> roomList;
     private String hotelArrivalDate;
     private String hotelDepartureDate;
     private String totalHotelNights;

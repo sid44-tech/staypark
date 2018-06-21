@@ -10,7 +10,21 @@
 		<br><br>
 		<span th:text="${hotel.cityState}"></span>
 		<br><br><br>
+		<img th:each="imageLink : ${hotel.imageLinks}" th:src="${imageLink.smallImageLink}"/>
+		<br><br>
+		<div th:each="room : ${hotel.roomList}">
+			<img th:src="${room.image.smallImageLink}"/>
+			<br>
+			<span th:text="${room.roomDescription}"></span>
+			<br>
+			<span th:text="${room.occupancy}"></span>
+			<br>
+			<span th:text="${room.cost}"></span>
+			<br>
+		</div>
+		<br><br>
 		<div th:utext="${hotel.hotelText}"></div>
-	</div>
+		<br><br>
+	</img>
 </section>
 </html>
