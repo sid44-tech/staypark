@@ -1,6 +1,12 @@
 package staypark.parking.util;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+
 public class DateUtil {
+	private static SimpleDateFormat DATE_FORMAT_WITH_DAY = new SimpleDateFormat("EEEE MMMM dd, yyyy", Locale.US);
 
 	public final static String[] PARKING_TIMES = {
 			"12:00 AM", "12:15 AM", "12:30 AM", "12:45 AM", 
@@ -28,4 +34,19 @@ public class DateUtil {
 			"10:00 PM", "10:15 PM", "10:30 PM", "10:45 PM",
 			"11:00 PM", "11:15 PM", "11:30 PM", "11:45 PM"
 	};
+	
+	public static String formatDate(final Date date) {
+		if (date != null) {
+			return DATE_FORMAT_WITH_DAY.format(date);
+		}
+		return "";
+	}
+	
+	public static int getDaysDifference(final Date date1, final Date date2) { 
+		if (date1 == null || date2 == null) {
+			return 0;
+		}
+		long diff = date2.getTime() - date1.getTime();
+	    return (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+	}
 }

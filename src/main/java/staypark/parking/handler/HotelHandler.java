@@ -2,8 +2,11 @@ package staypark.parking.handler;
 
 import staypark.parking.beans.ImageLink;
 import staypark.parking.beans.Room;
+import staypark.parking.beans.RoomParkSearch;
 import staypark.parking.beans.RoomParkSearchResults;
+import staypark.parking.util.AirportUtil;
 import staypark.parking.util.DBUtil;
+import staypark.parking.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +14,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -50,12 +54,28 @@ public class HotelHandler {
             "from gp_special_date_for_room " +
             "WHERE sp_rm_date = ? and sp_rm_room_id = ? ";
 
-    public List<RoomParkSearchResults> getHotelslForSearch(final String airportCode) {
+    public List<RoomParkSearchResults> getHotelslForSearch(final RoomParkSearch search) {
+    	String airportCode = AirportUtil.getAirportCodeFromSearchCityString(search.getCity());
         List<RoomParkSearchResults> hotels = getHotelsForAirport(airportCode);
 
         for (RoomParkSearchResults hotel : hotels) {
             hotel.setImageLinks(getHotelImageLinks(hotel.getHotelId()));
             hotel.setRoomList(getRoomDetails(hotel.getHotelId()));
+            hotel.setHotelArrivalDate(DateUtil.formatDate(search.getPrimaryCheckInDate()));
+            hotel.setHotelDepartureDate(DateUtil.formatDate(search.getPrimaryCheckOutDate()));
+            hotel.setEndHotelArrivalDate(DateUtil.formatDate(search.getSecondaryCheckInDate()));
+            hotel.setEndHotelDepartureDate(DateUtil.formatDate(search.getSecondaryCheckOutDate()));
+            
+            int numberDaysAtHotel = getNumberOfDaysForHotel(search.getHotelTimeOptions(), search.getPrimaryCheckInDate(), search.getPrimaryCheckOutDate(),
+            		search.getSecondaryCheckInDate(), search.getSecondaryCheckOutDate());
+            hotel.setTotalHotelNights(numberDaysAtHotel);
+            
+            hotel.setRooms(search.getRooms());
+            hotel.setTotalAdults(search.getAdults());
+            hotel.setChildren(search.getChildren());
+            hotel.setCarDropOffDate(DateUtil.formatDate(search.getDropOffDate()));
+            hotel.setCarPickUpDate(DateUtil.formatDate(search.getPickUpDate()));
+            hotel.setTotalParkingTime(DateUtil.getDaysDifference(search.getDropOffDate(), search.getPickUpDate()));
         }
 
         return hotels;
@@ -143,20 +163,25 @@ public class HotelHandler {
             DBUtil.closeResources(conn, ps, rs);
             log.error(e.getMessage(), e);
         }
+        
+        for (Room room : rooms) {
+        	//Check if room has occupancy for all days requested
+        }
 
         return rooms;
     }
 
-    public void getRoomsAvailableForSearch() {
-        //Get Hotels which match search
-            //Run GET_HOTEL_IMAGES to get images for hotel to display on screen
-                //Run GET_ROOMS_AVAILABLE to get rooms available for each hotel
-                //Run GET_ROOM_COUNT_TOTAL_USED to get how many rooms are used for that date
-                //Run GET_ROOM_SPECIAL to see if there are any special exemptions for the day
-
-                //For Start and End of trip hotels, run same search for end of trip
-                //Get Room Images using GET_ROOM_IMAGES
-
-                //Get extra cost of children: Line 534
+    private int getNumberOfDaysForHotel(final String type, final Date primaryStart, final Date primaryEnd,
+    		final Date secondaryStart, final Date secondaryEnd) {
+    	if (type == null) {
+    		return 0;
+    	}
+    	if (type.equals("B")) {
+            int startDaysDifference = DateUtil.getDaysDifference(primaryStart, primaryEnd);
+            int endDaysDifference = DateUtil.getDaysDifference(secondaryStart, secondaryEnd);
+            return startDaysDifference + endDaysDifference;
+    	} else {
+            return DateUtil.getDaysDifference(primaryStart, primaryEnd);
+    	}
     }
 }

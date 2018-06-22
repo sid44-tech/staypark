@@ -12,6 +12,30 @@
 		<br><br><br>
 		<img th:each="imageLink : ${hotel.imageLinks}" th:src="${imageLink.smallImageLink}"/>
 		<br><br>
+		<h1>Booking Information</h1>
+		<br><br>
+		Hotel Arrival Date: <span th:text="${hotel.hotelArrivalDate}"></span>
+		<br>
+		Hotel Departure Date: <span th:text="${hotel.hotelDepartureDate}"></span>
+		<br>
+		End Hotel Arrival Date: <span th:text="${hotel.endHotelArrivalDate}"></span>
+		<br>
+		End Hotel Departure Date: <span th:text="${hotel.endHotelDepartureDate}"></span>
+		<br>
+		Hotel Total Day(s): <span th:text="${hotel.totalHotelNights}"></span>
+		<br>
+		Room(s): <span th:text="${hotel.rooms}"></span>
+		<br>
+		Total Adults: <span th:text="${hotel.totalAdults}"></span>
+		<br>
+		Children: <span th:text="${hotel.children}"></span>
+		<br>
+		Car Drop Off Date: <span th:text="${hotel.carDropOffDate}"></span>
+		<br>
+		Car Pick Up Date: <span th:text="${hotel.carPickUpDate}"></span>
+		<br>
+		Total Parking Time: <span th:text="${hotel.totalParkingTime}"></span>
+		<br><br>
 		<div th:each="room : ${hotel.roomList}">
 			<img th:src="${room.image.smallImageLink}"/>
 			<br>
@@ -25,6 +49,6 @@
 		<br><br>
 		<div th:utext="${hotel.hotelText}"></div>
 		<br><br>
-	</img>
+	</div>
 </section>
 </html>

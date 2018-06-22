@@ -31,8 +31,7 @@ public class AirportController {
 	
     @PostMapping("/room-park-results")
     public String roomParkResults(Model model, @ModelAttribute RoomParkSearch search) {
-        String code = AirportUtil.getAirportCodeFromSearchCityString(search.getCity());
-        model.addAttribute("hotels", hotelHandler.getHotelslForSearch(code));
+        model.addAttribute("hotels", hotelHandler.getHotelslForSearch(search));
 
         return "room-park-results";
     }

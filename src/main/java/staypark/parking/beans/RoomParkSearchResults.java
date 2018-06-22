@@ -13,13 +13,15 @@ public class RoomParkSearchResults {
     private List<Room> roomList;
     private String hotelArrivalDate;
     private String hotelDepartureDate;
-    private String totalHotelNights;
-    private String rooms;
-    private String totalAdults;
-    private String children;
+    private String endHotelArrivalDate;
+    private String endHotelDepartureDate;
+    private int totalHotelNights;
+    private int rooms;
+    private int totalAdults;
+    private int children;
     private String carDropOffDate;
     private String carPickUpDate;
-    private String totalParkingTime;
+    private int totalParkingTime;
     private String hotelText;
     private String googleMapLink;
 }
