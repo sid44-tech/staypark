@@ -1,6 +1,8 @@
 package staypark.parking.util;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -48,5 +50,23 @@ public class DateUtil {
 		}
 		long diff = date2.getTime() - date1.getTime();
 	    return (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+	}
+
+	public static Date addDaysToDate(final Date date, final int days) {
+		if (date == null) {
+			return null;
+		}
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		c.add(Calendar.DATE, days);
+		return c.getTime();
+	}
+
+	public static String getDayOfWeek(final Date date) {
+		if (date == null) {
+			return "";
+		}
+		DateFormat format = new SimpleDateFormat("EEEE");
+		return format.format(date);
 	}
 }

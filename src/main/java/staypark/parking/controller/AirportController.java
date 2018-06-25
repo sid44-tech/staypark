@@ -3,7 +3,6 @@ package staypark.parking.controller;
 import staypark.parking.beans.RoomParkSearch;
 import staypark.parking.handler.AirportHandler;
 import staypark.parking.handler.HotelHandler;
-import staypark.parking.util.AirportUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,7 +30,7 @@ public class AirportController {
 	
     @PostMapping("/room-park-results")
     public String roomParkResults(Model model, @ModelAttribute RoomParkSearch search) {
-        model.addAttribute("hotels", hotelHandler.getHotelslForSearch(search));
+        model.addAttribute("results", hotelHandler.getHotelslForSearch(search));
 
         return "room-park-results";
     }
