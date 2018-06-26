@@ -1,12 +1,16 @@
 package staypark.parking.util;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class DateUtil {
 	private static SimpleDateFormat DATE_FORMAT_WITH_DAY = new SimpleDateFormat("EEEE MMMM dd, yyyy", Locale.US);
 
@@ -36,6 +40,16 @@ public class DateUtil {
 			"10:00 PM", "10:15 PM", "10:30 PM", "10:45 PM",
 			"11:00 PM", "11:15 PM", "11:30 PM", "11:45 PM"
 	};
+	
+	public static Date stringMDYToDate(final String dateStr) {
+		 try {
+			Date date = new SimpleDateFormat("MM-dd-yyyy").parse(dateStr);
+			return date;
+		} catch (ParseException e) {
+			log.error(e.getMessage(), e);
+			return null;
+		}
+	}
 	
 	public static String formatDate(final Date date) {
 		if (date != null) {
@@ -68,5 +82,12 @@ public class DateUtil {
 		}
 		DateFormat format = new SimpleDateFormat("EEEE");
 		return format.format(date);
+	}
+	
+	public static int getNumericalDayOfWeek(final Date date) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+		return dayOfWeek;
 	}
 }

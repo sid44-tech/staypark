@@ -11,6 +11,7 @@ public class HotelInformation {
     private String hotelTitle;
     private String cityState;
     private List<ImageLink> imageLinks;
+    private List<ImageLink> parkingImageLinks;
     private List<Room> roomList;
     private String hotelText;
     private BigDecimal carBaseRate;
@@ -25,6 +26,10 @@ public class HotelInformation {
     private BigDecimal longitude;
     private BigDecimal parkingCost;
     private String parkingCostDescription;
-    private boolean soldout;
+    private boolean soldout = false;
     private String currencyType;
+    private int numberParkingSpaces;
+    private String parkingPaymentType = "";
+    private BigDecimal parkingStandardDailyFee;
+    private BigDecimal totalCost;
 }
