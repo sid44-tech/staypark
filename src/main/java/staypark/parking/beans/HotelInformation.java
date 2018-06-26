@@ -26,4 +26,5 @@ public class HotelInformation {
     private BigDecimal parkingCost;
     private String parkingCostDescription;
     private boolean soldout;
+    private String currencyType;
 }

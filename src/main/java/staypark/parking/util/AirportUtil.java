@@ -71,4 +71,14 @@ public class AirportUtil {
 		return airportName + " (" + airportCode + ")"; 
 	}
 
+	public static String getCurrencyFromId(final int id) {
+		if (id == 2) {
+			return "CAD";
+		} else if (id == 3) {
+			return "GBP";
+		}
+
+		return "USD";
+	}
+
 }
