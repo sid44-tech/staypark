@@ -200,6 +200,10 @@ body {
 	margin-top: 8px;
 }
 
+.no-padding {
+	padding: 0px 0px 0px 0px;
+}
+
 /* -------------------------- Main Layout CSS -------------------------- */
 
 .flex-layout {
@@ -949,4 +953,82 @@ body {
 	font-family: 'Roboto', sans-serif;
 	font-size: 0.90rem;
 	margin-top: 24px;
+}
+
+/* -------------------------- PARK RESULTS CSS -------------------------- */
+
+.p-results-hotel {
+	border: red solid 2px;
+}
+
+.p-results-custom {
+	margin-bottom: 24px;
+	margin-left: 16px;
+	margin-right: 16px;
+	box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+	border: none;
+	min-width: 250px;
+	max-width: 337px;
+}
+
+.p-results-cardbody-font {
+	font-family: 'Roboto', sans-serif;
+	font-size: 10px;
+	font-weight: normal;
+}
+
+
+.p-results-cardbody-cost-font {
+	font-family: 'Roboto', sans-serif;
+	font-size: 18px;
+	font-weight: bold;
+	color: #6f9702;
+}
+
+.p-results-pri-button {
+	width: 100px;
+	height: 50px;
+}
+
+.p-results-moneymargin {
+	margin-bottom: 24px;
+}
+
+.p-results-card-img-top {
+	height: 200px;
+	object-fit: cover;
+	opacity: .8;
+}
+
+.p-results-card-img-text {
+	height: 200px;
+	color: #ffffff;
+	font-size: 22px;
+	font-weight: bold;
+	font-family: 'Roboto', sans-serif;
+	text-shadow: 1px 1px 16px #000000;
+	opacity: 1;
+}
+
+.p-results-card-label {
+	font-family: 'Roboto', sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.p-results-card-text {
+	font-family: 'Roboto', sans-serif;
+	font-size: 14px;
+	font-weight: normal;
+}
+
+.p-results-expand {
+	color: #428bca;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.p-results-expand-icon {
+	width: 21px;
+	height: 14px;
 }

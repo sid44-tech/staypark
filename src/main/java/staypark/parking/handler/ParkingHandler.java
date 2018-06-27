@@ -84,7 +84,7 @@ public class ParkingHandler {
 			while (rs.next()) {
 				HotelInformation hotel = new HotelInformation();
 				hotel.setHotelId(rs.getInt("gpi_id"));
-				hotel.setLogoImage(rs.getString("gpi_logo"));
+				hotel.setLogoImage("/images/hotel-logo/" + rs.getString("gpi_logo"));
 				hotel.setHotelTitle(rs.getString("gpi_inn_name"));
 				hotel.setAirportDistance(rs.getDouble("gpi_distence"));
 				hotel.setShuttleFrequency(rs.getString("gpi_shuttel"));
@@ -247,8 +247,8 @@ public class ParkingHandler {
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				ImageLink il = new ImageLink();
-				il.setSmallImageLink(rs.getString("gppi_timage"));
-				il.setLargeImageLink(rs.getString("gppi_limage"));
+				il.setSmallImageLink("/images/hotel-images/" + rs.getString("gppi_timage"));
+				il.setLargeImageLink("/images/hotel-images/" + rs.getString("gppi_limage"));
 				images.add(il);
 			}
 		} catch (Exception e) {
