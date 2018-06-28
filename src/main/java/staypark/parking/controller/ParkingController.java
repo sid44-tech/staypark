@@ -19,10 +19,14 @@ public class ParkingController {
 	@GetMapping("/parking/{airport}")
     public String parkingSearchRequest(@PathVariable("airport") String airport, @RequestParam(name="dropOffDate") String dropOffDate, 
     		@RequestParam(name="dropOffTime") String dropOffTime, @RequestParam(name="pickUpDate") String pickUpDate,
-    		@RequestParam(name="pickUpTime") String pickUpTime, Model model) {
-		model.addAttribute("hotels", parkingHandler.getParkingSearchResults(airport, dropOffDate, pickUpDate, dropOffTime, pickUpTime));
+    		@RequestParam(name="pickUpTime") String pickUpTime, @RequestParam(name="sort", required = false) String sort, Model model) {
+		if (sort == null) {
+			sort = "PLH";
+		}
+		model.addAttribute("hotels", parkingHandler.getParkingSearchResults(airport, dropOffDate, pickUpDate, dropOffTime, pickUpTime, sort));
 		model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
 		model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
+		model.addAttribute("sort", sort);
         
         return "parking";
     }

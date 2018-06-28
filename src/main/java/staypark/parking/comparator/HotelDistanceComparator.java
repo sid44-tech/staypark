@@ -2,10 +2,12 @@ package staypark.parking.comparator;
 
 import java.util.Comparator;
 
-public class HotelDistanceComparator implements Comparator<HotelDistanceComparator> {
+import staypark.parking.beans.HotelInformation;
+
+public class HotelDistanceComparator implements Comparator<HotelInformation> {
 
     @Override
-    public int compare(HotelDistanceComparator o1, HotelDistanceComparator o2) {
-        return 0;
+    public int compare(HotelInformation h1, HotelInformation h2) {
+        return (new Double(h1.getAirportDistance())).compareTo(new Double(h2.getAirportDistance()));
     }
 }

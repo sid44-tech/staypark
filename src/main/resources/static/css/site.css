@@ -974,6 +974,7 @@ body {
 	font-family: 'Roboto', sans-serif;
 	font-size: 10px;
 	font-weight: normal;
+	border-top: 1px rgba(0, 0, 0, 0.25) solid;
 }
 
 
@@ -995,7 +996,7 @@ body {
 
 .p-results-card-img-top {
 	height: 200px;
-	object-fit: cover;
+	object-fit: fill;
 	opacity: .8;
 }
 
@@ -1063,3 +1064,16 @@ body {
 .p-results-sort-custom {
 	margin-bottom: 24px;
 }
+
+.p-results-sort-text {
+	font-family: 'Roboto', sans-serif;
+	font-size: 15px;
+	font-weight: bold;
+	color: #428bca;
+}
+
+.p-results-map-div {
+	margin-top: 24px;
+	margin-bottom: 0px;
+}
+

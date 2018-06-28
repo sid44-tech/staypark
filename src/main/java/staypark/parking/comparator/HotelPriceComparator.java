@@ -1,8 +1,14 @@
 package staypark.parking.comparator;
 
-public class HotelPriceComparator implements Comparable<HotelPriceComparator> {
-    @Override
-    public int compareTo(HotelPriceComparator o) {
-        return 0;
-    }
+import java.util.Comparator;
+
+import staypark.parking.beans.HotelInformation;
+
+public class HotelPriceComparator implements Comparator<HotelInformation> {
+
+	@Override
+	public int compare(HotelInformation h1, HotelInformation h2) {
+		return (h1.getTotalCost()).compareTo(h2.getTotalCost());
+	}
+
 }
