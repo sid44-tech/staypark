@@ -4,9 +4,11 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -57,27 +59,32 @@ public class ParkingHandler {
 			final String startTimeStr, final String endTimeStr) {
 		Date startDate = DateUtil.stringMDYToDate(startDateStr);
 		Date endDate = DateUtil.stringMDYToDate(endDateStr);
-		
-		int totalParkingDays = getNumberOfParkingDays(startDate, endDate, startTimeStr, endTimeStr);
-		
-		List<HotelInformation> hotels = getParkingLocations(airportCode);
-		
-		for (HotelInformation hotel : hotels) {
-			calculateParkingCost(hotel, startDate, totalParkingDays);
-			hotel.setParkingImageLinks(getParkingImagesForHotel(hotel.getHotelId()));
+		List<HotelInformation> hotels = new ArrayList<>();
+
+		try (Connection conn = DBUtil.getConnection()) {
+			int totalParkingDays = getNumberOfParkingDays(startDate, endDate, startTimeStr, endTimeStr);
+
+			hotels = getParkingLocations(airportCode, conn);
+
+			for (HotelInformation hotel : hotels) {
+				calculateParkingCost(hotel, startDate, totalParkingDays, conn);
+				hotel.setParkingImageLinks(getParkingImagesForHotel(hotel.getHotelId(), conn));
+			}
+		} catch (SQLException e) {
+			log.error(e.getMessage(), e);
 		}
-		
+
+		Collections.sort(hotels);
+
 		return hotels;
 	}
 
-	private List<HotelInformation> getParkingLocations(final String airportCode) {
+	private List<HotelInformation> getParkingLocations(final String airportCode, final Connection conn) {
 		List<HotelInformation> hotels = new ArrayList<>();
-		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		
 		try {
-			conn = DBUtil.getConnection();
 			ps = conn.prepareStatement(GET_PARKING_LOCATIONS);
 			ps.setString(1,  airportCode);
 			rs = ps.executeQuery();
@@ -103,13 +110,13 @@ public class ParkingHandler {
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		} finally {
-			DBUtil.closeResources(conn, ps, rs);
+			DBUtil.closeResources(null, ps, rs);
 		}
 		
 		return hotels;
 	}
 	
-	private HotelInformation calculateParkingCost(final HotelInformation hotel, final Date startDate, final int totalDays) {
+	private HotelInformation calculateParkingCost(final HotelInformation hotel, final Date startDate, final int totalDays, final Connection conn) {
 		BigDecimal totalCost = new BigDecimal(0);
 		Date currentDate = startDate;
 
@@ -117,9 +124,9 @@ public class ParkingHandler {
 			currentDate = DateUtil.addDaysToDate(currentDate, i);
 			int dayId = DateUtil.getNumericalDayOfWeek(currentDate);
 
-			int bookedCount = getReservationForDayCountbyHotel(hotel.getHotelId(), currentDate);
-			SpecialParkingDate spdate = checkSpecialParkingForDate(hotel.getHotelId(), currentDate);
-			SpecialParkingDay spday = checkSpecialParkingForDay(hotel.getHotelId(), dayId);
+			int bookedCount = getReservationForDayCountbyHotel(hotel.getHotelId(), currentDate, conn);
+			SpecialParkingDate spdate = checkSpecialParkingForDate(hotel.getHotelId(), currentDate, conn);
+			SpecialParkingDay spday = checkSpecialParkingForDay(hotel.getHotelId(), dayId, conn);
 
 			//Calculate cost for day if day is a special date
 			if (spdate != null) {
@@ -147,14 +154,12 @@ public class ParkingHandler {
 		return hotel;
 	}
 	
-	private int getReservationForDayCountbyHotel(final int hotelId, final Date date) {
-		Connection conn = null;
+	private int getReservationForDayCountbyHotel(final int hotelId, final Date date, final Connection conn) {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		int count = 0;
 
 		try {
-			conn = DBUtil.getConnection();
 			ps = conn.prepareStatement(GET_RESERVATION_COUNT_FOR_DAY_HOTEL);
 			ps.setInt(1,  hotelId);
 			ps.setDate(2, new java.sql.Date(date.getTime()));
@@ -165,7 +170,7 @@ public class ParkingHandler {
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		} finally {
-			DBUtil.closeResources(conn, ps, rs);
+			DBUtil.closeResources(null, ps, rs);
 		}
 
 		return count;
@@ -178,14 +183,12 @@ public class ParkingHandler {
 	 * @param date Date
 	 * @return SpecialParkingDate - null if not special rates for given hotel and date
 	 */
-	private SpecialParkingDate checkSpecialParkingForDate(final int hotelId, final Date date) {
+	private SpecialParkingDate checkSpecialParkingForDate(final int hotelId, final Date date, final Connection conn) {
 		SpecialParkingDate spday = null;
-		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
 		try {
-			conn = DBUtil.getConnection();
 			ps = conn.prepareStatement(GET_SPECIAL_DATE_PARKING_INFO);
 			ps.setInt(1,  hotelId);
 			ps.setDate(2, new java.sql.Date(date.getTime()));
@@ -200,20 +203,18 @@ public class ParkingHandler {
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		} finally {
-			DBUtil.closeResources(conn, ps, rs);
+			DBUtil.closeResources(null, ps, rs);
 		}
 
 		return spday;
 	}
 	
-	private SpecialParkingDay checkSpecialParkingForDay(final int hotelId, final int dayId) {
+	private SpecialParkingDay checkSpecialParkingForDay(final int hotelId, final int dayId, final Connection conn) {
 		SpecialParkingDay spday = null;
-		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
 		try {
-			conn = DBUtil.getConnection();
 			ps = conn.prepareStatement(GET_SPECIAL_DAY_PARKING_INFO);
 			ps.setInt(1,  hotelId);
 			ps.setInt(2, dayId);
@@ -228,20 +229,18 @@ public class ParkingHandler {
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		} finally {
-			DBUtil.closeResources(conn, ps, rs);
+			DBUtil.closeResources(null, ps, rs);
 		}
 
 		return spday;
 	}
 	
-	private List<ImageLink> getParkingImagesForHotel(final int hotelId) {
+	private List<ImageLink> getParkingImagesForHotel(final int hotelId, final Connection conn) {
 		List<ImageLink> images = new ArrayList<>();
-		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
 		try {
-			conn = DBUtil.getConnection();
 			ps = conn.prepareStatement(GET_PARKING_IMAGES_FOR_HOTEL);
 			ps.setInt(1,  hotelId);
 			rs = ps.executeQuery();
@@ -254,7 +253,7 @@ public class ParkingHandler {
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		} finally {
-			DBUtil.closeResources(conn, ps, rs);
+			DBUtil.closeResources(null, ps, rs);
 		}
 
 		return images;

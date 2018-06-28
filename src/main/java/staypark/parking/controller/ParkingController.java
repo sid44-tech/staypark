@@ -1,5 +1,6 @@
 package staypark.parking.controller;
 
+import staypark.parking.util.AirportUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +21,8 @@ public class ParkingController {
     		@RequestParam(name="dropOffTime") String dropOffTime, @RequestParam(name="pickUpDate") String pickUpDate,
     		@RequestParam(name="pickUpTime") String pickUpTime, Model model) {
 		model.addAttribute("hotels", parkingHandler.getParkingSearchResults(airport, dropOffDate, pickUpDate, dropOffTime, pickUpTime));
+		model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
+		model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
         
         return "parking";
     }
