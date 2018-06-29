@@ -13,10 +13,10 @@
 
 			<div class="card-body">
 				<div class="row rp-results-map-row-custom">
-					<div class="col-sm-6">
+					<div class="col">
 						<span class="p-results-card-label">Distance: <span class="p-results-card-text" th:text="${hotel.airportDistance}"></span><span class="p-results-card-text"> miles</span></span>
 					</div>
-					<div class="col-sm-6 text-right">
+					<div class="col text-right">
 						<button class="btn btn-info btn-sm" type="button" aria-expanded="false" th:onclick="'javascript:viewmap(' + ${hotel.latitude} + ', ' + ${hotel.longitude} + ')'">VIEW MAP</button>
 					</div>
 				</div>
@@ -50,7 +50,7 @@
 								</div>
 							</div>
 						</div>
-						<div id="expand_button" onclick="updateExpand(this)" class="p-results-expand pointer p-results-toggle-custom" data-toggle="collapse" th:attr="data-target='#parking-description' + ${hotel.hotelId}" aria-expanded="false" aria-controls="collapseExample">
+						<div id="expand_button" onclick="updateExpand(this)" class="p-results-expand pointer rp-results-toggle-custom" data-toggle="collapse" th:attr="data-target='#parking-description' + ${hotel.hotelId}" aria-expanded="false" aria-controls="collapseExample">
 							Show More Details
 						</div>
 						<div class="collapse" th:id="'parking-description' + ${hotel.hotelId}">

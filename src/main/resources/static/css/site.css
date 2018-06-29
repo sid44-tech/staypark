@@ -980,6 +980,11 @@ body {
 	margin-bottom: 24px;
 }
 
+.rp-results-toggle-custom {
+	margin-top: 0px;
+}
+
+
 .rp-results-hr {
 	width: 100%;
 	margin-top: 24px;
@@ -1100,7 +1105,7 @@ body {
 }
 
 .p-results-toggle-custom {
-	margin-top: 0px;
+	margin-top: 24px;
 }
 
 #p_results_large_image {
