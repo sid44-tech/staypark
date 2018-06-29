@@ -8,7 +8,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class CheckoutController {
 
 	@GetMapping("/parking/checkout")
-    public String signup(Model model) {
+    public String checkoutPark(Model model) {
+        return "checkout";
+    }
+
+    @GetMapping("/checkout")
+    public String checkoutRoomPark(Model model) {
         return "checkout";
     }
 }

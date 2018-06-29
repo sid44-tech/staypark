@@ -6,54 +6,91 @@
 <section layout:fragment="main-content">
 	<div  th:each="hotel : ${results.hotels}">
 		<div class="card ad-card-custom">
-			<!--<img class="card-img-top ad-card-img-top" th:src="${hotel.logoImage}" alt="Card image cap">-->
-			<div id="rp_results_image_carousel" class="card-img-top rp-results-card-img-top carousel slide" data-ride="carousel" data-interval="8000">
-				<div class="carousel-inner">
-					<div class="carousel-item active">
-						<img class="d-block w-100 carousel-item-image" th:src="${hotel.logoImage}">
-					</div>
-					<div class="carousel-item" th:each="imageLink : ${hotel.imageLinks}">
-						<img class="d-block w-100 carousel-item-image" th:src="${imageLink.largeImageLink}"/>
-					</div>
-				</div>
-				<a class="carousel-control-prev" href="#rp_results_image_carousel" role="button" data-slide="prev">
-					<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-					<span class="sr-only">Previous</span>
-				</a>
-				<a class="carousel-control-next" href="#rp_results_image_carousel" role="button" data-slide="next">
-					<span class="carousel-control-next-icon" aria-hidden="true"></span>
-					<span class="sr-only">Next</span>
-				</a>
-				<div class="rp-results-card-img-overlay rp-results-card-img-text d-flex flex-column justify-content-end">
-					<span th:text="${hotel.cityState}"></span>
-					<span th:text="${hotel.hotelTitle}"></span>
-				</div>
+			<img class="card-img-top p-results-card-img-top" th:src="${hotel.logoImage}" alt="Card image cap">
+			<div class="card-img-overlay p-results-card-img-text d-flex flex-column justify-content-end" th:text="${hotel.hotelTitle}">
 			</div>
 
 			<div class="card-body">
+				<div class="row rp-results-map-row-custom">
+					<div class="col-sm-6">
+						<span class="p-results-card-label">Distance: <span class="p-results-card-text" th:text="${hotel.airportDistance}"></span><span class="p-results-card-text"> miles</span></span>
+					</div>
+					<div class="col-sm-6 text-right">
+						<button class="btn btn-info btn-sm" type="button" aria-expanded="false" th:onclick="'javascript:viewmap(' + ${hotel.latitude} + ', ' + ${hotel.longitude} + ')'">VIEW MAP</button>
+					</div>
+				</div>
 				<div class="row">
-					<div th:each="room : ${hotel.roomList}" class="col-sm rp-results-room-card-custom">
-						<div th:text="${room.roomDescription}" class="message-bar">Hotel Information</div>
-						<img class="rp-results-room-image" th:src="${room.image.largeImageLink}"/>
-						<br>
-						<div class="row rp-results-room-row-padding">
-							<div class="col rp-results-persons">
-								<span th:text="${room.occupancy}"></span><span> Person(s)</span>
+					<div class="col">
+						<span class="p-results-card-label">Shuttle Frequency: <span class="p-results-card-text" th:text="${hotel.shuttleFrequency}"></span></span>
+						<br><br>
+						<div class="row">
+							<img data-toggle="modal" data-target="#p_results_image_modal" onclick="showModal(this)" th:each="il : ${hotel.imageLinks}" th:src="${il.smallImageLink}" class="col p-results-image"/>
+						</div>
+						<hr class="rp-results-hr">
+						<div class="row">
+							<div th:each="room : ${hotel.roomList}" class="col-sm rp-results-room-card-custom">
+								<div th:text="${room.roomDescription}" class="rp-results-message-bar">Hotel Information</div>
+								<img data-toggle="modal" data-target="#p_results_image_modal" onclick="showModal(this)" class="rp-results-room-image" th:src="${room.image.largeImageLink}"/>
+								<br>
+								<div class="row rp-results-room-row-padding">
+									<div class="col rp-results-persons">
+										<span th:text="${room.occupancy}"></span><span> Person(s)</span>
+									</div>
+								</div>
+								<div class="row rp-results-room-row-padding">
+									<div class="col rp-results-cost">
+										</span><span>$</span><span th:text="${room.totalCost}"></span><span> USD</span>
+									</div>
+								</div>
+								<div class="row rp-results-room-row-padding">
+									<div class="col">
+										<button class="btn rp-results-book-button" onclick="checkout()">Book Now</button>
+									</div>
+								</div>
 							</div>
 						</div>
-						<div class="row rp-results-room-row-padding">
-							<div class="col rp-results-cost">
-								</span><span>$</span><span th:text="${room.totalCost}"></span><span> USD</span>
-							</div>
+						<div id="expand_button" onclick="updateExpand(this)" class="p-results-expand pointer p-results-toggle-custom" data-toggle="collapse" th:attr="data-target='#parking-description' + ${hotel.hotelId}" aria-expanded="false" aria-controls="collapseExample">
+							Show More Details
 						</div>
-						<div class="row rp-results-room-row-padding">
-							<div class="col">
-								<button class="btn rp-results-book-button">Book Now</button>
-							</div>
+						<div class="collapse" th:id="'parking-description' + ${hotel.hotelId}">
+							<br>
+							<span class="small-font" th:utext="${hotel.hotelText}"></span>
 						</div>
 					</div>
 				</div>
-				<div class="card-text rp-results-card-text-custom" th:utext="${hotel.hotelText}"></div>
+				<!--<div class="row">-->
+					<!--<div th:each="room : ${hotel.roomList}" class="col-sm rp-results-room-card-custom">-->
+						<!--<div th:text="${room.roomDescription}" class="message-bar">Hotel Information</div>-->
+						<!--<img class="rp-results-room-image" th:src="${room.image.largeImageLink}"/>-->
+						<!--<br>-->
+						<!--<div class="row rp-results-room-row-padding">-->
+							<!--<div class="col rp-results-persons">-->
+								<!--<span th:text="${room.occupancy}"></span><span> Person(s)</span>-->
+							<!--</div>-->
+						<!--</div>-->
+						<!--<div class="row rp-results-room-row-padding">-->
+							<!--<div class="col rp-results-cost">-->
+								<!--</span><span>$</span><span th:text="${room.totalCost}"></span><span> USD</span>-->
+							<!--</div>-->
+						<!--</div>-->
+						<!--<div class="row rp-results-room-row-padding">-->
+							<!--<div class="col">-->
+								<!--<button class="btn rp-results-book-button">Book Now</button>-->
+							<!--</div>-->
+						<!--</div>-->
+					<!--</div>-->
+				<!--</div>-->
+				<!--<div class="card-text rp-results-card-text-custom" th:utext="${hotel.hotelText}"></div>-->
+			</div>
+		</div>
+	</div>
+
+	<div id="p_results_image_modal" class="modal fade p_results_modal_shadow" role="dialog">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content p_results_modal_content">
+				<div class="modal-body align-center">
+					<img id="p_results_large_image" src=""/>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -147,5 +184,31 @@
 		</div>
 		<hr class="rp-results-side-hr">
 	</div>
+
+	<script>
+        function showModal(e) {
+            var link = e.src;
+            link = link.replace("thumb_", "");
+            $("#p_results_large_image").attr("src",link);
+        }
+
+        function updateExpand(e) {
+            var html = e.textContent;
+
+            if (html.indexOf("Show") != -1) {
+                e.innerHTML = "Hide Details";
+            } else {
+                e.innerHTML = "Show More Details";
+            }
+        }
+
+        function checkout() {
+            location.href = "\checkout";
+        }
+
+        function viewmap(lat, lon) {
+            window.open('http://www.google.com/maps/place/' + lat + ',' + lon, '_blank');
+        }
+	</script>
 </section>
 </html>

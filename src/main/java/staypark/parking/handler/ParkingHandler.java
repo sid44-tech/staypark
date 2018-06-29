@@ -31,35 +31,35 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class ParkingHandler {
-	private static String GET_PARKING_LOCATIONS = 
-			"select p.*, d.*, c.gpc_id, c.gpc_state_id, c.gpc_city, c.gpc_status, s.gps_id, s.gps_state, s.gps_status " + 
-			"from dbstaypark.gp_parking_info as p " + 
-			"left join dbstaypark.gp_deperture_location as d on p.gpi_dep_id = d.gdl_id " + 
-			"left join dbstaypark.gp_city as c on d.gdl_city_id= c.gpc_id " + 
-			"left join dbstaypark.gp_state as s on d.gdl_state_id=s.gps_id " + 
+	private static String GET_PARKING_LOCATIONS =
+			"select p.*, d.*, c.gpc_id, c.gpc_state_id, c.gpc_city, c.gpc_status, s.gps_id, s.gps_state, s.gps_status " +
+			"from dbstaypark.gp_parking_info as p " +
+			"left join dbstaypark.gp_deperture_location as d on p.gpi_dep_id = d.gdl_id " +
+			"left join dbstaypark.gp_city as c on d.gdl_city_id= c.gpc_id " +
+			"left join dbstaypark.gp_state as s on d.gdl_state_id=s.gps_id " +
 			"where d.gdl_scode=? and p.gpi_status='Active' ";
-	
-	private static String GET_RESERVATION_COUNT_FOR_RANGE_HOTEL = 
-			"select d.rd_st_date, count(d.rd_st_date) as count " + 
-			"from dbstaypark.gp_reservation_dtls as d " + 
-			"WHERE d.rd_htl_id = ? and d.rd_st_date >= ? AND d.rd_st_date <= ? " + 
+
+	private static String GET_RESERVATION_COUNT_FOR_RANGE_HOTEL =
+			"select d.rd_st_date, count(d.rd_st_date) as count " +
+			"from dbstaypark.gp_reservation_dtls as d " +
+			"WHERE d.rd_htl_id = ? and d.rd_st_date >= ? AND d.rd_st_date <= ? " +
 			"group by d.rd_st_date ";
-	
-	private static String GET_SPECIAL_DATE_PARKING_RANGE_INFO = 
-			"select sp_date, sp_cost, sp_prk_no " + 
-			"from dbstaypark.gp_sp_reservation " + 
+
+	private static String GET_SPECIAL_DATE_PARKING_RANGE_INFO =
+			"select sp_date, sp_cost, sp_prk_no " +
+			"from dbstaypark.gp_sp_reservation " +
 			"WHERE sp_htl_id = ? and sp_date >= ? and sp_date <= ? ";
-	
-	private static String GET_SPECIAL_DAY_PARKING_INFO = 
-			"select * " + 
+
+	private static String GET_SPECIAL_DAY_PARKING_INFO =
+			"select * " +
 			"from dbstaypark.gp_sp_dy_reservation " +
 			"WHERE dy_htl_id = ? ";
-	
+
 	private static String GET_PARKING_IMAGES_FOR_HOTEL =
-			"select gppi_timage, gppi_limage " + 
-			"from dbstaypark.gp_parking_image " + 
+			"select gppi_timage, gppi_limage " +
+			"from dbstaypark.gp_parking_image " +
 			"where gppi_p_id = ? ";
-	
+
 	public List<HotelInformation> getParkingSearchResults(final String airportCode, final String startDateStr, final String endDateStr,
 			final String startTimeStr, final String endTimeStr, final String sort) {
 		Date startDate = DateUtil.stringMDYToDate(startDateStr);
@@ -80,10 +80,10 @@ public class ParkingHandler {
 		}
 
 		sortHotels(hotels, sort);
-		
+
 		return hotels;
 	}
-	
+
 	private void sortHotels(final List<HotelInformation> hotels, final String sort) {
 		if (sort == null || sort.equals("PLH")) {
 			hotels.sort(new HotelPriceComparator());
@@ -104,7 +104,7 @@ public class ParkingHandler {
 		List<HotelInformation> hotels = new ArrayList<>();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		
+
 		try {
 			ps = conn.prepareStatement(GET_PARKING_LOCATIONS);
 			ps.setString(1,  airportCode);
@@ -133,10 +133,10 @@ public class ParkingHandler {
 		} finally {
 			DBUtil.closeResources(null, ps, rs);
 		}
-		
+
 		return hotels;
 	}
-	
+
 	private HotelInformation calculateParkingCost(final HotelInformation hotel, final Date startDate, final Date endDate, final int totalDays, final Connection conn) {
 		BigDecimal totalCost = new BigDecimal(0);
 		Date currentDate = startDate;
@@ -144,7 +144,7 @@ public class ParkingHandler {
 		Map<Date, Integer> bookedCountMap = getReservationForRangeCountbyHotel(hotel.getHotelId(), startDate, endDate, conn);
 		Map<Date, SpecialParkingDate> spdateMap = checkSpecialParkingForDateRange(hotel.getHotelId(), startDate, endDate, conn);
 		Map<Integer, SpecialParkingDay> spdayMap = checkSpecialParkingForDay(hotel.getHotelId(), conn);
-		
+
 		for (int i = 0; i < totalDays; i++) {
 			currentDate = DateUtil.addDaysToDate(currentDate, i);
 			int dayId = DateUtil.getNumericalDayOfWeek(currentDate);
@@ -173,12 +173,12 @@ public class ParkingHandler {
 				}
 			}
 		}
-		
+
 		hotel.setTotalCost(totalCost.setScale(2));
-		
+
 		return hotel;
 	}
-	
+
 	private Map<Date, Integer> getReservationForRangeCountbyHotel(final int hotelId, final Date startDate, final Date endDate, final Connection conn) {
 		Map<Date, Integer> map = new HashMap<>();
 		PreparedStatement ps = null;
@@ -201,7 +201,7 @@ public class ParkingHandler {
 
 		return map;
 	}
-	
+
 	/**
 	 * Checks if given day for a hotel is considered a special parking day with different rates and number of spaces available.
 	 * @param hotelId int
@@ -235,7 +235,7 @@ public class ParkingHandler {
 
 		return map;
 	}
-	
+
 	private Map<Integer, SpecialParkingDay> checkSpecialParkingForDay(final int hotelId, final Connection conn) {
 		Map<Integer, SpecialParkingDay> map = new HashMap<>();
 		PreparedStatement ps = null;

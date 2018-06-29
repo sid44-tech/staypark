@@ -21,9 +21,10 @@ import java.util.List;
 public class HotelHandler {
 
     private static String GET_HOTELS_FOR_SEARCH =
-            "select cost.*, deptloc.*, city.gpc_id, city.gpc_state_id, city.gpc_city, city.gpc_state_id, city.gpc_status, state.gps_id, state.gps_state, state.gps_status " +
+            "select cost.*, p.*, deptloc.*, city.gpc_id, city.gpc_state_id, city.gpc_city, city.gpc_state_id, city.gpc_status, state.gps_id, state.gps_state, state.gps_status " +
             "from dbstaypark.gp_htl_day_range_cost as cost " +
             "left join  dbstaypark.gp_deperture_location as deptloc on cost.drc_gpi_dep_id = deptloc.gdl_id  " +
+            "left join dbstaypark.gp_parking_info as p on p.gpi_aff_id = cost.drc_aff_id " +
             "left join dbstaypark.gp_city as city on deptloc.gdl_city_id = city.gpc_id " +
             "left join dbstaypark.gp_state as state on deptloc.gdl_state_id = state.gps_id " +
             "where deptloc.gdl_scode = ? and cost.drc_status = 'Active'";
@@ -126,6 +127,10 @@ public class HotelHandler {
                 bean.setCarEightToFourteenRate(rs.getBigDecimal("drc_8_14_cost"));
                 bean.setCarOverFifteenRate(rs.getBigDecimal("drc_upto_15_cost"));
                 bean.setLogoImage("/images/hotel-logo/" + rs.getString( "drc_gpi_logo"));
+                bean.setAirportDistance(rs.getDouble("gpi_distence"));
+                bean.setShuttleFrequency(rs.getString("gpi_shuttel"));
+                bean.setLatitude(rs.getBigDecimal("gpi_latitude"));
+                bean.setLongitude(rs.getBigDecimal("gpi_longitude"));
 
                 results.add(bean);
             }

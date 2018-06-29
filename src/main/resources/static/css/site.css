@@ -204,6 +204,12 @@ body {
 	padding: 0px 0px 0px 0px;
 }
 
+.small-font {
+	font-family: 'Roboto', sans-serif;
+	font-size: 10px;
+	font-weight: normal;
+}
+
 /* -------------------------- Main Layout CSS -------------------------- */
 
 .flex-layout {
@@ -334,6 +340,11 @@ body {
 	border-width: 0px;
 	
 	background-color: transparent !important;
+}
+
+.navbar-text {
+	color: #FFFFFF !important;
+	font-weight: bold;
 }
 
 /* -------------------------- Footer CSS -------------------------- */
@@ -763,10 +774,20 @@ body {
 	opacity: .9;
 }
 
+/*.ad-card-custom {*/
+	/*margin-bottom: 24px;*/
+	/*box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);*/
+	/*border: none;*/
+/*}*/
+
 .ad-card-custom {
+	margin: 0 auto;
 	margin-bottom: 24px;
+
 	box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 	border: none;
+	min-width: 337px;
+	max-width: 337px;
 }
 
 .ad-card-img-text {
@@ -882,18 +903,18 @@ body {
 }
 
 #rp_results_image_carousel .carousel-item-image {
-	height: 300px;
+	height: 200px;
 	object-fit: cover;
 }
 
 .rp-results-card-img-top {
-	height: 300px;
-	object-fit: cover;
-	opacity: .9;
+	height: 200px;
+	object-fit: fill;
+	opacity: 1.0;
 }
 
 .rp-results-card-img-text {
-	height: 300px;
+	height: 200px;
 	color: #ffffff;
 	font-size: 18px;
 	font-weight: bold;
@@ -911,9 +932,10 @@ body {
 }
 
 .rp-results-room-image {
-	width: 100%;
-	height: 150px;
+	width: 100px;
+	height: 100px;
 	object-fit: cover;
+	cursor: pointer;
 }
 
 .rp-results-room-card-custom {
@@ -953,6 +975,29 @@ body {
 	font-size: 0.90rem;
 	margin-top: 24px;
 }
+
+.rp-results-map-row-custom {
+	margin-bottom: 24px;
+}
+
+.rp-results-hr {
+	width: 100%;
+	margin-top: 24px;
+	margin-bottom: 24px;
+	border-bottom: 1px solid;
+	border-color: #cccecf;
+}
+
+.rp-results-message-bar {
+	width: 100%;
+	color: #428bca;
+	text-align: center;
+	font-size: 14px;
+	font-weight: bold;
+	font-family: 'Roboto', sans-serif;
+	margin-bottom: 8px;
+}
+
 
 /* -------------------------- PARK RESULTS CSS -------------------------- */
 
@@ -997,16 +1042,16 @@ body {
 .p-results-card-img-top {
 	height: 200px;
 	object-fit: fill;
-	opacity: .8;
+	opacity: 1.0;
 }
 
 .p-results-card-img-text {
 	height: 200px;
-	color: #ffffff;
+	color: #FFFFFF;
 	font-size: 22px;
 	font-weight: bold;
 	font-family: 'Roboto', sans-serif;
-	text-shadow: 1px 1px 16px #000000;
+	text-shadow: 4px 4px 16px #000000;
 	opacity: 1;
 }
 
@@ -1045,7 +1090,7 @@ body {
 }
 
 .p-results-toggle-custom {
-	margin-top: 24px;
+	margin-top: 0px;
 }
 
 #p_results_large_image {
@@ -1077,3 +1122,9 @@ body {
 	margin-bottom: 0px;
 }
 
+.p-results-hr {
+	width: 100%;
+	margin-top: 5px;
+	border-bottom: 1px solid;
+	border-color: #cccecf;
+}
