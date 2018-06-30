@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import staypark.parking.comparator.HotelRecommendedComparator;
 import staypark.parking.util.AirportUtil;
 import org.springframework.stereotype.Service;
 
@@ -85,7 +86,9 @@ public class ParkingHandler {
 	}
 
 	private void sortHotels(final List<HotelInformation> hotels, final String sort) {
-		if (sort == null || sort.equals("PLH")) {
+		if (sort == null || sort.equals("REC")) {
+			hotels.sort(new HotelRecommendedComparator());
+		} else if (sort.equals("PLH")) {
 			hotels.sort(new HotelPriceComparator());
 		} else if (sort.equals("PHL")) {
 			hotels.sort(new HotelPriceComparator());
@@ -126,6 +129,7 @@ public class ParkingHandler {
 				hotel.setNumberParkingSpaces(rs.getInt("gpi_pno"));
 				hotel.setParkingPaymentType(rs.getString("payment_type"));
 				hotel.setParkingStandardDailyFee(rs.getBigDecimal("gpi_feepday"));
+				hotel.setRecommendedSort(rs.getInt("gpi_sequence"));
 				hotels.add(hotel);
 			}
 		} catch (Exception e) {

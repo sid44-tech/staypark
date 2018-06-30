@@ -9,6 +9,7 @@
 		    <label for="sort" class="col-form-label p-results-sort-text">Sort By</label>
 		    <div>
 				<select class="form-control" id="sort" onchange="updateSort(this)">
+					<option value="REC" th:selected="${sort == 'REC'}">Recommended</option>
 					<option value="PLH" th:selected="${sort == 'PLH'}">Price Lowest to Highest</option>
 					<option value="PHL" th:selected="${sort == 'PHL'}">Price Highest to Lowest</option>
 					<option value="DSL" th:selected="${sort == 'DSL'}">Distance Shortest to Longest</option>
@@ -110,7 +111,7 @@
         }
         
         function checkout() {
-        	location.href = "\checkout";
+        	location.href = "/checkout";
         }
         
 		function viewmap(lat, lon) {

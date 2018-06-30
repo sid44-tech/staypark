@@ -228,7 +228,7 @@
                 	initDatePicker(drop_off_date, new Date());
                 }
                 initDatePicker(primary_check_out_date, addDaysToDate(new Date(), 1));
-                initDatePicker(pick_up_date, addDaysToDate(new Date(), 1));
+                initDatePicker(pick_up_date, addDaysToDate(new Date(), 2));
                 initDatePicker(secondary_check_in_date, addDaysToDate(new Date(), 2));
                 initDatePicker(secondary_check_out_date, addDaysToDate(new Date(), 3));
                 updateMinValues(primary_check_in_date, primary_check_out_date, secondary_check_in_date, secondary_check_out_date, drop_off_date, pick_up_date);
@@ -326,13 +326,16 @@
                 var sec_indate = datefield3.datepicker("getDate");
                 var sec_outdate = datefield4.datepicker("getDate");
                 var cardrop_date = cardrop.datepicker("getDate");
+                var carpickup_date = carpickup.datepicker("getDate");
 
                 if (pri_indate > pri_outdate) {
                 	pri_indate.setDate(pri_indate.getDate() + 1);
                     datefield2.datepicker("setDate", pri_indate);
-                    
+
                     if (document.getElementById('hotelTimeOption1').checked) {
                     	cardrop.datepicker("setDate", pri_indate);
+                        pri_indate.setDate(pri_indate.getDate() + 1);
+                        carpickup.datepicker("setDate", pri_indate);
                     }
                 }
                 
@@ -349,6 +352,8 @@
                 if (document.getElementById('hotelTimeOption2').checked) {
                 	if (pri_indate <= cardrop_date) {
                 		cardrop.datepicker("setDate", pri_indate);
+                        pri_indate.setDate(pri_indate.getDate() + 1);
+                        carpickup.datepicker("setDate", pri_indate);
                 	}
                 }
             });
@@ -362,6 +367,12 @@
                 if (pri_outdate < pri_indate) {
                 	pri_indate.setDate(pri_outdate.getDate() - 1);
                     datefield1.datepicker("setDate", pri_indate);
+                }
+
+                if (document.getElementById('hotelTimeOption1').checked) {
+                    cardrop.datepicker("setDate", pri_outdate);
+                    pri_outdate.setDate(pri_outdate.getDate() + 1);
+                    carpickup.datepicker("setDate", pri_outdate);
                 }
                 
                 updateTotalParkingDays(datefield2.datepicker("getDate"), datefield3.datepicker("getDate"));
@@ -414,6 +425,19 @@
                 		cardrop_date.setDate(cardrop_date.getDate() + 1);
                 		datefield2.datepicker("setDate", cardrop_date);
                 	}
+                }
+            });
+
+            carpickup.on('changeDate', function() {
+                var cardrop_date = cardrop.datepicker("getDate");
+                var carpickup_indate = carpickup.datepicker("getDate");
+
+                if (document.getElementById('hotelTimeOption1').checked) {
+                    if (carpickup_indate <= cardrop_date) {
+						alert("Car Pick Up Date should be after Car Drop Off Date");
+                        cardrop_date.setDate(cardrop_date.getDate() + 1);
+                        carpickup.datepicker("setDate", cardrop_date)
+                    }
                 }
             });
         }

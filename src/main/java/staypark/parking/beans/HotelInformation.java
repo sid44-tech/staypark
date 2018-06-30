@@ -32,4 +32,5 @@ public class HotelInformation {
     private String parkingPaymentType = "";
     private BigDecimal parkingStandardDailyFee;
     private BigDecimal totalCost;
+    private int recommendedSort;
 }

@@ -21,7 +21,7 @@ public class ParkingController {
     		@RequestParam(name="dropOffTime") String dropOffTime, @RequestParam(name="pickUpDate") String pickUpDate,
     		@RequestParam(name="pickUpTime") String pickUpTime, @RequestParam(name="sort", required = false) String sort, Model model) {
 		if (sort == null) {
-			sort = "PLH";
+			sort = "REC";
 		}
 		model.addAttribute("hotels", parkingHandler.getParkingSearchResults(airport, dropOffDate, pickUpDate, dropOffTime, pickUpTime, sort));
 		model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
