@@ -93,7 +93,7 @@
         	var parmsStr = "";
 			var sortFound = false;
         	for (i = 0; i < parms.length; i++) {
-        		if (parms[i].includes("sort")) {
+        		if (parms[i].indexOf("sort") != -1) {
         			parmsStr = parmsStr + "sort=" + item.value + "&";
         			sortFound = true;
         		} else {
