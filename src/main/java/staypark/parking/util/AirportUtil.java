@@ -73,7 +73,7 @@ public class AirportUtil {
 
 	public static String getCurrencyFromId(final int id) {
 		if (id == 2) {
-			return "CAD";
+			return "USD";
 		} else if (id == 3) {
 			return "GBP";
 		}
