@@ -159,7 +159,7 @@
 										</select>
 									</div>
 								</div>
-								<div id="car_pikcup_div" class="form-row">
+								<div id="car_pickup_div" class="form-row">
 									<div class="form-group col-md-6">
 										<label for="pick_up_date">Car Pick Up Date</label>
 										<input type="text" class="form-control" id="pick_up_date" name="pickUpDate"  placeholder="mm/dd/yyyy" required/>
@@ -234,7 +234,7 @@
                 updateMinValues(primary_check_in_date, primary_check_out_date, secondary_check_in_date, secondary_check_out_date, drop_off_date, pick_up_date);
                 addListenersForDateFields(primary_check_in_date, primary_check_out_date, secondary_check_in_date, secondary_check_out_date, drop_off_date, pick_up_date);
 
-                document.getElementById("drop_off_date").disabled = true;
+                document.getElementById("drop_off_date").readOnly = true;
 
                 $( "#hotelOption1" ).click(function() {
                     $('#hotel_when_selection').hide();
@@ -249,7 +249,7 @@
                     $('#car_date_input_section').show();
 
                     document.getElementById('hotelTimeOption1').checked = true;
-                    document.getElementById("drop_off_date").disabled = true;
+                    document.getElementById("drop_off_date").readOnly = true;
                 });
 
                 $( "#hotelOption2" ).click(function() {
@@ -260,21 +260,16 @@
 
                 $('#hotelTimeOption1').click(function() {
                     $('#secondary_checkin_section').hide();
-                    $('#car_pikcup_div').show();
+                    $('#car_pickup_div').show();
                     $('#car_dates_div').show();
                     $('#car_date_input_section').show();
                     $('#start_trip').hide();
                     $('#car_drop_time_div').hide();
                     $('#total_parking_time_div').hide();
-                    document.getElementById("drop_off_date").disabled = true;
-                    
-                    var pri_indate = primary_check_in_date.datepicker("getDate");
+                    document.getElementById("drop_off_date").readOnly = true;
+
                     var pri_outdate = primary_check_out_date.datepicker("getDate");
-                    var sec_indate = secondary_check_in_date.datepicker("getDate");
-                    var sec_outdate = secondary_check_out_date.datepicker("getDate");
-                    var cardrop_date = drop_off_date.datepicker("getDate");
                     drop_off_date.datepicker("setDate", pri_outdate);
-                    
 				});
 
                 $('#hotelTimeOption2').click(function() {
@@ -284,26 +279,22 @@
                     $('#start_trip').hide();
                     $('#car_drop_time_div').show();
                     $('#total_parking_time_div').hide();
-                    document.getElementById("drop_off_date").disabled = false;
-                    $('#car_pikcup_div').hide();
+                    document.getElementById("drop_off_date").readOnly = false;
+                    $('#car_pickup_div').hide();
                     
                     var pri_indate = primary_check_in_date.datepicker("getDate");
-                    var pri_outdate = primary_check_out_date.datepicker("getDate");
-                    var sec_indate = secondary_check_in_date.datepicker("getDate");
-                    var sec_outdate = secondary_check_out_date.datepicker("getDate");
-                    var cardrop_date = drop_off_date.datepicker("getDate");
                     drop_off_date.datepicker("setDate", pri_indate);
                 });
 
                 $('#hotelTimeOption3').click(function() {
                     $('#secondary_checkin_section').show();
-                    $('#car_pikcup_div').show();
+                    $('#car_pickup_div').show();
                     $('#car_dates_div').hide();
                     $('#car_date_input_section').hide();
                     $('#start_trip').show();
                     $('#car_drop_time_div').show();
                     $('#total_parking_time_div').show();
-                    document.getElementById("drop_off_date").disabled = false;
+                    document.getElementById("drop_off_date").readOnly = false;
                 });
 
             }, false);
@@ -324,9 +315,7 @@
                 var pri_indate = datefield1.datepicker("getDate");
                 var pri_outdate = datefield2.datepicker("getDate");
                 var sec_indate = datefield3.datepicker("getDate");
-                var sec_outdate = datefield4.datepicker("getDate");
                 var cardrop_date = cardrop.datepicker("getDate");
-                var carpickup_date = carpickup.datepicker("getDate");
 
                 if (pri_indate > pri_outdate) {
                 	pri_indate.setDate(pri_indate.getDate() + 1);
@@ -347,8 +336,6 @@
                 	datefield4.datepicker("setDate", pri_indate);
                 }
                 
-                updateTotalParkingDays(datefield2.datepicker("getDate"), datefield3.datepicker("getDate"));
-                
                 if (document.getElementById('hotelTimeOption2').checked) {
                 	if (pri_indate <= cardrop_date) {
                 		cardrop.datepicker("setDate", pri_indate);
@@ -356,13 +343,13 @@
                         carpickup.datepicker("setDate", pri_indate);
                 	}
                 }
+
+                updateTotalParkingDays(datefield2.datepicker("getDate"), datefield3.datepicker("getDate"));
             });
 
             datefield2.on('changeDate', function() {
                 var pri_indate = datefield1.datepicker("getDate");
                 var pri_outdate = datefield2.datepicker("getDate");
-                var sec_indate = datefield3.datepicker("getDate");
-                var sec_outdate = datefield4.datepicker("getDate");
 
                 if (pri_outdate < pri_indate) {
                 	pri_indate.setDate(pri_outdate.getDate() - 1);
@@ -379,7 +366,6 @@
             });
 
             datefield3.on('changeDate', function() {
-                var pri_indate = datefield1.datepicker("getDate");
                 var pri_outdate = datefield2.datepicker("getDate");
                 var sec_indate = datefield3.datepicker("getDate");
                 var sec_outdate = datefield4.datepicker("getDate");
@@ -401,8 +387,6 @@
             });
 
             datefield4.on('changeDate', function() {
-                var pri_indate = datefield1.datepicker("getDate");
-                var pri_outdate = datefield2.datepicker("getDate");
                 var sec_indate = datefield3.datepicker("getDate");
                 var sec_outdate = datefield4.datepicker("getDate");
 
@@ -417,7 +401,6 @@
             cardrop.on('changeDate', function() {
             	var cardrop_date = cardrop.datepicker("getDate");
                 var pri_indate = datefield1.datepicker("getDate");
-                var pri_outdate = datefield2.datepicker("getDate");
 
                 if (document.getElementById('hotelTimeOption2').checked) {
                 	if (pri_indate < cardrop_date) {
@@ -426,6 +409,8 @@
                 		datefield2.datepicker("setDate", cardrop_date);
                 	}
                 }
+
+                updateTotalParkingDays(datefield2.datepicker("getDate"), datefield3.datepicker("getDate"));
             });
 
             carpickup.on('changeDate', function() {
@@ -439,6 +424,8 @@
                         carpickup.datepicker("setDate", cardrop_date)
                     }
                 }
+
+                updateTotalParkingDays(datefield2.datepicker("getDate"), datefield3.datepicker("getDate"));
             });
         }
         

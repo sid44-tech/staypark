@@ -15,4 +15,5 @@ public class Room {
     private BigDecimal totalCost;
     private BigDecimal extraPersonCost;
     private BigDecimal extraChildCost;
+    private boolean available = true;
 }

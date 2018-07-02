@@ -15,4 +15,5 @@ public class RoomParkSearchOptions {
     private String carDropOffDate;
     private String carPickUpDate;
     private int totalParkingTime;
+    private String searchType;
 }

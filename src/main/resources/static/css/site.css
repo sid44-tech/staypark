@@ -183,7 +183,7 @@ body {
 	border-radius: 6px 6px 0px 0px;
 	
 	padding-top: 8px;
-	padding-bottom: 8px;s
+	padding-bottom: 8px;
 }
 
 .radio-button-font {
@@ -1010,6 +1010,10 @@ body {
 	height: 200px;
 	background-color: rgba(0, 0, 0, 0.4);
 	border-top-radius: 5px;
+}
+
+.rp-results-sidebar-title {
+	color: #428bca;
 }
 
 

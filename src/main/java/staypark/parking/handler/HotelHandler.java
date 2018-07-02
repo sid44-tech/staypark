@@ -95,10 +95,20 @@ public class HotelHandler {
         searchOptions.setCarDropOffDate(DateUtil.formatDate(search.getDropOffDate()));
         searchOptions.setCarPickUpDate(DateUtil.formatDate(search.getPickUpDate()));
 
+        if (search.getHotelOptions().equals("R")) {
+            searchOptions.setSearchType("R");
+        } else if (search.getHotelTimeOptions().equals("S")) {
+            searchOptions.setSearchType("S");
+        } else if (search.getHotelTimeOptions().equals("E")) {
+            searchOptions.setSearchType("E");
+        } else if (search.getHotelTimeOptions().equals("B")) {
+            searchOptions.setSearchType("B");
+        }
+
         Date carStartDate = getCarStartDate(search.getHotelTimeOptions(), search.getDropOffDate(),
                 search.getPrimaryCheckInDate(), search.getSecondaryCheckInDate());
         Date carEndDate = getCarEndDate(search.getHotelTimeOptions(), search.getPrimaryCheckOutDate(),
-                search.getDropOffDate());
+                search.getPickUpDate());
 
         searchOptions.setTotalParkingTime(DateUtil.getDaysDifference(carStartDate, carEndDate));
 
@@ -193,6 +203,10 @@ public class HotelHandler {
                 il.setLargeImageLink("/images/room-images/" + rs.getString("rm_limage"));
                 room.setImage(il);
 
+                if ((room.getMaxOccupancy()*search.getRooms()) < (search.getAdults() + search.getChildren())) {
+                    room.setAvailable(false);
+                }
+
                 rooms.add(room);
             }
         } catch (Exception e) {
@@ -204,7 +218,7 @@ public class HotelHandler {
             Date carStartDate = getCarStartDate(search.getHotelTimeOptions(), search.getDropOffDate(),
                     search.getPrimaryCheckInDate(), search.getSecondaryCheckInDate());
             Date carEndDate = getCarEndDate(search.getHotelTimeOptions(), search.getPrimaryCheckOutDate(),
-                    search.getDropOffDate());
+                    search.getPickUpDate());
 
             double hotelDays = DateUtil.getDaysDifference(search.getPrimaryCheckInDate(), search.getPrimaryCheckOutDate());
             if (search.getHotelTimeOptions().equals("B")) {
@@ -282,11 +296,11 @@ public class HotelHandler {
         }
     }
 
-    private Date getCarEndDate(final String stayType, final Date hotelCheckOutDate, final Date carDropOffDate) {
+    private Date getCarEndDate(final String stayType, final Date hotelCheckOutDate, final Date pickUpDate) {
         if ("S".equals(stayType)) {
-            return hotelCheckOutDate;
+            return pickUpDate;
         } else if ("E".equals(stayType)) {
-            return carDropOffDate;
+            return pickUpDate;
         } else {
             return DateUtil.addDaysToDate(hotelCheckOutDate, 1);
         }

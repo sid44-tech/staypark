@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorate="~{page-right-side-bar.html}">
-
+<body onload="updateFields()">
 <section layout:fragment="main-content">
 	<div  th:each="hotel : ${results.hotels}">
 		<div class="card ad-card-custom">
@@ -44,8 +44,9 @@
 									</div>
 								</div>
 								<div class="row rp-results-room-row-padding">
-									<div class="col">
-										<button class="btn rp-results-book-button" onclick="checkout()">Book Now</button>
+									<div th:switch="${room.available}" class="col">
+										<button class="btn rp-results-book-button btn-sm" type="button" aria-expanded="false" th:case="${true}" onclick="checkout()">BOOK NOW</button>
+										<button class="btn btn-danger btn-sm" type="button" aria-expanded="false" th:case="${false}" disabled>UNAVAILABLE</button>
 									</div>
 								</div>
 							</div>
@@ -59,29 +60,6 @@
 						</div>
 					</div>
 				</div>
-				<!--<div class="row">-->
-					<!--<div th:each="room : ${hotel.roomList}" class="col-sm rp-results-room-card-custom">-->
-						<!--<div th:text="${room.roomDescription}" class="message-bar">Hotel Information</div>-->
-						<!--<img class="rp-results-room-image" th:src="${room.image.largeImageLink}"/>-->
-						<!--<br>-->
-						<!--<div class="row rp-results-room-row-padding">-->
-							<!--<div class="col rp-results-persons">-->
-								<!--<span th:text="${room.occupancy}"></span><span> Person(s)</span>-->
-							<!--</div>-->
-						<!--</div>-->
-						<!--<div class="row rp-results-room-row-padding">-->
-							<!--<div class="col rp-results-cost">-->
-								<!--</span><span>$</span><span th:text="${room.totalCost}"></span><span> USD</span>-->
-							<!--</div>-->
-						<!--</div>-->
-						<!--<div class="row rp-results-room-row-padding">-->
-							<!--<div class="col">-->
-								<!--<button class="btn rp-results-book-button">Book Now</button>-->
-							<!--</div>-->
-						<!--</div>-->
-					<!--</div>-->
-				<!--</div>-->
-				<!--<div class="card-text rp-results-card-text-custom" th:utext="${hotel.hotelText}"></div>-->
 			</div>
 		</div>
 	</div>
@@ -99,94 +77,194 @@
 <section layout:fragment="side-bar">
 	<div class="rp-results-side-container">
 		<div class="form-group parking-search-title-font">Search Criteria</div>
-		<div class="row rp-results-side-row">
-			<div class="col">Beginning Of Trip (Hotel Room)</div>
-		</div>
-		<hr class="rp-results-side-hr">
-		<div class="row rp-results-side-row">
-			<div class="col">Hotel Arrival Date</div>
-			<div class="col">
-				<span th:text="${results.search.hotelArrivalDate}"></span>
+		<div id="begtriplbl">
+			<div class="row rp-results-side-row">
+				<div class="col rp-results-sidebar-title">Beginning Of Trip (Hotel Room)</div>
 			</div>
+			<hr class="rp-results-side-hr">
 		</div>
-		<hr class="rp-results-side-hr">
-		<div class="row rp-results-side-row">
-			<div class="col">Hotel Departure Date</div>
-			<div class="col">
-				<span th:text="${results.search.hotelDepartureDate}"></span>
+		<div id="hotarrdtelbl">
+			<div class="row rp-results-side-row">
+				<div class="col">Hotel Arrival Date</div>
+				<div class="col">
+					<span th:text="${results.search.hotelArrivalDate}"></span>
+				</div>
 			</div>
+			<hr class="rp-results-side-hr">
 		</div>
-		<hr class="rp-results-side-hr">
-		<div class="row rp-results-side-row">
-			<div class="col">End Of Trip (Hotel Room)</div>
-		</div>
-		<hr class="rp-results-side-hr">
-		<div class="row rp-results-side-row">
-			<div class="col">Hotel Arrival Date</div>
-			<div class="col">
-				<span th:text="${results.search.endHotelArrivalDate}"></span>
+		<div id="hotdepdtelbl">
+			<div class="row rp-results-side-row">
+				<div class="col">Hotel Departure Date</div>
+				<div class="col">
+					<span th:text="${results.search.hotelDepartureDate}"></span>
+				</div>
 			</div>
+			<hr class="rp-results-side-hr">
 		</div>
-		<hr class="rp-results-side-hr">
-		<div class="row rp-results-side-row">
-			<div class="col">Hotel Departure Date</div>
-			<div class="col">
-				<span th:text="${results.search.endHotelDepartureDate}"></span>
+		<div id="endtriplbl">
+			<div class="row rp-results-side-row">
+				<div class="col rp-results-sidebar-title">End Of Trip (Hotel Room)</div>
 			</div>
+			<hr class="rp-results-side-hr">
 		</div>
-		<hr class="rp-results-side-hr">
-		<div class="row rp-results-side-row">
-			<div class="col">Hotel Total Day(s)</div>
-			<div class="col">
-				<span th:text="${results.search.totalHotelNights}"></span>
+		<div id="hotarrdtelbl2">
+			<div class="row rp-results-side-row">
+				<div class="col">Hotel Arrival Date</div>
+				<div class="col">
+					<span th:text="${results.search.endHotelArrivalDate}"></span>
+				</div>
 			</div>
+			<hr class="rp-results-side-hr">
 		</div>
-		<hr class="rp-results-side-hr">
-		<div class="row rp-results-side-row">
-			<div class="col">Room(s)</div>
-			<div class="col">
-				<span th:text="${results.search.rooms}"></span>
+		<div id="endhotarrdtelbl2">
+			<div class="row rp-results-side-row">
+				<div class="col">Hotel Departure Date</div>
+				<div class="col">
+					<span th:text="${results.search.endHotelDepartureDate}"></span>
+				</div>
 			</div>
+			<hr class="rp-results-side-hr">
 		</div>
-		<hr class="rp-results-side-hr">
-		<div class="row rp-results-side-row">
-			<div class="col">Total Adults</div>
-			<div class="col">
-				<span th:text="${results.search.totalAdults}"></span>
+		<div id="hottotlbl">
+			<div class="row rp-results-side-row">
+				<div class="col">Hotel Total Day(s)</div>
+				<div class="col">
+					<span th:text="${results.search.totalHotelNights}"></span>
+				</div>
 			</div>
+			<hr class="rp-results-side-hr">
 		</div>
-		<hr class="rp-results-side-hr">
-		<div class="row rp-results-side-row">
-			<div class="col">Children</div>
-			<div class="col">
-				<span th:text="${results.search.children}"></span>
+		<div id="roomslbl">
+			<div class="row rp-results-side-row">
+				<div class="col">Room(s)</div>
+				<div class="col">
+					<span th:text="${results.search.rooms}"></span>
+				</div>
 			</div>
+			<hr class="rp-results-side-hr">
 		</div>
-		<hr class="rp-results-side-hr">
-		<div class="row rp-results-side-row">
-			<div class="col">Car Drop Off Date</div>
-			<div class="col">
-				<span th:text="${results.search.carDropOffDate}"></span>
+		<div id="adultslbl">
+			<div class="row rp-results-side-row">
+				<div class="col">Total Adults</div>
+				<div class="col">
+					<span th:text="${results.search.totalAdults}"></span>
+				</div>
 			</div>
+			<hr class="rp-results-side-hr">
 		</div>
-		<hr class="rp-results-side-hr">
-		<div class="row rp-results-side-row">
-			<div class="col">Car Pick Up Date</div>
-			<div class="col">
-				<span th:text="${results.search.carPickUpDate}"></span>
+		<div id="chiildslbl">
+			<div class="row rp-results-side-row">
+				<div class="col">Children</div>
+				<div class="col">
+					<span th:text="${results.search.children}"></span>
+				</div>
 			</div>
+			<hr class="rp-results-side-hr">
 		</div>
-		<hr class="rp-results-side-hr">
-		<div class="row rp-results-side-row">
-			<div class="col">Total Parking Time</div>
-			<div class="col">
-				<span th:text="${results.search.totalParkingTime}"></span>
+		<div id="carprklbl">
+			<div class="row rp-results-side-row">
+				<div class="col rp-results-sidebar-title">Car Parking</div>
 			</div>
+			<hr class="rp-results-side-hr">
 		</div>
-		<hr class="rp-results-side-hr">
+		<div id="cardodtelbl">
+			<div class="row rp-results-side-row">
+				<div class="col">Car Drop Off Date</div>
+				<div class="col">
+					<span th:text="${results.search.carDropOffDate}"></span>
+				</div>
+			</div>
+			<hr class="rp-results-side-hr">
+		</div>
+		<div id="cardpudtelbl">
+			<div class="row rp-results-side-row">
+				<div class="col">Car Pick Up Date</div>
+				<div class="col">
+					<span th:text="${results.search.carPickUpDate}"></span>
+				</div>
+			</div>
+			<hr class="rp-results-side-hr">
+		</div>
+		<div id="tptlbl">
+			<div class="row rp-results-side-row">
+				<div class="col">Total Parking Time</div>
+				<div class="col">
+					<span th:text="${results.search.totalParkingTime}"></span><span> days</span>
+				</div>
+			</div>
+			<hr class="rp-results-side-hr">
+		</div>
 	</div>
 
+	<script th:inline="javascript">
+        /*<![CDATA[*/
+        function updateFields() {
+            $("#begtriplbl").hide();
+            $("#hotarrdtelbl").hide();
+            $("#hotdepdtelbl").hide();
+            $("#endtriplbl").hide();
+            $("#hotarrdtelbl2").hide();
+            $("#endhotarrdtelbl2").hide();
+            $("#hottotlbl").hide();
+            $("#roomslbl").hide();
+            $("#adultslbl").hide();
+            $("#chiildslbl").hide();
+            $("#carprklbl").hide();
+            $("#cardodtelbl").hide();
+            $("#cardpudtelbl").hide();
+            $("#tptlbl").hide();
+
+            var message = /*[[${results.search.searchType}]]*/;
+            if (message == "R")  {
+                $("#hotarrdtelbl").show();
+                $("#hotdepdtelbl").show();
+                $("#hottotlbl").show();
+                $("#roomslbl").show();
+                $("#adultslbl").show();
+                $("#chiildslbl").show();
+			} else if (message == "S") {
+                $("#hotarrdtelbl").show();
+                $("#hotdepdtelbl").show();
+                $("#hottotlbl").show();
+                $("#roomslbl").show();
+                $("#adultslbl").show();
+                $("#chiildslbl").show();
+                $("#cardodtelbl").show();
+                $("#cardpudtelbl").show();
+                $("#tptlbl").show();
+			} else if (message == "E") {
+                $("#hotarrdtelbl").show();
+                $("#hotdepdtelbl").show();
+                $("#hottotlbl").show();
+                $("#roomslbl").show();
+                $("#adultslbl").show();
+                $("#chiildslbl").show();
+                $("#cardodtelbl").show();
+                $("#cardpudtelbl").show();
+                $("#tptlbl").show();
+            } else if (message == "B") {
+                $("#begtriplbl").show();
+                $("#hotarrdtelbl").show();
+                $("#hotdepdtelbl").show();
+                $("#endtriplbl").show();
+                $("#hotarrdtelbl2").show();
+                $("#endhotarrdtelbl2").show();
+                $("#hottotlbl").show();
+                $("#roomslbl").show();
+                $("#adultslbl").show();
+                $("#chiildslbl").show();
+                $("#carprklbl").show();
+                $("#cardodtelbl").show();
+                $("#cardpudtelbl").show();
+                $("#tptlbl").show();
+            }
+        }
+
+        /*]]>*/
+	</script>
+
 	<script>
+
         function showModal(e) {
             var link = e.src;
             link = link.replace("thumb_", "");
@@ -212,4 +290,5 @@
         }
 	</script>
 </section>
+</body>
 </html>

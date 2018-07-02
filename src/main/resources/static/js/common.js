@@ -56,7 +56,8 @@
          todayHighlight: true,
          autoclose: true,
          disableTouchKeyboard: true,
-         clearBtn: true
+         clearBtn: true,
+         enableOnReadonly: false
      })
      pickup_date_input.datepicker("setDate", date);
  }
