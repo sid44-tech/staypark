@@ -12,9 +12,11 @@ import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 @Service
 @Slf4j
@@ -67,6 +69,7 @@ public class HotelHandler {
             //Set room information for hotel
             hotel.setRoomList(getRoomDetails(hotel, search));
         }
+
 
         results.setHotels(hotels);
         results.setSearch(BuildSearchOptionsBean(search));

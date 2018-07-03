@@ -1,11 +1,14 @@
 package staypark.parking.controller;
 
+import staypark.parking.beans.AffiliateRegister;
+import staypark.parking.beans.ContactUs;
 import staypark.parking.handler.AirportHandler;
 import staypark.parking.util.AirportUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 @Controller
 public class FooterLinksController {
@@ -17,7 +20,15 @@ public class FooterLinksController {
     public String affiliates(Model model) {
         model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
         model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
+        model.addAttribute("affiliate", new AffiliateRegister());
 	    return "affiliates";
+    }
+
+    @GetMapping("/affiliate-register")
+    public String affiliateRegister(Model model, @ModelAttribute AffiliateRegister affiliate) {
+        model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
+        model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
+        return "affiliate-registered";
     }
 	
 	@GetMapping("/affiliates-login")
