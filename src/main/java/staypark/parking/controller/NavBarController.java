@@ -35,9 +35,8 @@ public class NavBarController {
 	
 	@GetMapping("/room-park")
     public String roomPark(Model model) {
-	    model.addAttribute("locations", airportHandler.getRoomAndParkLocations());
-        model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
-        model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
+        model.addAttribute("usDepart", AirportUtil.getRoomAndParkLocations(1));
+        model.addAttribute("canadaDepart", AirportUtil.getRoomAndParkLocations(2));
 	    return "room-park";
     }
 	

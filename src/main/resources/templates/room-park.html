@@ -55,14 +55,18 @@
 					</div>
 					<div class="col-sm-8">
 						<div class="message-bar">Select City</div>
-						<div class="form-group">
-							<select class="form-control" id="city" name="city">
-								<option th:each="location : ${locations}" th:text="${location}" th:value="${location}"></option>
-							</select>
-							<div class="invalid-feedback">
-								City is required.
-							</div>
+						<div class="form-group flex-display">
+							<input type="text" data-toggle="modal" data-target="#parking_selection_modal" class="form-control float parking-select-text flex1" id="city" name="city" placeholder="- Select a city -" readonly required>
+							<button type="button" class="btn parking-select-button flex0" data-toggle="modal" data-target="#parking_selection_modal"><img src="/images/down-arrow-green.png" class="parking-select-button-image"/></button>
 						</div>
+						<!--<div class="form-group">-->
+							<!--<select class="form-control" id="city" name="city">-->
+								<!--<option th:each="location : ${locations}" th:text="${location}" th:value="${location}"></option>-->
+							<!--</select>-->
+							<!--<div class="invalid-feedback">-->
+								<!--City is required.-->
+							<!--</div>-->
+						<!--</div>-->
 						<div id="hotel_section">
 							<div class="message-bar">Hotel Information</div>
 							<div id="primary_checkin_section">
@@ -206,6 +210,38 @@
 		<br>
 			*Looking for PARKING ONLY with NO hotel room? <a href="/airport-parking">CLICK HERE</a> to use our StayPark Parking Only Service.</span>
 	<br><br>
+
+	<div id="parking_selection_modal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<span class="modal-title airport-select-title">Departure Location</span>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="airport-select-countries-container">
+						<button id="usButton" class="btn airport-select-countries-button-selected" onclick="handleUSDepartSelected()">United States</button>
+						<button id="canadaButton" class="btn airport-select-countries-button" onclick="handleCanadaDepartSelected()">Canada</button>
+					</div>
+					<div id="usDepartDiv" class="visible">
+						<ul class="airport-select-cities-list">
+							<li class="airport-select-cities-list-item" onclick="handleDepartAirportSelect(this)" th:each="usDepart : ${usDepart}"><img class="airplane-icon" src="/images/plane_icon.png" th:text=" ${usDepart}"/></li>
+						</ul>
+					</div>
+					<div id="canadaDepartDiv" class="gone">
+						<ul class="airport-select-cities-list">
+							<li class="airport-select-cities-list-item" onclick="handleDepartAirportSelect(this)" th:each="canadaDepart : ${canadaDepart}"><img class="airplane-icon" src="/images/plane_icon.png" th:text=" ${canadaDepart}"/></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
 
 	<script>
         (function() {
@@ -434,6 +470,30 @@
         	var days = Math.round(Math.abs((date1.getTime() - date2.getTime())/(oneDay)));
         	$('#total_parking_time').val(days);
         }
+
+        function handleUSDepartSelected() {
+            $("#usDepartDiv").css("display", "block");
+            $("#canadaDepartDiv").css("display", "none");
+            $("#usButton").removeClass("airport-select-countries-button");
+            $("#usButton").addClass("airport-select-countries-button-selected");
+            $("#canadaButton").removeClass("airport-select-countries-button-selected");
+            $("#canadaButton").addClass("airport-select-countries-button");
+        }
+
+        function handleCanadaDepartSelected() {
+            $("#usDepartDiv").css( "display", "none" );
+            $("#canadaDepartDiv").css( "display", "block" );
+            $("#usButton").removeClass("airport-select-countries-button-selected");
+            $("#usButton").addClass("airport-select-countries-button");
+            $("#canadaButton").removeClass("airport-select-countries-button");
+            $("#canadaButton").addClass("airport-select-countries-button-selected");
+        }
+
+        function handleDepartAirportSelect(e) {
+            $("#city").val(e.textContent);
+            $('#parking_selection_modal').modal('hide');
+        }
+
 	</script>
 </section>
 </html>

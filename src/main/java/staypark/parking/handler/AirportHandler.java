@@ -35,13 +35,6 @@ public class AirportHandler {
             "from dbstaypark.gp_deperture_location as d " +
             "left join dbstaypark.gp_state as s on d.gdl_state_id = s.gps_id " +
             "where d.gdl_scode = ? ";
-    private static String GET_ROOM_AND_PARK_= "select distinct c.gpc_city, d.gdl_scode, d.gdl_logo_title " +
-            "from dbstaypark.gp_htl_day_range_cost h " +
-            "left join dbstaypark.gp_deperture_location d on h.drc_gpi_dep_id = d.gdl_id " +
-            "left join dbstaypark.gp_city c on d.gdl_city_id= c.gpc_id " +
-            "left join dbstaypark.gp_state s on d.gdl_state_id= s.gps_id " +
-            "WHERE h.drc_area = 'both' and h.drc_status = 'Active' and c.gpc_city is not null " +
-            "order by c.gpc_city ";
 
     static {
     	initializeAirportToStateMaps();
@@ -119,31 +112,6 @@ public class AirportHandler {
         }
 
         return bean;
-    }
-    
-    public List<String> getRoomAndParkLocations() {
-        List<String> list = new ArrayList<String>();
-
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-
-        try {
-            conn = DBUtil.getConnection();
-            ps = conn.prepareStatement(GET_ROOM_AND_PARK_);
-            rs = ps.executeQuery();
-
-            while (rs.next()) {
-                String text = rs.getString("gpc_city") + " : " + rs.getString("gdl_logo_title") + " (" +rs.getString("gdl_scode") + ")";
-                list.add(text);
-            }
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        } finally {
-            DBUtil.closeResources(conn, ps, rs);
-        }
-
-        return list;
     }
 
     private List<StateAirportBean> parseAirportsInStateString() {
