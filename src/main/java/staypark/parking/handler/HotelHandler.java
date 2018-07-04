@@ -228,9 +228,12 @@ public class HotelHandler {
                 hotelDays += DateUtil.getDaysDifference(search.getSecondaryCheckInDate(), search.getSecondaryCheckOutDate());
             }
 
-            BigDecimal parkingCost = getParkingCostForRoomAndPark(carStartDate, carEndDate, hotel.getCarBaseRate(),
-                    hotel.getCarUpToSevenRate(), hotel.getCarEightToFourteenRate(), hotel.getCarOverFifteenRate(),
-                    search.getHotelOptions());
+            BigDecimal parkingCost = new BigDecimal(0);
+            if (!"R".equals(search.getHotelOptions())) {
+               parkingCost = getParkingCostForRoomAndPark(carStartDate, carEndDate, hotel.getCarBaseRate(),
+                        hotel.getCarUpToSevenRate(), hotel.getCarEightToFourteenRate(), hotel.getCarOverFifteenRate(),
+                        search.getHotelOptions());
+            }
 
             BigDecimal roomCost = getRoomCost(search.getAdults(), search.getChildren(), search.getRooms(), hotelDays,
                     room.getBaseCost(), room.getOccupancy(),
