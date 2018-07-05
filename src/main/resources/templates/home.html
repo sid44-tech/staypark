@@ -119,7 +119,6 @@
 		</div>
     </div>
 
-    
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
@@ -152,7 +151,36 @@ $(document).ready(function(){
     })
     pickup_date_input.val(tomorrowString());
     pickup_date_input.datepicker("setDate", tomorrow());
+
+    addListenersForDateField(dropoff_date_input, pickup_date_input);
+
+    var index = convertCurrentTimeToSelectIndex();
+    document.getElementById('pick_up_time').selectedIndex = index;
+    document.getElementById('drop_off_time').selectedIndex = index;
+
 })
+
+function addListenersForDateField(dropOffDate, pickUpDate) {
+    dropOffDate.on('changeDate', function() {
+        var dDate = dropOffDate.datepicker("getDate");
+        var pDate = pickUpDate.datepicker("getDate");
+
+        if (dDate >= pDate) {
+            pDate.setDate(dDate.getDate() + 1);
+            pickUpDate.datepicker("setDate", pDate);
+        }
+    });
+
+    pickUpDate.on('changeDate', function(e) {
+        var dDate = dropOffDate.datepicker("getDate");
+        var pDate = pickUpDate.datepicker("getDate");
+
+        if (dDate >= pDate) {
+            dDate.setDate(pDate.getDate() - 1);
+            dropOffDate.datepicker("setDate", dDate);
+        }
+    });
+}
 
 function handleUSDepartSelected() {
 	$("#usDepartDiv").css("display", "block");

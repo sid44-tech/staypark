@@ -61,3 +61,17 @@
      })
      pickup_date_input.datepicker("setDate", date);
  }
+
+ function convertCurrentTimeToSelectIndex() {
+     var d = new Date();
+     var h = d.getHours();
+     var m = d.getMinutes();
+
+     var index = Math.floor(m/15);
+     if (h != 0) {
+         index = h * Math.floor(m/15);
+     }
+     index += 4;
+
+     return index;
+ }

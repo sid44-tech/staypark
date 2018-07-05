@@ -110,7 +110,35 @@
         })
         pickup_date_input.val(tomorrowString());
         pickup_date_input.datepicker("setDate", tomorrow());
+
+        addListenersForDateField(dropoff_date_input, pickup_date_input);
+
+        var index = convertCurrentTimeToSelectIndex();
+        document.getElementById('pick_up_time').selectedIndex = index;
+        document.getElementById('drop_off_time').selectedIndex = index;
     })
+
+    function addListenersForDateField(dropOffDate, pickUpDate) {
+        dropOffDate.on('changeDate', function() {
+            var dDate = dropOffDate.datepicker("getDate");
+            var pDate = pickUpDate.datepicker("getDate");
+
+            if (dDate >= pDate) {
+                pDate.setDate(dDate.getDate() + 1);
+                pickUpDate.datepicker("setDate", pDate);
+            }
+        });
+
+        pickUpDate.on('changeDate', function(e) {
+            var dDate = dropOffDate.datepicker("getDate");
+            var pDate = pickUpDate.datepicker("getDate");
+
+            if (dDate >= pDate) {
+                dDate.setDate(pDate.getDate() - 1);
+                dropOffDate.datepicker("setDate", dDate);
+            }
+        });
+    }
 
     function handleUSDepartSelected() {
         $("#usDepartDiv").css("display", "block");
