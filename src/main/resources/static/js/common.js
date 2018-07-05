@@ -69,7 +69,7 @@
 
      var index = Math.floor(m/15);
      if (h != 0) {
-         index = h * Math.floor(m/15);
+         index = (h*4) * Math.floor(m/15);
      }
      index += 4;
 
