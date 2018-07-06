@@ -8,17 +8,17 @@ public class AffiliateRegister {
     private String email = "";
     private String password = "";
 
-    private String companyName = "";
-    private String contactName = "";
-    private String phoneNumber = "";
-    private String hotelName = "";
+    private String company = "";
+    private String contact = "";
+    private String phone = "";
+    private String hotel = "";
     private String country = "";
     private String city = "";
     private String state = "";
-    private String hotelLogo = "";
-    private String numberRooms = "";
-    private String numberParkingSpaces = "";
     private String address = "";
-    private String companyInfo = "";
+    private String hotelLogo = "";
+    private String rooms = "";
+    private String parking = "";
+    private String info = "";
 
 }

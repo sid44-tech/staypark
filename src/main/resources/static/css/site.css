@@ -1156,3 +1156,16 @@ body {
 	background-color: rgba(0, 0, 0, .4);
 	border-top-radius: 5px;
 }
+
+
+/* -------------------------- AFFILIATE REG CSS -------------------------- */
+
+.ar-logo {
+	width: 75px;
+	margin-bottom: 16px;
+}
+
+.ar-section-margin {
+	margin-top: 24px;
+	margin-bottom: 24px;
+}

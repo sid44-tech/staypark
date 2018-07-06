@@ -1,5 +1,6 @@
 package staypark.parking.controller;
 
+import staypark.parking.beans.AffiliateRegister;
 import staypark.parking.beans.ContactUs;
 import staypark.parking.handler.AirportHandler;
 import staypark.parking.util.AirportUtil;
@@ -81,5 +82,33 @@ public class NavBarController {
             log.error(e.getMessage(), e);
         }
         return "contact-us";
+    }
+
+    @GetMapping("/affiliates")
+    public String affiliates(Model model) {
+        model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
+        model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
+        model.addAttribute("countries", AirportUtil.getCountries());
+        model.addAttribute("states", AirportUtil.getStates(1));
+        model.addAttribute("cities", AirportUtil.getCities(1));
+        model.addAttribute("affiliate", new AffiliateRegister());
+        return "affiliates";
+    }
+
+    @PostMapping("/affiliates")
+    public String affiliateRegister(Model model, @ModelAttribute AffiliateRegister affiliate) {
+        model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
+        model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
+        model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
+        model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
+        model.addAttribute("countries", AirportUtil.getCountries());
+        model.addAttribute("states", AirportUtil.getStates(1));
+        model.addAttribute("cities", AirportUtil.getCities(1));
+
+
+
+        model.addAttribute("affiliate", new AffiliateRegister());
+
+        return "affiliate";
     }
 }

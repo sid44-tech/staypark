@@ -15,21 +15,6 @@ public class FooterLinksController {
 
     @Autowired
     private AirportHandler airportHandler;
-
-	@GetMapping("/affiliates")
-    public String affiliates(Model model) {
-        model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
-        model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
-        model.addAttribute("affiliate", new AffiliateRegister());
-	    return "affiliates";
-    }
-
-    @GetMapping("/affiliate-register")
-    public String affiliateRegister(Model model, @ModelAttribute AffiliateRegister affiliate) {
-        model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
-        model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
-        return "affiliate-registered";
-    }
 	
 	@GetMapping("/affiliates-login")
     public String affiliatesLogin(Model model) {
