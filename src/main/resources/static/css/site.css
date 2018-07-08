@@ -507,6 +507,32 @@ body {
     padding-right: 10px;
 }
 
+.parking-search-widget-container2 {
+	position: absolute;
+	max-width: 380px;
+	height: 420px;
+	top: 14px;
+	left: 0px;
+	margin-left: 8px;
+	margin-right: 8px;
+	background: rgba(0,0,0,0.2);
+	border-radius: 5px;
+	border: solid 1px #999690;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.parking-search-widget-container3 {
+	max-width: 380px;
+	height: 420px;
+	margin: 0 auto;
+	background: rgba(0,0,0,0.65);
+	border-radius: 5px;
+	border: solid 1px #999690;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
 .parking-search-widget-container-non-abs {
 	max-width: 325px;
 	min-width: 325px;
@@ -530,6 +556,36 @@ body {
 		margin-left: 8px;
 		margin-right: 8px;
 		background: rgba(0,0,0,0.6);
+		border-radius: 5px;
+		border: solid 1px #999690;
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+
+	.parking-search-widget-container2 {
+		position: absolute;
+		max-width: 380px;
+		min-width: 380px;
+		height: 420px;
+		top: 14px;
+		left: auto;
+		margin-left: 8px;
+		margin-right: 8px;
+		background: rgba(0,0,0,0.2);
+		border-radius: 5px;
+		border: solid 1px #999690;
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+
+	.parking-search-widget-container3 {
+		max-width: 380px;
+		min-width: 380px;
+		height: 420px;
+		margin: 0 auto;
+		margin-top: 24px;
+		margin-bottom: 24px;
+		background: rgba(0,0,0,0.65);
 		border-radius: 5px;
 		border: solid 1px #999690;
 		padding-left: 10px;
