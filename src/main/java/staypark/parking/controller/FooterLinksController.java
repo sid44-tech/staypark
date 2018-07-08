@@ -51,4 +51,11 @@ public class FooterLinksController {
         model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
 	    return "sitemap";
     }
+
+    @GetMapping("/contact")
+    public String contact(Model model) {
+        model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
+        model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
+        return "contact";
+    }
 }

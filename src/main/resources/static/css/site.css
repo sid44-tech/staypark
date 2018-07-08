@@ -209,6 +209,13 @@ body {
 	font-weight: normal;
 }
 
+.green-normal-font {
+	font-size: 16px;
+	font-family: 'Roboto', sans-serif;
+	font-weight: bold;
+	color: #71a40a;
+}
+
 /* -------------------------- Main Layout CSS -------------------------- */
 
 .flex-layout {
@@ -500,7 +507,7 @@ body {
 	left: 0px;
 	margin-left: 8px;
 	margin-right: 8px;
-	background: rgba(0,0,0,0.6);
+	background: rgba(0,0,0,0.2);
     border-radius: 5px;
     border: solid 1px #999690;
     padding-left: 10px;
@@ -529,7 +536,7 @@ body {
 		left: auto;
 		margin-left: 8px;
 		margin-right: 8px;
-		background: rgba(0,0,0,0.6);
+		background: rgba(0,0,0,0.2);
 		border-radius: 5px;
 		border: solid 1px #999690;
 		padding-left: 10px;

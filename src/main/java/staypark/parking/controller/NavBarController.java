@@ -2,6 +2,7 @@ package staypark.parking.controller;
 
 import staypark.parking.beans.AffiliateRegister;
 import staypark.parking.beans.ContactUs;
+import staypark.parking.handler.AccountHandler;
 import staypark.parking.handler.AirportHandler;
 import staypark.parking.util.AirportUtil;
 import staypark.parking.util.EmailUtil;
@@ -19,6 +20,8 @@ public class NavBarController {
 
     @Autowired
     private AirportHandler airportHandler;
+    @Autowired
+    private AccountHandler accountHandler;
 
 	@GetMapping("/about")
     public String about(Model model) {
@@ -92,6 +95,7 @@ public class NavBarController {
         model.addAttribute("states", AirportUtil.getStates(1));
         model.addAttribute("cities", AirportUtil.getCities(1));
         model.addAttribute("affiliate", new AffiliateRegister());
+        model.addAttribute("success", "false");
         return "affiliates";
     }
 
@@ -104,11 +108,9 @@ public class NavBarController {
         model.addAttribute("countries", AirportUtil.getCountries());
         model.addAttribute("states", AirportUtil.getStates(1));
         model.addAttribute("cities", AirportUtil.getCities(1));
-
-
-
         model.addAttribute("affiliate", new AffiliateRegister());
+        model.addAttribute("success", accountHandler.createAffiliateAccount(affiliate));
 
-        return "affiliate";
+        return "affiliates";
     }
 }

@@ -1,6 +1,7 @@
 package staypark.parking.beans;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class AffiliateRegister {
@@ -16,7 +17,7 @@ public class AffiliateRegister {
     private String city = "";
     private String state = "";
     private String address = "";
-    private String hotelLogo = "";
+    private MultipartFile hotelLogo;
     private String rooms = "";
     private String parking = "";
     private String info = "";

@@ -1,5 +1,6 @@
 package staypark.parking.handler;
 
+import staypark.parking.beans.AffiliateRegister;
 import staypark.parking.util.DBUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -98,5 +99,11 @@ public class AccountHandler {
         }
 
         return found;
+    }
+
+    public String createAffiliateAccount(AffiliateRegister affiliate){
+
+
+        return "true";
     }
 }

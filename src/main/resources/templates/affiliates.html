@@ -4,161 +4,170 @@
 	  layout:decorate="~{page-right-nav.html}">
 
 <section layout:fragment="page-right-nav-content">
-	<span class="section-title">Join Our Growing List of Affiliates</span>
-	<div class="row">
-		<div class="col-xs ar-col-img-custom">
-			<img class="ar-logo" src="/images/affiliate-images/best-western-plus.png"/>
-		</div>
-		<div class="col-xs ar-col-img-custom">
-			<img class="ar-logo" src="/images/affiliate-images/comfort-inn.png"/>
-		</div>
-		<div class="col-xs ar-col-img-custom">
-			<img class="ar-logo" src="/images/affiliate-images/comfort-suites.png"/>
-		</div>
-		<div class="col-xs ar-col-img-custom">
-			<img class="ar-logo" src="/images/affiliate-images/days-inn.png"/>
-		</div>
-		<div class="col-xs ar-col-img-custom">
-			<img class="ar-logo" src="/images/affiliate-images/fairfield-inn.png"/>
-		</div>
-		<div class="col-xs ar-col-img-custom">
-			<img class="ar-logo" src="/images/affiliate-images/hampton-inn.png"/>
-		</div>
-		<div class="col-xs ar-col-img-custom">
-			<img class="ar-logo" src="/images/affiliate-images/hilton.png"/>
-		</div>
-		<div class="col-xs ar-col-img-custom">
-			<img class="ar-logo" src="/images/affiliate-images/hilton-garden-inn.png"/>
-		</div>
-		<div class="col-xs ar-col-img-custom">
-			<img class="ar-logo" src="/images/affiliate-images/homewood-suites.png"/>
-		</div>
-		<div class="col-xs ar-col-img-custom">
-			<img class="ar-logo" src="/images/affiliate-images/marriott.png"/>
-		</div>
-		<div class="col-xs ar-col-img-custom">
-			<img class="ar-logo" src="/images/affiliate-images/quality-inn.png"/>
-		</div>
-		<div class="col-xs ar-col-img-custom">
-			<img class="ar-logo" src="/images/affiliate-images/residence-inn.png"/>
-		</div>
-		<div class="col-xs ar-col-img-custom">
-			<img class="ar-logo" src="/images/affiliate-images/sleep-inn.png"/>
-		</div>
-		<div class="col-xs ar-col-img-custom">
-			<img class="ar-logo" src="/images/affiliate-images/spring-hill.png"/>
+	<div th:switch="${success}">
+		<span th:case="'true'" class="green-normal-font"><br><br><br>Thank you for registering with StayPark.com!  <a href="/login">Click here to login.</a><br><br><br></span>
+		<div th:case="'false'">
+			<span class="section-title">Join Our Growing List of Affiliates</span>
+			<div class="row">
+				<div class="col-xs ar-col-img-custom">
+					<img class="ar-logo" src="/images/affiliate-images/best-western-plus.png"/>
+				</div>
+				<div class="col-xs ar-col-img-custom">
+					<img class="ar-logo" src="/images/affiliate-images/comfort-inn.png"/>
+				</div>
+				<div class="col-xs ar-col-img-custom">
+					<img class="ar-logo" src="/images/affiliate-images/comfort-suites.png"/>
+				</div>
+				<div class="col-xs ar-col-img-custom">
+					<img class="ar-logo" src="/images/affiliate-images/days-inn.png"/>
+				</div>
+				<div class="col-xs ar-col-img-custom">
+					<img class="ar-logo" src="/images/affiliate-images/fairfield-inn.png"/>
+				</div>
+				<div class="col-xs ar-col-img-custom">
+					<img class="ar-logo" src="/images/affiliate-images/hampton-inn.png"/>
+				</div>
+				<div class="col-xs ar-col-img-custom">
+					<img class="ar-logo" src="/images/affiliate-images/hilton.png"/>
+				</div>
+				<div class="col-xs ar-col-img-custom">
+					<img class="ar-logo" src="/images/affiliate-images/hilton-garden-inn.png"/>
+				</div>
+				<div class="col-xs ar-col-img-custom">
+					<img class="ar-logo" src="/images/affiliate-images/homewood-suites.png"/>
+				</div>
+				<div class="col-xs ar-col-img-custom">
+					<img class="ar-logo" src="/images/affiliate-images/marriott.png"/>
+				</div>
+				<div class="col-xs ar-col-img-custom">
+					<img class="ar-logo" src="/images/affiliate-images/quality-inn.png"/>
+				</div>
+				<div class="col-xs ar-col-img-custom">
+					<img class="ar-logo" src="/images/affiliate-images/residence-inn.png"/>
+				</div>
+				<div class="col-xs ar-col-img-custom">
+					<img class="ar-logo" src="/images/affiliate-images/sleep-inn.png"/>
+				</div>
+				<div class="col-xs ar-col-img-custom">
+					<img class="ar-logo" src="/images/affiliate-images/spring-hill.png"/>
+				</div>
+			</div>
+			<span class="section-text">
+				Turn your unused parking spaces into REVENUE!  Generate supplementary revenue by selling your unused parking spaces through our program.  Participation will allow your hotel to off set the high cost of running a shuttle service.  Your hotel will gain additional exposure with the public via our Web site, which may increase future room reservations.
+				<br><br>
+				Other hotels are generating revenue by partnering with us, and no long-term obligations are required to get started. The consumer gets a discounted parking space, and the hotel will earn additional income with minimal effort and no costs. It’s a win-win situation!  In addition, your facility will be recognized for its participation in being a part to better the environment.
+				<br><br>
+				For more details and information call us at 1-877-337-4377, fill out the form below, or contact us with questions on our Contact Us Page
+			</span>
+			<br><br><br>
+			<form class="needs-validation" enctype="multipart/form-data" novalidate action="#" th:action="@{/affiliates}" th:object="${affiliate}" method="post" onsubmit="return validateForm()">
+				<div class="form-div-container">
+					<div class="form-div-container-header">Account Information *</div>
+					<div class="form-div-container-body">
+						<div class="form-row">
+							<div class="form-group col-md-6">
+								<label for="email">Email Address *</label>
+								<input type="email" class="form-control" id="email" name="email" onfocusout="checkEmailExists(this)" required/>
+								<small id="emailHelp" class="form-text text-muted">This will be your login username</small>
+							</div>
+						</div>
+						<div class="form-row">
+							<div class="form-group col-md-6">
+								<label for="password">Password *</label>
+								<input type="password" class="form-control" id="password" name="password" required/>
+								<small id="passwordHelp" class="form-text text-muted">Minimum 8 characters and 1 number</small>
+								<div id="password_feedback" class="invalid-feedback">
+
+								</div>
+							</div>
+							<div class="form-group col-md-6">
+								<label for="confirm">Confirm Password *</label>
+								<input type="password" class="form-control" id="confirm" name="confirm" required/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="form-div-container ar-section-margin">
+					<div class="form-div-container-header">Affiliate Information</div>
+					<div class="form-div-container-body">
+						<div class="form-row">
+							<div class="form-group col-md-6">
+								<label for="company">Company Name *</label>
+								<input type="text" class="form-control" id="company" name="company" required/>
+							</div>
+							<div class="form-group col-md-6">
+								<label for="contact">Contact Name *</label>
+								<input type="text" class="form-control" id="contact" name="contact" required/>
+							</div>
+						</div>
+						<div class="form-row">
+							<div class="form-group col-md-6">
+								<label for="hotel">Hotel Name *</label>
+								<input type="text" class="form-control" id="hotel" name="hotel" required/>
+							</div>
+							<div class="form-group col-md-6">
+								<label for="phone">Phone Number *</label>
+								<input type="number" class="form-control" id="phone" name="phone" required/>
+							</div>
+						</div>
+						<div class="form-row">
+							<div class="form-group col-md-4">
+								<label for="country">Country *</label>
+								<select class="form-control" id="country" name="country" onchange="countryChanged(this)" required>
+									<option th:each="country : ${countries}" th:value="${country.countryId}" th:text="${country.countryName}"></option>
+								</select>
+							</div>
+							<div class="form-group col-md-4">
+								<label for="state">State *</label>
+								<select class="form-control" id="state" name="state" onchange="stateChanged(this)" required>
+									<option th:each="state : ${states}" th:value="${state.stateId}" th:text="${state.stateName}"></option>
+								</select>
+							</div>
+							<div class="form-group col-md-4">
+								<label for="city">City *</label>
+								<select class="form-control" id="city" name="city" required>
+									<option th:each="city : ${cities}" th:value="${city.cityId}" th:text="${city.cityName}"></option>
+								</select>
+							</div>
+						</div>
+						<div class="form-row">
+							<div class="form-group col-md-12">
+								<label for="address">Address *</label>
+								<input type="text" class="form-control" id="address" name="address" required/>
+							</div>
+						</div>
+						<div class="form-row">
+							<div class="form-group col-md-4">
+								<label for="rooms">Number of Rooms *</label>
+								<input type="number" class="form-control" id="rooms" name="rooms" required/>
+							</div>
+							<div class="form-group col-md-4">
+								<label for="parking">Parking Spaces *</label>
+								<input type="number" class="form-control" id="parking" name="parking" required/>
+								<small id="parkingHelp" class="form-text text-muted">Approximate number of spaces</small>
+							</div>
+							<div class="form-group col-md-4">
+								<label for="hotelLogo">Upload Hotel Logo</label>
+								<input type="file" class="form-control-file" id="hotelLogo" name="hotelLogo">
+							</div>
+						</div>
+						<div class="form-row">
+							<div class="form-group col-md-12">
+								<label for="info">Tell Us About Your Company *</label>
+								<textarea class="form-control" rows="4" id="info" name="info" required></textarea>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="col-sm-9">
+						<button type="submit" class="btn btn-primary">Sign Up</button>
+					</div>
+				</div>
+			</form>
 		</div>
 	</div>
-	<span class="section-text">
-		Turn your unused parking spaces into REVENUE!  Generate supplementary revenue by selling your unused parking spaces through our program.  Participation will allow your hotel to off set the high cost of running a shuttle service.  Your hotel will gain additional exposure with the public via our Web site, which may increase future room reservations.
-		<br><br>
-		Other hotels are generating revenue by partnering with us, and no long-term obligations are required to get started. The consumer gets a discounted parking space, and the hotel will earn additional income with minimal effort and no costs. It’s a win-win situation!  In addition, your facility will be recognized for its participation in being a part to better the environment.
-		<br><br>
-		For more details and information call us at 1-877-337-4377, fill out the form below, or contact us with questions on our Contact Us Page
-	</span>
-	<br><br><br>
-	<form class="needs-validation" novalidate action="#" th:action="@{/affiliates}" th:object="${affiliate}" method="post">
-		<div class="form-div-container">
-			<div class="form-div-container-header">Account Information *</div>
-			<div class="form-div-container-body">
-				<div class="form-row">
-					<div class="form-group col-md-6">
-						<label for="email">Email Address *</label>
-						<input type="email" class="form-control" id="email" name="email" onfocusout="checkEmailExists(this)" required/>
-						<small id="emailHelp" class="form-text text-muted">This will be your login username</small>
-					</div>
-				</div>
-				<div class="form-row">
-					<div class="form-group col-md-6">
-						<label for="password">Password *</label>
-						<input type="password" class="form-control" id="password" name="password" required/>
-						<small id="passwordHelp" class="form-text text-muted">Minimum 8 characters and 1 number</small>
-					</div>
-					<div class="form-group col-md-6">
-						<label for="confirm">Confirm Password *</label>
-						<input type="password" class="form-control" id="confirm" name="confirm" required/>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="form-div-container ar-section-margin">
-			<div class="form-div-container-header">Affiliate Information</div>
-			<div class="form-div-container-body">
-				<div class="form-row">
-					<div class="form-group col-md-6">
-						<label for="company">Company Name *</label>
-						<input type="text" class="form-control" id="company" name="company" required/>
-					</div>
-					<div class="form-group col-md-6">
-						<label for="contact">Contact Name *</label>
-						<input type="text" class="form-control" id="contact" name="contact" required/>
-					</div>
-				</div>
-				<div class="form-row">
-					<div class="form-group col-md-6">
-						<label for="hotel">Hotel Name *</label>
-						<input type="text" class="form-control" id="hotel" name="hotel" required/>
-					</div>
-					<div class="form-group col-md-6">
-						<label for="phone">Phone Number *</label>
-						<input type="text" class="form-control" id="phone" name="phone" required/>
-					</div>
-				</div>
-				<div class="form-row">
-					<div class="form-group col-md-4">
-						<label for="country">Country *</label>
-						<select class="form-control" id="country" onchange="countryChanged(this)" required>
-							<option th:each="country : ${countries}" th:value="${country.countryId}" th:text="${country.countryName}"></option>
-						</select>
-					</div>
-					<div class="form-group col-md-4">
-						<label for="state">State *</label>
-						<select class="form-control" id="state" onchange="stateChanged(this)" required>
-							<option th:each="state : ${states}" th:value="${state.stateId}" th:text="${state.stateName}"></option>
-						</select>
-					</div>
-					<div class="form-group col-md-4">
-						<label for="city">City *</label>
-						<select class="form-control" id="city" required>
-							<option th:each="city : ${cities}" th:value="${city.cityId}" th:text="${city.cityName}"></option>
-						</select>
-					</div>
-				</div>
-				<div class="form-row">
-					<div class="form-group col-md-12">
-						<label for="address">Address *</label>
-						<input type="text" class="form-control" id="address" name="address" required/>
-					</div>
-				</div>
-				<div class="form-row">
-					<div class="form-group col-md-4">
-						<label for="rooms">Number of Rooms *</label>
-						<input type="text" class="form-control" id="rooms" name="rooms" required/>
-					</div>
-					<div class="form-group col-md-4">
-						<label for="parking">Parking Spaces *</label>
-						<input type="text" class="form-control" id="parking" name="parking" required/>
-						<small id="parkingHelp" class="form-text text-muted">Approximate number of spaces</small>
-					</div>
-					<div class="form-group col-md-4">
-						<label for="logo">Upload Hotel Logo</label>
-						<input type="file" class="form-control-file" id="logo">
-					</div>
-				</div>
-				<div class="form-row">
-					<div class="form-group col-md-12">
-						<label for="info">Tell Us About Your Company *</label>
-						<textarea class="form-control" rows="4" id="info" required></textarea>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="form-group row">
-			<div class="col-sm-9">
-				<button type="submit" class="btn btn-primary">Sign Up</button>
-			</div>
-		</div>
-	</form>
+
 	<br>
 
 	<script>
@@ -223,6 +232,52 @@
             xhttp.open("GET", "/states/" + state + "/cities", true);
             xhttp.send();
 		}
+
+		function validateForm() {
+            var p = $('#password').val();
+            var cp = $('#confirm').val();
+
+            var passwordValid = validatePassword(p);
+            var passwordsMatch = validateConfirmPassword(p, cp);
+
+			if (passwordValid && passwordsMatch) {
+                $('#password_feedback').html("")
+                $('#password_feedback').hide();
+			    return true;
+			} else if (!passwordValid) {
+                $('#password_feedback').html("Password must be 8 characters and contain at least 1 number.");
+                $('#password_feedback').show();
+			} else if (!passwordsMatch) {
+                $('#password_feedback').html("Password and Confirm Password do not match.");
+                $('#password_feedback').show();
+			}
+
+            return false;
+		}
+
+        function validatePassword(password) {
+            if (password.length < 8 || !containsDigit(password)) {
+                return false;
+            }
+            return true;
+        }
+
+        function validateConfirmPassword(password, confirm) {
+            if (password != confirm) {
+                return false;
+            }
+
+            return true;
+        }
+
+        function containsDigit(s) {
+            var containsDigit = false;
+            var matches = s.match(/\d+/g);
+            if (matches != null) {
+                containsDigit = true;
+            }
+            return containsDigit;
+        }
 	</script>
 </section>
 
