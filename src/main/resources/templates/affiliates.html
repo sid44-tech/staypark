@@ -177,7 +177,10 @@
                     if (this.readyState == 4 && this.status == 200) {
                         var input = $('#email');
                         var data = this.responseText;
-                        alert(data);
+                        if (data == "true") {
+                            e.value = "";
+                            alert("Email is already in use.");
+						}
                     }
                 };
                 xhttp.open("GET", "/account/email/" + e.value + "/check", true);
