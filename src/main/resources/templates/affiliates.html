@@ -60,9 +60,12 @@
 				For more details and information call us at 1-877-337-4377, fill out the form below, or contact us with questions on our Contact Us Page
 			</span>
 			<br><br><br>
+			<div th:if="${imageErrorCheck}">
+				<span class="error-font" th:text="${imageError}"></span><br><br>
+			</div>
 			<form class="needs-validation" enctype="multipart/form-data" novalidate action="#" th:action="@{/affiliates}" th:object="${affiliate}" method="post" onsubmit="return validateForm()">
 				<div class="form-div-container">
-					<div class="form-div-container-header">Account Information *</div>
+					<div class="form-div-container-header">Account Information</div>
 					<div class="form-div-container-body">
 						<div class="form-row">
 							<div class="form-group col-md-6">
@@ -148,7 +151,7 @@
 							</div>
 							<div class="form-group col-md-4">
 								<label for="hotelLogo">Upload Hotel Logo</label>
-								<input type="file" class="form-control-file" id="hotelLogo" name="hotelLogo">
+								<input type="file" accept=".jpg,.png,.gif" class="form-control-file" id="hotelLogo" name="hotelLogo">
 							</div>
 						</div>
 						<div class="form-row">

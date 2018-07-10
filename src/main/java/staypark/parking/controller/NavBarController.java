@@ -13,6 +13,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 @Controller
 @Slf4j
@@ -100,7 +106,7 @@ public class NavBarController {
     }
 
     @PostMapping("/affiliates")
-    public String affiliateRegister(Model model, @ModelAttribute AffiliateRegister affiliate) {
+    public String affiliateRegister(Model model, @RequestPart(value = "hotelLogo", required = false) MultipartFile hotelLogo, @ModelAttribute AffiliateRegister affiliate) {
         model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
         model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
         model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
@@ -108,8 +114,34 @@ public class NavBarController {
         model.addAttribute("countries", AirportUtil.getCountries());
         model.addAttribute("states", AirportUtil.getStates(1));
         model.addAttribute("cities", AirportUtil.getCities(1));
-        model.addAttribute("affiliate", new AffiliateRegister());
-        model.addAttribute("success", accountHandler.createAffiliateAccount(affiliate));
+        boolean imageError = false;
+
+        if (!hotelLogo.getOriginalFilename().equals("")) {
+            if (hotelLogo.getSize() > 1000000) {
+                imageError = true;
+                model.addAttribute("imageError", "Image is too large.  Limit image size to 1 MB.");
+            }
+
+            try {
+                BufferedImage img = ImageIO.read(hotelLogo.getInputStream());
+                if (img == null) {
+                    imageError = true;
+                    model.addAttribute("imageError", "File uploaded is not an image.  Please verify logo is an image file.");
+                }
+            } catch (IOException e) {
+                //do nothing just checking if image is really an image
+            }
+        }
+
+        if (imageError) {
+            model.addAttribute("imageErrorCheck", true);
+            model.addAttribute("affiliate", affiliate);
+            model.addAttribute("success", "false");
+        } else {
+            model.addAttribute("imageErrorCheck", false);
+            model.addAttribute("affiliate", new AffiliateRegister());
+            model.addAttribute("success", accountHandler.createAffiliateAccount(affiliate));
+        }
 
         return "affiliates";
     }

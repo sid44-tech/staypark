@@ -8,18 +8,16 @@ public class AffiliateRegister {
     private String username = "";
     private String email = "";
     private String password = "";
-
     private String company = "";
     private String contact = "";
     private String phone = "";
     private String hotel = "";
-    private String country = "";
-    private String city = "";
-    private String state = "";
+    private int country;
+    private int city;
+    private int state;
     private String address = "";
     private MultipartFile hotelLogo;
-    private String rooms = "";
-    private String parking = "";
+    private int rooms;
+    private int parking;
     private String info = "";
-
 }

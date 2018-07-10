@@ -216,6 +216,18 @@ body {
 	color: #71a40a;
 }
 
+.error-font {
+	font-size: 16px;
+	font-family: 'Roboto', sans-serif;
+	font-weight: bold;
+	color: #FF0000;
+}
+
+.small-row {
+	height: 20px;
+}
+
+
 /* -------------------------- Main Layout CSS -------------------------- */
 
 .flex-layout {
@@ -1180,4 +1192,30 @@ body {
 .ar-section-margin {
 	margin-top: 24px;
 	margin-bottom: 24px;
+}
+
+/* -------------------------- USER REG CSS -------------------------- */
+
+.ur-submit {
+	margin-top: 24px;
+}
+
+.ur-terms {
+	margin-left: 0px;
+}
+
+
+/* -------------------------- LOGIN CSS -------------------------- */
+
+.login-container {
+	margin: 0 auto;
+	margin-top: 62px;
+	margin-bottom: 88px;
+	max-width: 300px;
+}
+
+.login-small-font {
+	font-family: 'Roboto', sans-serif;
+	font-size: 12px;
+	font-weight: normal;
 }
