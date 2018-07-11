@@ -47,7 +47,7 @@ public class CustomerAccessController {
         return "signup";
     }
 
-    @PostMapping("/forgot")
+    @GetMapping("/forgot")
     public String forgot(Model model) {
 
         return "forgot";
