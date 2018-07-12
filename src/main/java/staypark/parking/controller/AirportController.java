@@ -4,6 +4,7 @@ import staypark.parking.beans.RoomParkSearch;
 import staypark.parking.handler.AirportHandler;
 import staypark.parking.handler.HotelHandler;
 
+import staypark.parking.util.AirportUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +25,8 @@ public class AirportController {
 	@GetMapping("/airport/{airport}")
     public String airportDetails(@PathVariable("airport") String airport, Model model) {
         model.addAttribute("airport", airportHandler.getAirportDetails(airport));
+        model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
+        model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
         
         return "airport-detail";
     }
@@ -31,6 +34,8 @@ public class AirportController {
     @PostMapping("/room-park-results")
     public String roomParkResults(Model model, @ModelAttribute RoomParkSearch search) {
         model.addAttribute("results", hotelHandler.getHotelslForSearch(search));
+        model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
+        model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
 
         return "room-park-results";
     }

@@ -22,7 +22,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/images/**", "/js/**", "/css/**").permitAll()
+                .antMatchers("/", "/about", "/airport-parking", "/room-park", "/affiliates",
+                        "/faq", "/contact-us", "/sitemap", "/privacy", "/tac", "/browse-airports", "/parking/**",
+                        "/airport/**", "/checkout", "/forgot", "/signup", "/images/**", "/js/**", "/css/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -32,7 +34,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login")
+                //.logoutSuccessHandler(logoutSuccessHandler)
+                .invalidateHttpSession(true)
+                //.addLogoutHandler(logoutHandler)
+                //.deleteCookies(cookieNamesToClear)
                 .permitAll();
+
     }
 
 }

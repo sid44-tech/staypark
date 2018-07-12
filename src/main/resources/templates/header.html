@@ -9,20 +9,26 @@
 			</span>
 		</div>
 		<div class='float header-top-row-padding header-contact-link-visible'>
-			<a href="\contact"><span class='header_text_item_left'>Contact</span></a>
+			<a href="\contact-us"><span class='header_text_item_left'>Contact</span></a>
 		</div>
 		<div class="align-right header-top-row-padding">
 			<span sec:authorize="isAuthenticated()">
-                Logged user: <span sec:authentication="name"></span> 
-                <a th:href="@{/logout}">Sign Out</a>
+				<span class='header_text_item_right'>
+					Welcome, <span sec:authentication="name"></span>
+				</span>
+				<span class='header_text_item_right'>
+					<a th:href="@{/logout}">Sign Out</a>
+				</span>
             </span>
-			<span class='header_text_item_right'>
-				<img class="small-icon" src="/images/login_icon.png"/>
-				<a href="/login" class="header_font">Login</a>
-			</span>&nbsp;
-			<span class='header_text_item_right'>
-				<img class="small-icon" src="/images/person_icon.png"/>
-				<a href="/signup" class="header_font">Sign-Up</a>
+			<span sec:authorize="isAnonymous()">
+				<span class='header_text_item_right'>
+					<img class="small-icon" src="/images/login_icon.png"/>
+					<a href="/login" class="header_font">Login</a>
+				</span>
+				<span class='header_text_item_right'>
+					<img class="small-icon" src="/images/person_icon.png"/>
+					<a href="/signup" class="header_font">Sign-Up</a>
+				</span>
 			</span>
 		</div>
 	</div>
