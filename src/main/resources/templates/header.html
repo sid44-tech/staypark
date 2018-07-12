@@ -13,8 +13,7 @@
 		</div>
 		<div class="align-right header-top-row-padding">
 			<span sec:authorize="isAuthenticated()">
-                | Logged user: <span sec:authentication="name"></span> |
-                Roles: <span sec:authentication="principal.authorities"></span> |
+                Logged user: <span sec:authentication="name"></span> 
                 <a th:href="@{/logout}">Sign Out</a>
             </span>
 			<span class='header_text_item_right'>
