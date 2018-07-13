@@ -14,7 +14,7 @@
 		<div class="align-right header-top-row-padding">
 			<span sec:authorize="isAuthenticated()">
 				<span class='header_text_item_right'>
-					Welcome, <span sec:authentication="name"></span>
+					Welcome, <span sec:authentication="Principal.firstName"></span>
 				</span>
 				<span class='header_text_item_right'>
 					<a th:href="@{/logout}">Sign Out</a>

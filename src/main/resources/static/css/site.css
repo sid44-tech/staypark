@@ -1223,3 +1223,13 @@ body {
 .login-links-custom {
 	margin-top: -7px;
 }
+
+.login-error {
+	display: none;
+	color: #FF0000;
+	font-family: 'Roboto', sans-serif;
+	font-size: 14px;
+	font-weight: normal;
+	margin-top: 16px;
+	margin-bottom: 16px;
+}

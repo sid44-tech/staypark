@@ -296,7 +296,12 @@ public class AccountHandler {
             return false;
         }
 
-        byte[] decodedBytes = Base64.getDecoder().decode(hashedPassword);
+        byte[] decodedBytes;
+        try {
+            decodedBytes = Base64.getDecoder().decode(hashedPassword);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
         String decodedString = new String(decodedBytes);
         if (decodedString.equals(realPassword)) {
             return true;

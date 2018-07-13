@@ -9,6 +9,11 @@
 			<div class="form-div-container-header">LOGIN</div>
 			<div class="form-div-container-body">
 				<div class="form-row">
+					<div id="error" class="col login-error">
+						Username or Password is Incorrect
+					</div>
+				</div>
+				<div class="form-row">
 					<div class="form-group col-md">
 						<label for="username">Username *</label>
 						<input type="text" class="form-control" id="username" name="username" onfocusout="checkUsernameExists(this)" required/>
@@ -32,5 +37,19 @@
 			</div>
 		</div>
 	</form>
+
+	<script>
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                var link = location.href;
+                if (link.indexOf("error") != -1) {
+                    $("#error").show();
+                } else {
+                    $("#error").hide();
+                }
+            }, false);
+        })();
+	</script>
 </section>
 </html>
