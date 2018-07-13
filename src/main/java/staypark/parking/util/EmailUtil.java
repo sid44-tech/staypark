@@ -13,7 +13,7 @@ import javax.mail.internet.MimeMessage;
 @Slf4j
 public class EmailUtil {
     public static final String INFO_EMAIL = "info@staypark.com";
-    public static final String AFFILIATE_EMAIL = "";
+    public static final String AFFILIATE_EMAIL = "support@staypark.com";
     //public static final String AFFILIATE_EMAIL = "affiliate@staypark.com";
     static final String FROM = "support@staypark.com";
     static final String FROMNAME = "StayPark Support";
