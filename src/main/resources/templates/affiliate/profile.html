@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page-left-nav.html}">
+
+<section layout:fragment="side-bar">
+    <div class="prof-left-nav">
+        <div class="row">
+            <a href="/affiliate/profile"><span class="section-title">Profile</span></a>
+        </div>
+        <div class="row">
+            <a href="/#"><span class="section-title">Airport Parking Reservations</span></a>
+        </div>
+        <div class="row">
+            <a href="/#"><span class="section-title">Event Parking Reservations</span></a>
+        </div>
+        <div class="row">
+            <a href="/#"><span class="section-title">Change Password</span></a>
+        </div>
+    </div>
+</section>
+
+<section layout:fragment="main-content">
+    <form class="needs-validation" novalidate action="/affiliate/profile" th:action="@{/affiliate/profile}" th:object="${profile}" method="post">
+        <div class="form-div-container">
+            <div class="form-div-container-header">Profile</div>
+            <div class="form-div-container-body">
+                <div class="form-group row">
+                    <label for="fname" class="col-sm-4 col-form-label">First Name *</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="fname" th:field="*{firstName}" placeholder="" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="lname" class="col-sm-4 col-form-label">Last Name *</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="lname" th:field="*{lastName}" placeholder="" maxlength="12" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="email" class="col-sm-4 col-form-label">Email *</label>
+                    <div class="col-sm-8">
+                        <input type="email" class="form-control" id="email" th:field="*{email}" placeholder="" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="phone" class="col-sm-4 col-form-label">Phone Number *</label>
+                    <div class="col-sm-8">
+                        <input type="number" class="form-control" id="phone" th:field="*{phone}" placeholder="" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="address" class="col-sm-4 col-form-label">Address *</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="address" th:field="*{address}" placeholder="" maxlength="12" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="city" class="col-sm-4 col-form-label">City *</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="city" th:field="*{city}" placeholder="" maxlength="12" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="state" class="col-sm-4 col-form-label">State *</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="state" th:field="*{state}" placeholder="" maxlength="12" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="zip" class="col-sm-4 col-form-label">Zip *</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="zip" th:field="*{zip}" placeholder="" maxlength="12" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-9">
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>
+</html>

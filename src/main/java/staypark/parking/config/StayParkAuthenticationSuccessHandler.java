@@ -15,29 +15,21 @@ import java.io.IOException;
 import java.util.Collection;
 
 @Slf4j
-public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+public class StayParkAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request,
-                                        HttpServletResponse response, Authentication authentication)
-            throws IOException {
-
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         handle(request, response, authentication);
         clearAuthenticationAttributes(request);
     }
 
-    protected void handle(HttpServletRequest request,
-                          HttpServletResponse response, Authentication authentication)
-            throws IOException {
-
+    protected void handle(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         String targetUrl = determineTargetUrl(authentication);
 
         if (response.isCommitted()) {
-            log.debug(
-                    "Response has already been committed. Unable to redirect to "
-                            + targetUrl);
+            log.debug("Response has already been committed. Unable to redirect to " + targetUrl);
             return;
         }
 
@@ -47,8 +39,7 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
     protected String determineTargetUrl(Authentication authentication) {
         boolean isUser = true;
         boolean isAdmin = false;
-        Collection<? extends GrantedAuthority> authorities
-                = authentication.getAuthorities();
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         for (GrantedAuthority grantedAuthority : authorities) {
             if (grantedAuthority.getAuthority().equals("ROLE_USER")) {
                 isUser = true;

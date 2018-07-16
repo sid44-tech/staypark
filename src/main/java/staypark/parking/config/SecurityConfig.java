@@ -11,7 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
-    private MyAuthenticationProvider authProvider;
+    private StayParkAuthenticationProvider authProvider;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
-                .successHandler(new MyAuthenticationSuccessHandler())
+                .successHandler(new StayParkAuthenticationSuccessHandler())
                 .permitAll()
                 .and()
                 .logout()
@@ -43,5 +43,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll();
 
     }
-
 }

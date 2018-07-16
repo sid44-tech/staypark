@@ -2,13 +2,14 @@ package staypark.parking.handler;
 
 import staypark.parking.beans.AffiliateRegister;
 import staypark.parking.beans.UserRegister;
+import staypark.parking.beans.security.AuthProfile;
+import staypark.parking.beans.security.UserProfile;
 import staypark.parking.util.DBUtil;
 import staypark.parking.util.EmailUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
-import javax.xml.transform.Result;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -49,6 +50,22 @@ public class AccountHandler {
             "from dbstaypark.gp_user_register " +
             ") as all_users " +
             "where email = ? ";
+    private String GET_USERNAME_AND_PASSWORD =
+            "select * from " +
+            "( " +
+            "select gp_username as username, gp_password as password, 'ADMN' as type, gp_username as fname " +
+            "from dbstaypark.gp_admin_login " +
+            "union " +
+            "select gal_email as username, gal_password as password, 'AFFL' as type, gal_con_name as fname " +
+            "from dbstaypark.gp_affiliate_login " +
+            "union " +
+            "select username, password, 'CALL' as type, name as fname " +
+            "from dbstaypark.gp_callcenter_user " +
+            "union " +
+            "select username, password, 'USER' as type, firstname as fname " +
+            "from dbstaypark.gp_user_register " +
+            ") as all_users " +
+            "where username = ? ";
     private String ADD_AFFILIATE =
             "insert into dbstaypark.gp_affiliate_login " +
             "(gal_com_name,gal_con_name,gal_phone,gal_hotel_name,gal_state_id,gal_city_id,gal_add,gal_logo,gal_no_room,gal_prk_sps,gal_email,gal_s_email,gal_password,gal_desc,gal_status,gal_area,gal_billing_email1,gal_billing_email2,gal_faclty_name,gal_bill_address,chkemail,gal_time_zone,gal_cdt_time,gal_netpark,gal_confirmation_type,gal_netpark_id,gal_country,gal_fax_number,gal_fax_type,gal_currency) " +
@@ -58,7 +75,113 @@ public class AccountHandler {
             "insert into dbstaypark.gp_user_register " +
             "(username, password, firstname, lastname, occupation, gender, email, ph_num, address, state_id, city_id, zip, status) " +
             "values (?, ?, ?, ?, '', '', ?, ?, ?, ?, ?, ?, 'A') ";
-    private String GET_PASSWORD = "select password from dbstaypark.gp_user_register where username= ? ";
+    private String GET_USER_PROFILE = "select * from dbstaypark.gp_user_register where username = ? ";
+    private String UPDATE_USER_PROFILE =
+            "update dbstaypark.gp_user_register set " +
+            "address = ?, " +
+            "city_id = ?, " +
+            "email = ?, " +
+            "firstname = ?, " +
+            "lastname = ?, " +
+            "ph_num = ?, " +
+            "state_id = ?, " +
+            "zip = ? " +
+            "where username = ? ";
+    private String UPDATE_PASSWORD = "update dbstaypark.gp_user_register set password = ? where username = ? ";
+
+
+    public UserProfile getUserProfile(final String username) {
+        UserProfile up = new UserProfile();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(GET_USER_PROFILE);
+            ps.setString(1, username);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                up.setAddress(rs.getString("address"));
+                up.setCity(rs.getString("city_id"));
+                up.setEmail(rs.getString("email"));
+                up.setFirstName(rs.getString("firstname"));
+                up.setLastName(rs.getString("lastname"));
+                up.setPhone(rs.getString("ph_num"));
+                up.setState(rs.getString("state_id"));
+                up.setZip(rs.getString("zip"));
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            DBUtil.closeResources(conn, ps, rs);
+        }
+
+        return up;
+    }
+
+    public UserProfile updateUserProfile(final String username, final UserProfile up) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(UPDATE_USER_PROFILE);
+            ps.setString(1, up.getAddress());
+            ps.setString(2, up.getCity());
+            ps.setString(3, up.getEmail());
+            ps.setString(4, up.getFirstName());
+            ps.setString(5, up.getLastName());
+            ps.setString(6, up.getPhone());
+            ps.setString(7, up.getState());
+            ps.setString(8, up.getZip());
+            ps.setString(9, username);
+
+            int rowsUpdated = ps.executeUpdate();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            DBUtil.closeResources(conn, ps, null);
+        }
+
+        return up;
+    }
+
+    public boolean changePassword(final String username, final String currentPassword, final String newPassword) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        boolean updated = false;
+
+        if (username == null || currentPassword == null || newPassword == null) {
+            return updated;
+        }
+
+        AuthProfile profile = validateCredentials(username, currentPassword);
+        if (profile.isAuthenticated()) {
+            return updated;
+        }
+
+        if ("USER".equals(profile.getRole())) {
+            try {
+                conn = DBUtil.getConnection();
+                ps = conn.prepareStatement(UPDATE_PASSWORD);
+                ps.setString(1, encryptPassword(newPassword));
+                ps.setString(2, username);
+                int rows = ps.executeUpdate();
+                if (rows > 0) {
+                    updated = true;
+                }
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            } finally {
+                DBUtil.closeResources(conn, ps, null);
+            }
+        } else {
+            log.error("Not handling non USER change password yet");
+        }
+
+        return updated;
+    }
 
     public boolean checkEmailExists(final String email) {
         boolean found = false;
@@ -152,7 +275,38 @@ public class AccountHandler {
         return success;
     }
 
-    public String createCustomerDBRecord(UserRegister user){
+    public AuthProfile validateCredentials(final String username, final String password) {
+        if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
+            return null;
+        }
+
+        AuthProfile profile = getAuthenticationInformation(username);
+
+        if (profile.getPassword() == null) {
+            return null;
+        }
+
+        //Really really old school stored passwords.  And by that I mean plain text.  Wha?
+        if (checkPasswordPlain(password, profile.getPassword())) {
+            profile.setAuthenticated(true);
+            return profile;
+        }
+        //Old school stored passwords.  And by that I mean MD5.  Wha?
+        else if (checkPasswordMD5(password, profile.getPassword())) {
+            profile.setAuthenticated(true);
+            return profile;
+        }
+        //Stored passwords.  And by that I mean BlowFish.  Wha?
+        else if (checkPasswordBlowfish(password, profile.getPassword())) {
+            profile.setAuthenticated(true);
+            return profile;
+        }
+        //TODO: One day one-way bcrypt should be done.  Out of scope for now.
+
+        return null;
+    }
+
+    private String createCustomerDBRecord(UserRegister user){
         String success = "false";
 
         if (user == null) {
@@ -189,7 +343,7 @@ public class AccountHandler {
         return success;
     }
 
-    public String createAffiliateDBRecord(AffiliateRegister affiliate){
+    private String createAffiliateDBRecord(AffiliateRegister affiliate){
         String success = "false";
 
         if (affiliate == null) {
@@ -231,46 +385,23 @@ public class AccountHandler {
         return success;
     }
 
-    public boolean validateCredentials(final String username, final String password) {
-        if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
-            return false;
-        }
-
-        String hashedPassword = getHashedPassword(username);
-
-        if (hashedPassword == null) {
-            return false;
-        }
-
-        //Really really old school stored passwords.  And by that I mean plain text.  Wha?
-        if (checkPasswordPlain(password, hashedPassword)) {
-            return true;
-        }
-        //Old school stored passwords.  And by that I mean MD5.  Wha?
-        else if (checkPasswordMD5(password, hashedPassword)) {
-            return true;
-        }
-        //Stored passwords.  And by that I mean BlowFish.  Wha?
-        else if (checkPasswordBlowfish(password, hashedPassword)) {
-            return true;
-        }
-        //TODO: One day one-way bcrypt should be done.  Out of scope for now.
-
-        return false;
-    }
-
-    private String getHashedPassword(final String username) {
+    private AuthProfile getAuthenticationInformation(final String username) {
+        AuthProfile profile = new AuthProfile();
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
 
         try {
             conn = DBUtil.getConnection();
-            ps = conn.prepareStatement(GET_PASSWORD);
+            ps = conn.prepareStatement(GET_USERNAME_AND_PASSWORD);
             ps.setString(1, username);
             rs = ps.executeQuery();
             if (rs.next()) {
-                return rs.getString("password");
+                profile.setUsername(rs.getString("username"));
+                profile.setPassword(rs.getString("password"));
+                profile.setRole(rs.getString("type"));
+                profile.setFirstName(rs.getString("fname"));
+                return profile;
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);

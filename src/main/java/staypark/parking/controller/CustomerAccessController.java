@@ -1,6 +1,7 @@
 package staypark.parking.controller;
 
 import staypark.parking.beans.UserRegister;
+import staypark.parking.beans.security.AuthProfile;
 import staypark.parking.handler.AccountHandler;
 import staypark.parking.util.AirportUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +39,8 @@ public class CustomerAccessController {
 
     @PostMapping("/login")
     public String loginCheck(Model model, @ModelAttribute UserRegister user) {
-        boolean credentialsValid = accountHandler.validateCredentials(user.getUsername(), user.getPassword());
-        model.addAttribute("validates", credentialsValid);
+        AuthProfile profile = accountHandler.validateCredentials(user.getUsername(), user.getPassword());
+        model.addAttribute("validates", profile.isAuthenticated());
         return "login";
     }
 	

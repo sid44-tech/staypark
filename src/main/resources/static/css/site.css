@@ -1233,3 +1233,11 @@ body {
 	margin-top: 16px;
 	margin-bottom: 16px;
 }
+
+
+/* -------------------------- LOGIN CSS -------------------------- */
+
+.prof-left-nav {
+	margin-left: 16px;
+	margin-right: 48px;
+}
