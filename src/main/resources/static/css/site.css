@@ -1241,3 +1241,38 @@ body {
 	margin-left: 16px;
 	margin-right: 48px;
 }
+
+
+/* -------------------------- CHANGE PASSWORD CSS -------------------------- */
+
+.cp-message-custom-error {
+	margin-top: 8px;
+	margin-bottom: 24px;
+	color: #FF0000;
+	font-family: 'Roboto', sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.cp-message-custom-success{
+	margin-top: 8px;
+	margin-bottom: 24px;
+	color: #6f9702;
+	font-family: 'Roboto', sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+
+/* -------------------------- CUSTOMER AIRPORT PARKING RESERVATIONS CSS -------------------------- */
+
+.capp-table-custom {
+	background-color: #FFFFFF;
+}
+
+.capp-no-results {
+	color: #FF0000;
+	font-family: 'Roboto', sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+}

@@ -75,3 +75,27 @@
 
      return index;
  }
+
+ function validatePassword(password) {
+     if (password.length < 8 || !containsDigit(password)) {
+         return false;
+     }
+     return true;
+ }
+
+ function validateConfirmPassword(password, confirm) {
+     if (password != confirm) {
+         return false;
+     }
+
+     return true;
+ }
+
+ function containsDigit(s) {
+     var containsDigit = false;
+     var matches = s.match(/\d+/g);
+     if (matches != null) {
+         containsDigit = true;
+     }
+     return containsDigit;
+ }

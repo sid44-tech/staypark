@@ -4,6 +4,7 @@ import staypark.parking.beans.AirportBean;
 import staypark.parking.beans.AirportDetailBean;
 import staypark.parking.beans.BrowseAirports;
 import staypark.parking.beans.StateAirportBean;
+import staypark.parking.beans.user.AirportReservations;
 import staypark.parking.util.DBUtil;
 import staypark.parking.util.FileUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +36,11 @@ public class AirportHandler {
             "from dbstaypark.gp_deperture_location as d " +
             "left join dbstaypark.gp_state as s on d.gdl_state_id = s.gps_id " +
             "where d.gdl_scode = ? ";
+    private static String GET_CUSTOMER_RESERVATIONS =
+            "select * " +
+            "from dbstaypark.gp_reservation as res " +
+            "left join dbstaypark.gp_user_register as u on u.id = res.user_id " +
+            "where gr_p_id != 0 and user_id != 0 and u.username = ? ";
 
     static {
     	initializeAirportToStateMaps();
@@ -76,8 +82,6 @@ public class AirportHandler {
     			currentTitle = list.get(i).getTitle();
     		}
     	}
-        //AIRPORT_INFO_BY_STATE.add(ba);
-
     	
     	return AIRPORT_INFO_BY_STATE;
     }
@@ -112,6 +116,28 @@ public class AirportHandler {
         }
 
         return bean;
+    }
+
+    public List<AirportReservations> getCustomerReservations(final String username) {
+        List<AirportReservations> reservations = new ArrayList<>();
+
+        for (int i = 0; i < 20; i++) {
+            AirportReservations res = new AirportReservations();
+
+            res.setDepartingAirport("DIA");
+            res.setDetails("Your Search Was Succesfull?");
+            res.setDropLocation("DIA Suittes");
+            res.setOrderNumber(4);
+            res.setReservationStatus("Pending");
+
+            reservations.add(res);
+        }
+
+        if (username == null) {
+            return reservations;
+        }
+
+        return reservations;
     }
 
     private List<StateAirportBean> parseAirportsInStateString() {

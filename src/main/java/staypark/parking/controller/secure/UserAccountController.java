@@ -3,8 +3,9 @@ package staypark.parking.controller.secure;
 import staypark.parking.beans.security.ChangePassword;
 import staypark.parking.beans.security.Principal;
 import staypark.parking.beans.security.UserProfile;
+import staypark.parking.beans.user.AirportReservations;
 import staypark.parking.handler.AccountHandler;
-import javafx.scene.control.TextFormatter;
+import staypark.parking.handler.AirportHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -13,11 +14,33 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.List;
+
 @Controller
 public class UserAccountController {
 
     @Autowired
     private AccountHandler accountHandler;
+
+    @Autowired
+    private AirportHandler airportHandler;
+
+    @GetMapping("/user/reservations")
+    public String getUserReservations(Model model, Authentication auth) {
+        Principal p = (Principal) auth.getPrincipal();
+        String username = p.getUsername();
+
+        List<AirportReservations> list = airportHandler.getCustomerReservations(username);
+        model.addAttribute("reservations", list);
+
+        if (list.isEmpty()) {
+            model.addAttribute("empty", "true");
+        } else {
+            model.addAttribute("empty", "false");
+        }
+
+        return "user/airport-parking-reservations";
+    }
 
     @GetMapping("/user/profile")
     public String getUserProfile(Model model, Authentication auth) {
@@ -30,7 +53,7 @@ public class UserAccountController {
 
     @GetMapping("/user/password")
     public String changeUserPasswordGet(Model model) {
-        return "change-password";
+        return "user/change-password";
     }
 
     @PostMapping("/user/password")
@@ -38,12 +61,30 @@ public class UserAccountController {
         Principal p = (Principal) auth.getPrincipal();
         boolean success = accountHandler.changePassword(p.getUsername(), pw.getCurrentPassword(), pw.getNewPassword());
         if (success) {
-            model.addAttribute("message", "Password Successfully Updated");
+            model.addAttribute("message", "success");
         } else {
-            model.addAttribute("message", "Error Updating Password");
+            model.addAttribute("message", "error");
         }
 
-        return "change-password";
+        return "user/change-password";
+    }
+
+    @GetMapping("/affiliate/password")
+    public String changeAffiliatePasswordGet(Model model) {
+        return "affiliate/change-password";
+    }
+
+    @PostMapping("/affiliate/password")
+    public String changeAffiliatePassword(Model model, Authentication auth, @ModelAttribute ChangePassword pw) {
+        Principal p = (Principal) auth.getPrincipal();
+        boolean success = accountHandler.changePassword(p.getUsername(), pw.getCurrentPassword(), pw.getNewPassword());
+        if (success) {
+            model.addAttribute("message", "success");
+        } else {
+            model.addAttribute("message", "error");
+        }
+
+        return "affiliate/change-password";
     }
 
     @PostMapping("/user/profile")

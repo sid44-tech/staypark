@@ -87,7 +87,8 @@ public class AccountHandler {
             "state_id = ?, " +
             "zip = ? " +
             "where username = ? ";
-    private String UPDATE_PASSWORD = "update dbstaypark.gp_user_register set password = ? where username = ? ";
+    private String UPDATE_PASSWORD_CUSTOMER = "update dbstaypark.gp_user_register set password = ? where username = ? ";
+    private String UPDATE_PASSWORD_AFFILIATE = "update dbstaypark.gp_affiliate_login set gal_password = ? where gal_email = ? ";
 
 
     public UserProfile getUserProfile(final String username) {
@@ -157,27 +158,32 @@ public class AccountHandler {
         }
 
         AuthProfile profile = validateCredentials(username, currentPassword);
-        if (profile.isAuthenticated()) {
+        if (profile == null || !profile.isAuthenticated()) {
             return updated;
         }
 
+        String query = "";
         if ("USER".equals(profile.getRole())) {
-            try {
-                conn = DBUtil.getConnection();
-                ps = conn.prepareStatement(UPDATE_PASSWORD);
-                ps.setString(1, encryptPassword(newPassword));
-                ps.setString(2, username);
-                int rows = ps.executeUpdate();
-                if (rows > 0) {
-                    updated = true;
-                }
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
-            } finally {
-                DBUtil.closeResources(conn, ps, null);
-            }
+            query = UPDATE_PASSWORD_CUSTOMER;
+        } else if ("AFFL".equals(profile.getRole())) {
+            query = UPDATE_PASSWORD_AFFILIATE;
         } else {
-            log.error("Not handling non USER change password yet");
+            log.error("Unsupported change password user type");
+        }
+
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, encryptPassword(newPassword));
+            ps.setString(2, username);
+            int rows = ps.executeUpdate();
+            if (rows > 0) {
+                updated = true;
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            DBUtil.closeResources(conn, ps, null);
         }
 
         return updated;
@@ -413,11 +419,13 @@ public class AccountHandler {
     }
 
     private boolean checkPasswordBlowfish(final String realPassword, final String hashedPassword) {
-        if (BCrypt.checkpw(realPassword, hashedPassword)) {
-            System.out.println("It matches");
-            return true;
-        } else {
-            System.out.println("It does not match");
+        try {
+            if (BCrypt.checkpw(realPassword, hashedPassword)) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (IllegalArgumentException e) {
             return false;
         }
     }
