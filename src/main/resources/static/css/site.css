@@ -227,6 +227,23 @@ body {
 	height: 20px;
 }
 
+.col-th-font {
+	font-size: 12px;
+	font-family: 'Roboto', sans-serif;
+	font-weight: bold;
+}
+
+.th-font {
+	font-size: 14px;
+	font-family: 'Roboto', sans-serif;
+	font-weight: bold;
+}
+
+.td-font {
+	font-size: 12px;
+	font-family: 'Roboto', sans-serif;
+	font-weight: normal;
+}
 
 /* -------------------------- Main Layout CSS -------------------------- */
 

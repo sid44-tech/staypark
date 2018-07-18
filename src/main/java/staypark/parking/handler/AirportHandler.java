@@ -6,7 +6,6 @@ import staypark.parking.beans.BrowseAirports;
 import staypark.parking.beans.StateAirportBean;
 import staypark.parking.beans.user.AirportReservations;
 import staypark.parking.util.DBUtil;
-import staypark.parking.util.FileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.springframework.stereotype.Service;
@@ -37,7 +36,7 @@ public class AirportHandler {
             "left join dbstaypark.gp_state as s on d.gdl_state_id = s.gps_id " +
             "where d.gdl_scode = ? ";
     private static String GET_CUSTOMER_RESERVATIONS =
-            "select * " +
+            "select order_id, gr_d_air, gr_d_loc, gr_payment, reservation_status " +
             "from dbstaypark.gp_reservation as res " +
             "left join dbstaypark.gp_user_register as u on u.id = res.user_id " +
             "where gr_p_id != 0 and user_id != 0 and u.username = ? ";
@@ -121,20 +120,46 @@ public class AirportHandler {
     public List<AirportReservations> getCustomerReservations(final String username) {
         List<AirportReservations> reservations = new ArrayList<>();
 
-        for (int i = 0; i < 20; i++) {
-            AirportReservations res = new AirportReservations();
-
-            res.setDepartingAirport("DIA");
-            res.setDetails("Your Search Was Succesfull?");
-            res.setDropLocation("DIA Suittes");
-            res.setOrderNumber(4);
-            res.setReservationStatus("Pending");
-
-            reservations.add(res);
-        }
-
         if (username == null) {
             return reservations;
+        }
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(GET_CUSTOMER_RESERVATIONS);
+            ps.setString(1, username);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                String paymentStatus = rs.getString("gr_payment");
+                String reservationStatus = rs.getString("reservation_status");
+
+                AirportReservations res = new AirportReservations();
+
+                String depAirport = rs.getString("gr_d_air");
+                if (depAirport != null) {
+                    depAirport = depAirport.replace("�", " ");
+                }
+                res.setDepartingAirport(depAirport);
+                res.setDetails("Details");
+                res.setDropLocation(rs.getString("gr_d_loc"));
+                res.setOrderNumber(rs.getString("order_id"));
+                if ("Notpaid".equals(paymentStatus)) {
+                    res.setReservationStatus("Pending");
+                } else if ("A".equals(reservationStatus)) {
+                    res.setReservationStatus("Booked");
+                } else {
+                    res.setReservationStatus("");
+                }
+                reservations.add(res);
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            DBUtil.closeResources(conn, ps, rs);
         }
 
         return reservations;

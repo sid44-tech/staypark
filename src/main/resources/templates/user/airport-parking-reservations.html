@@ -18,14 +18,13 @@
 </section>
 
 <section layout:fragment="main-content">
-    <table class="table table-responsive capp-table-custom">
+    <table class="table-sm table-responsive capp-table-custom">
         <thead>
         <tr>
-            <th scope="col">Order Number</th>
-            <th scope="col">Departing Airport</th>
-            <th scope="col">Drop Locations</th>
-            <th scope="col">Reservation Status</th>
-            <th scope="col">Details</th>
+            <th scope="col" class="th-font">Order Number</th>
+            <th scope="col" class="th-font">Departing Airport</th>
+            <th scope="col" class="th-font">Drop Locations</th>
+            <th scope="col" class="th-font">Reservation Status</th>
         </tr>
         </thead>
         <tbody>
@@ -37,11 +36,10 @@
                 </div>
                 <div th:case="'false'">
                     <tr th:each="res : ${reservations}">
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                        <td>Otto</td>
+                        <th scope="row" th:text="${res.orderNumber}" class="col-th-font"></th>
+                        <td th:text="${res.departingAirport}" class="td-font"></td>
+                        <td th:text="${res.dropLocation}" class="td-font"></td>
+                        <td th:text="${res.reservationStatus}" class="td-font"></td>
                     </tr>
                 </div>
             </div>
