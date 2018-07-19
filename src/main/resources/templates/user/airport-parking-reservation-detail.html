@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page-top-submenu.html}">
+
+<section layout:fragment="side-bar">
+    <div th:replace="usersubmenu :: usersubmenu"></div>
+</section>
+
+<section layout:fragment="main-content">
+    <div class="form-div-container">
+        <div class="form-div-container-header">Reservation Details (Order# <span th:text="${details.orderId}"></span>)</div>
+        <div class="form-div-container-body">
+            <div class="row">
+                <div class="col-auto aprd-custom">
+                    <div class="row capp-card-label">Departing Airport</div>
+                    <div class="row capp-card-text" th:text="${details.departingAirport}"></div>
+                </div>
+
+                <div class="col-auto aprd-custom">
+                    <div class="row capp-card-label">Drop Location</div>
+                    <div class="row capp-card-text" th:text="${details.dropLocation}"></div>
+                </div>
+
+                <div class="col-auto aprd-custom">
+                    <div class="row capp-card-label">Drop Time</div>
+                    <div class="row capp-card-text" th:text="${details.dropTime}"></div>
+                </div>
+
+                <div class="col-auto aprd-custom">
+                    <div class="row capp-card-label">Pick Time</div>
+                    <div class="row capp-card-text" th:text="${details.pickTime}"></div>
+                </div>
+
+                <div class="col-auto aprd-custom">
+                    <div class="row capp-card-label">Base Rate</div>
+                    <div class="row capp-card-text" th:text="${details.baseRate}"></div>
+                </div>
+
+                <div class="col-auto aprd-custom">
+                    <div class="row capp-card-label">Service Fee</div>
+                    <div class="row capp-card-text" th:text="${details.serviceFee}"></div>
+                </div>
+
+                <div class="col-auto aprd-custom">
+                    <div class="row capp-card-label">Sales Tax</div>
+                    <div class="row capp-card-text" th:text="${details.salesTax}"></div>
+                </div>
+
+                <div class="col-auto aprd-custom">
+                    <div class="row capp-card-label">Total Charge</div>
+                    <div class="row capp-card-text" th:text="${details.totalCharge}"></div>
+                </div>
+
+                <div class="col-auto aprd-custom">
+                    <div class="row capp-card-label">Payment Type</div>
+                    <div class="row capp-card-text" th:text="${details.paymentType}"></div>
+                </div>
+
+                <div class="col-auto aprd-custom">
+                    <div class="row capp-card-label">Payment Status</div>
+                    <div class="row capp-card-text" th:text="${details.paymentStatus}"></div>
+                </div>
+
+                <div class="col-auto aprd-custom">
+                    <div class="row capp-card-label">Booking Date</div>
+                    <div class="row capp-card-text" th:text="${details.bookingDate}"></div>
+                </div>
+
+                <div class="col-auto aprd-custom">
+                    <div class="row capp-card-label">Parking Time</div>
+                    <div class="row capp-card-text" th:text="${details.parkingTime}"></div>
+                </div>
+
+                <div class="col-auto aprd-custom">
+                    <div class="row capp-card-label">State</div>
+                    <div class="row capp-card-text" th:text="${details.state}"></div>
+                </div>
+
+                <div class="col-auto aprd-custom">
+                    <div class="row capp-card-label">City</div>
+                    <div class="row capp-card-text" th:text="${details.city}"></div>
+                </div>
+
+                <div class="col-auto aprd-custom">
+                    <div class="row capp-card-label">Order Id</div>
+                    <div class="row capp-card-text" th:text="${details.orderId}"></div>
+                </div>
+
+                <div class="col-auto aprd-custom">
+                    <div class="row capp-card-label">Tracking Number</div>
+                    <div class="row capp-card-text" th:text="${details.trackingNumber}"></div>
+                </div>
+
+                <div class="col-auto aprd-custom">
+                    <div class="row capp-card-label">Billing Address</div>
+                    <div class="row capp-card-text" th:text="${details.billingAddress}"></div>
+                </div>
+
+                <div class="col-auto aprd-custom">
+                    <div class="row capp-card-label">Reservation Status</div>
+                    <div class="row capp-card-text" th:text="${details.reservationStatus}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</html>

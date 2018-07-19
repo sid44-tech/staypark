@@ -9,25 +9,31 @@
 
 <section layout:fragment="main-content">
 
-	<div th:each="res : ${reservations}" class="capp-airport-block">
-		<div class="row capp-card-row">
-			<div class="col-sm-4 capp-card-label">Order Number</div>
-			<div class="col-sm-8 capp-card-text" th:text="${res.orderNumber}"></div>
-		</div>
-		<div class="row capp-card-row">
-			<div class="col-sm-4 capp-card-label">Departing Airport</div>
-			<div class="col-sm-8 capp-card-text" th:text="${res.departingAirport}"></div>
-		</div>
-		<div class="row capp-card-row">
-			<div class="col-sm-4 capp-card-label">Drop Location</div>
-			<div class="col-sm-8 capp-card-text" th:text="${res.dropLocation}"></div>
-		</div>
-		<div class="row">
-			<div class="col-sm-4 capp-card-label">Reservation Status</div>
-			<div class="col-sm-8 capp-card-text" th:text="${res.reservationStatus}"></div>
-		</div>
-		<div class="ba-button-div"><a href="#"><span class="capp-card-label">Details </span><img src="/images/left-arrow-green.png" class="ba-button-image"/></a></div>
-	</div>
+    <div class="row">
+        <div th:each="res : ${reservations}" class="col capp-airport-block p-results-custom no-padding">
+            <div class="row capp-card-row">
+                <div class="col-sm-5 capp-card-label">Order Number</div>
+                <div class="col-sm-7 capp-card-text" th:text="${res.orderNumber}"></div>
+            </div>
+            <div class="row capp-card-row">
+                <div class="col-sm-5 capp-card-label">Order Date</div>
+                <div class="col-sm-7 capp-card-text" th:text="${res.orderDate}"></div>
+            </div>
+            <div class="row capp-card-row">
+                <div class="col-sm-5 capp-card-label">Departing Airport</div>
+                <div class="col-sm-7 capp-card-text" th:text="${res.departingAirport}"></div>
+            </div>
+            <div class="row capp-card-row">
+                <div class="col-sm-5 capp-card-label">Drop Location</div>
+                <div class="col-sm-7 capp-card-text" th:text="${res.dropLocation}"></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-5 capp-card-label">Reservation Status</div>
+                <div class="col-sm-7 capp-card-text" th:text="${res.reservationStatus}"></div>
+            </div>
+            <div class="ba-button-div"><a th:href="${res.detailLink}"><span class="capp-card-label">Details </span><img src="/images/left-arrow-green.png" class="ba-button-image"/></a></div>
+        </div>
+    </div>
 		<!-- 
     <table class="table-sm table-responsive capp-table-custom">
         <thead>

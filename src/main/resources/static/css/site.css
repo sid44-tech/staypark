@@ -1319,9 +1319,12 @@ body {
 }
 
 .capp-airport-block {
+	min-width: 300px;
 	max-width: 450px;
 	margin-top: 8px;
 	margin-bottom: 16px;
+	margin-left: 8px;
+	margin-right: 8px;
 	padding-top: 16px;
 	padding-bottom: 8px;
 	padding-left: 8px;
@@ -1334,4 +1337,13 @@ body {
 .capp-button-image {
 	width: 24px;
 	height: 24px;
+}
+
+
+/* -------------------------- CUSTOMER AIRPORT PARKING RESERVATION DETAIL CSS -------------------------- */
+
+.aprd-custom {
+	margin-left: 16px;
+	margin-right: 16px;
+	margin-bottom: 32px;
 }

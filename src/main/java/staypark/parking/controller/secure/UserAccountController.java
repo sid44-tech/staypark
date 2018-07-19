@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
@@ -40,6 +41,16 @@ public class UserAccountController {
         }
 
         return "user/airport-parking-reservations";
+    }
+
+    @GetMapping("/user/reservations/{orderId}")
+    public String getUserReservationsDetails(Model model, @PathVariable("orderId") String orderId, Authentication auth) {
+        Principal p = (Principal) auth.getPrincipal();
+        String username = p.getUsername();
+
+        model.addAttribute("details", airportHandler.getCustomerReservationDetails(username, orderId));
+
+        return "user/airport-parking-reservation-detail";
     }
 
     @GetMapping("/user/profile")

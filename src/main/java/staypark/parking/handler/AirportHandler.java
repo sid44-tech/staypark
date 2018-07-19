@@ -5,7 +5,9 @@ import staypark.parking.beans.AirportDetailBean;
 import staypark.parking.beans.BrowseAirports;
 import staypark.parking.beans.StateAirportBean;
 import staypark.parking.beans.user.AirportReservations;
+import staypark.parking.beans.user.ReservtionDetails;
 import staypark.parking.util.DBUtil;
+import staypark.parking.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.springframework.stereotype.Service;
@@ -13,11 +15,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -36,10 +34,11 @@ public class AirportHandler {
             "left join dbstaypark.gp_state as s on d.gdl_state_id = s.gps_id " +
             "where d.gdl_scode = ? ";
     private static String GET_CUSTOMER_RESERVATIONS =
-            "select order_id, gr_d_air, gr_d_loc, gr_payment, reservation_status " +
+            "select order_id, gr_d_air, gr_d_loc, gr_payment, reservation_status, gr_reservation_date " +
             "from dbstaypark.gp_reservation as res " +
             "left join dbstaypark.gp_user_register as u on u.id = res.user_id " +
-            "where gr_p_id != 0 and user_id != 0 and u.username = ? ";
+            "where gr_p_id != 0 and user_id != 0 and u.username = ?" +
+            "order by gr_reservation_date asc ";
 
     static {
     	initializeAirportToStateMaps();
@@ -117,6 +116,32 @@ public class AirportHandler {
         return bean;
     }
 
+    public ReservtionDetails getCustomerReservationDetails(final String username, final String orderId) {
+        ReservtionDetails rd = new ReservtionDetails();
+
+        rd.setOrderId("87878798");
+        rd.setDepartingAirport("Airport Force 1");
+        rd.setDepartingAirport("DIA");
+        rd.setDropLocation("Suites Inn");
+        rd.setDropTime("8:00 AM");
+        rd.setPickTime("10:00 PM");
+        rd.setBaseRate("34.00");
+        rd.setServiceFee("5.00");
+        rd.setSalesTax("2.50");
+        rd.setTotalCharge("50.33");
+        rd.setPaymentType("Credit");
+        rd.setPaymentStatus("Paid");
+        rd.setBookingDate("2018-03-14");
+        rd.setParkingTime("9:00AM");
+        rd.setState("CO");
+        rd.setCity("Denver");
+        rd.setTrackingNumber("90890890808098");
+        rd.setBillingAddress("100 A. DD Place");
+        rd.setReservationStatus("Booked");
+
+        return rd;
+    }
+
     public List<AirportReservations> getCustomerReservations(final String username) {
         List<AirportReservations> reservations = new ArrayList<>();
 
@@ -139,11 +164,7 @@ public class AirportHandler {
 
                 AirportReservations res = new AirportReservations();
 
-                String depAirport = rs.getString("gr_d_air");
-                if (depAirport != null) {
-                    depAirport = depAirport.replace("�", " ");
-                }
-                res.setDepartingAirport(depAirport);
+                res.setDepartingAirport(parseDepartingLocation(rs.getString("gr_d_air")));
                 res.setDetails("Details");
                 String dropLocation = rs.getString("gr_d_loc");
                 if (dropLocation != null && dropLocation.indexOf("-") != -1) {
@@ -158,6 +179,12 @@ public class AirportHandler {
                 } else {
                     res.setReservationStatus("");
                 }
+
+                Date resDate = rs.getDate("gr_reservation_date");
+                res.setOrderDate(DateUtil.formatDate(resDate));
+
+                res.setDetailLink("/user/reservations/" + rs.getString("order_id"));
+
                 reservations.add(res);
             }
         } catch (Exception e) {
@@ -167,6 +194,18 @@ public class AirportHandler {
         }
 
         return reservations;
+    }
+
+    private String parseDepartingLocation(final String location) {
+        if (location == null) {
+            return "";
+        }
+        String depAirport = location.replace("�", " ");
+
+        if (depAirport.indexOf("-") != -1) {
+            depAirport = depAirport.split("-")[1].trim();
+        }
+        return depAirport;
     }
 
     private List<StateAirportBean> parseAirportsInStateString() {
