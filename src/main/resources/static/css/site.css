@@ -245,6 +245,13 @@ body {
 	font-weight: normal;
 }
 
+.submenu-font {
+	font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    color: #428bca;
+}
+
 /* -------------------------- Main Layout CSS -------------------------- */
 
 .flex-layout {
@@ -1255,8 +1262,7 @@ body {
 /* -------------------------- LOGIN CSS -------------------------- */
 
 .prof-left-nav {
-	margin-left: 16px;
-	margin-right: 48px;
+	margin-bottom: 24px;
 }
 
 
@@ -1292,4 +1298,40 @@ body {
 	font-family: 'Roboto', sans-serif;
 	font-size: 14px;
 	font-weight: bold;
+}
+
+.capp-card-row {
+	margin-bottom: 8px;
+}
+
+.capp-card-label {
+	color: #000000;
+	font-family: 'Roboto', sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.capp-card-text {
+	color: #000000;
+	font-family: 'Roboto', sans-serif;
+	font-size: 12px;
+	font-weight: normal;
+}
+
+.capp-airport-block {
+	max-width: 450px;
+	margin-top: 8px;
+	margin-bottom: 16px;
+	padding-top: 16px;
+	padding-bottom: 8px;
+	padding-left: 8px;
+	padding-right: 8px;
+	background: #FFFFFF;
+	box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+	transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+
+.capp-button-image {
+	width: 24px;
+	height: 24px;
 }

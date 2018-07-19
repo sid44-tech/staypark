@@ -1,23 +1,34 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{page-left-nav.html}">
+      layout:decorate="~{page-top-submenu.html}">
 
 <section layout:fragment="side-bar">
-    <div class="prof-left-nav">
-        <div class="row">
-            <a href="/user/profile"><span class="section-title">Profile</span></a>
-        </div>
-        <div class="row">
-            <a href="/user/reservations"><span class="section-title">Airport Parking Reservations</span></a>
-        </div>
-        <div class="row">
-            <a href="/user/password"><span class="section-title">Change Password</span></a>
-        </div>
-    </div>
+	<div th:replace="usersubmenu :: usersubmenu"></div>
 </section>
 
 <section layout:fragment="main-content">
+
+	<div th:each="res : ${reservations}" class="capp-airport-block">
+		<div class="row capp-card-row">
+			<div class="col-sm-4 capp-card-label">Order Number</div>
+			<div class="col-sm-8 capp-card-text" th:text="${res.orderNumber}"></div>
+		</div>
+		<div class="row capp-card-row">
+			<div class="col-sm-4 capp-card-label">Departing Airport</div>
+			<div class="col-sm-8 capp-card-text" th:text="${res.departingAirport}"></div>
+		</div>
+		<div class="row capp-card-row">
+			<div class="col-sm-4 capp-card-label">Drop Location</div>
+			<div class="col-sm-8 capp-card-text" th:text="${res.dropLocation}"></div>
+		</div>
+		<div class="row">
+			<div class="col-sm-4 capp-card-label">Reservation Status</div>
+			<div class="col-sm-8 capp-card-text" th:text="${res.reservationStatus}"></div>
+		</div>
+		<div class="ba-button-div"><a href="#"><span class="capp-card-label">Details </span><img src="/images/left-arrow-green.png" class="ba-button-image"/></a></div>
+	</div>
+		<!-- 
     <table class="table-sm table-responsive capp-table-custom">
         <thead>
         <tr>
@@ -45,7 +56,7 @@
             </div>
         </tbody>
     </table>
-
+ -->
     <script>
 
     </script>

@@ -145,7 +145,11 @@ public class AirportHandler {
                 }
                 res.setDepartingAirport(depAirport);
                 res.setDetails("Details");
-                res.setDropLocation(rs.getString("gr_d_loc"));
+                String dropLocation = rs.getString("gr_d_loc");
+                if (dropLocation != null && dropLocation.indexOf("-") != -1) {
+                	dropLocation = dropLocation.split("-")[0].trim();
+                }
+                res.setDropLocation(dropLocation);
                 res.setOrderNumber(rs.getString("order_id"));
                 if ("Notpaid".equals(paymentStatus)) {
                     res.setReservationStatus("Pending");
