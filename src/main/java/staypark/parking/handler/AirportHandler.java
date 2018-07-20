@@ -39,6 +39,13 @@ public class AirportHandler {
             "left join dbstaypark.gp_user_register as u on u.id = res.user_id " +
             "where gr_p_id != 0 and user_id != 0 and u.username = ?" +
             "order by gr_reservation_date asc ";
+    private static String GET_CUSTOMER_RESERVATION_DETAIL =
+            "select order_id, gr_d_air, gr_d_loc, gr_payment, reservation_status, gr_reservation_date, gr_d_time, gr_p_time, gr_b_fee, gr_s_fee, gr_s_tax, gr_g_total, " +
+            "gr_payment_type, s.gps_t_zone, gr_t_time, gr_h_time, loc_state, loc_city, gp_tracking_no, gr_add, gr_city, gr_state, gr_zip, loc_state, loc_city " +
+            "from dbstaypark.gp_reservation as res " +
+            "left join dbstaypark.gp_user_register as u on u.id = res.user_id " +
+            "left join dbstaypark.gp_state as s on s.gps_state = res.loc_state " +
+            "where gr_p_id != 0 and user_id != 0 and u.username = ? and res.order_id = ? ";
 
     static {
     	initializeAirportToStateMaps();
@@ -119,25 +126,42 @@ public class AirportHandler {
     public ReservtionDetails getCustomerReservationDetails(final String username, final String orderId) {
         ReservtionDetails rd = new ReservtionDetails();
 
-        rd.setOrderId("87878798");
-        rd.setDepartingAirport("Airport Force 1");
-        rd.setDepartingAirport("DIA");
-        rd.setDropLocation("Suites Inn");
-        rd.setDropTime("8:00 AM");
-        rd.setPickTime("10:00 PM");
-        rd.setBaseRate("34.00");
-        rd.setServiceFee("5.00");
-        rd.setSalesTax("2.50");
-        rd.setTotalCharge("50.33");
-        rd.setPaymentType("Credit");
-        rd.setPaymentStatus("Paid");
-        rd.setBookingDate("2018-03-14");
-        rd.setParkingTime("9:00AM");
-        rd.setState("CO");
-        rd.setCity("Denver");
-        rd.setTrackingNumber("90890890808098");
-        rd.setBillingAddress("100 A. DD Place");
-        rd.setReservationStatus("Booked");
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(GET_CUSTOMER_RESERVATION_DETAIL);
+            ps.setString(1, username);
+            ps.setString(2, orderId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                rd.setDepartingAirport(parseDepartingLocation(rs.getString("gr_d_air")));
+                rd.setDropLocation(parseDropLocation(rs.getString("gr_d_loc")));
+                rd.setOrderNumber(rs.getString("order_id"));
+                rd.setReservationStatus(getReservationStatus(rs.getString("gr_payment"), rs.getString("reservation_status")));
+                rd.setBookingDate(DateUtil.formatDate(rs.getDate("gr_reservation_date")));
+                rd.setDropTime(rs.getString("gr_d_time") + " " + rs.getString("gps_t_zone"));
+                rd.setPickTime(rs.getString("gr_p_time") + " " + rs.getString("gps_t_zone"));
+                rd.setBaseRate(rs.getString("gr_b_fee"));
+                rd.setServiceFee(rs.getString("gr_s_fee"));
+                rd.setSalesTax(rs.getString("gr_s_tax"));
+                rd.setTotalCharge(rs.getString("gr_g_total"));
+                rd.setPaymentType(rs.getString("gr_payment_type"));
+                rd.setState(rs.getString("loc_state"));
+                rd.setCity(rs.getString("loc_city"));
+                rd.setZip(rs.getString("gr_zip"));
+                rd.setTrackingNumber(rs.getString("gp_tracking_no"));
+                rd.setPaymentStatus(rs.getString("gr_payment"));
+                rd.setBillingAddress(builAddress(rs.getString("gr_add"), rs.getString("gr_city"), rs.getString("gr_state"), rs.getString("gr_zip")));
+                rd.setParkingTime(rs.getString("gr_t_time") + " days(s) " + rs.getString("gr_h_time") + " hours(s)");
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            DBUtil.closeResources(conn, ps, rs);
+        }
 
         return rd;
     }
@@ -178,6 +202,10 @@ public class AirportHandler {
         }
 
         return reservations;
+    }
+
+    private String builAddress(final String address, final String city, final String state, final String zip) {
+        return address + ", " + city + ", " + state + "  " + zip;
     }
     
     private String getReservationStatus(final String paymentStatus, final String reservationStatus) {

@@ -9,9 +9,14 @@
 
 <section layout:fragment="main-content">
     <div class="form-div-container">
-        <div class="form-div-container-header">Reservation Details (Order# <span th:text="${details.orderId}"></span>)</div>
-        <div class="form-div-container-body">
+        <div class="form-div-container-header">Reservation Details</div>
+        <div class="form-div-container-body-white">
             <div class="row">
+                <div class="col-auto aprd-custom">
+                    <div class="row capp-card-label">Order Number</div>
+                    <div class="row capp-card-text" th:text="${details.orderNumber}"></div>
+                </div>
+
                 <div class="col-auto aprd-custom">
                     <div class="row capp-card-label">Departing Airport</div>
                     <div class="row capp-card-text" th:text="${details.departingAirport}"></div>
@@ -34,22 +39,22 @@
 
                 <div class="col-auto aprd-custom">
                     <div class="row capp-card-label">Base Rate</div>
-                    <div class="row capp-card-text" th:text="${details.baseRate}"></div>
+                    <div class="row capp-card-text" th:text="${details.baseRate} + ' USD'"></div>
                 </div>
 
                 <div class="col-auto aprd-custom">
                     <div class="row capp-card-label">Service Fee</div>
-                    <div class="row capp-card-text" th:text="${details.serviceFee}"></div>
+                    <div class="row capp-card-text" th:text="${details.serviceFee} + ' USD'"></div>
                 </div>
 
                 <div class="col-auto aprd-custom">
                     <div class="row capp-card-label">Sales Tax</div>
-                    <div class="row capp-card-text" th:text="${details.salesTax}"></div>
+                    <div class="row capp-card-text" th:text="${details.salesTax} + ' USD'"></div>
                 </div>
 
                 <div class="col-auto aprd-custom">
                     <div class="row capp-card-label">Total Charge</div>
-                    <div class="row capp-card-text" th:text="${details.totalCharge}"></div>
+                    <div class="row capp-card-text" th:text="${details.totalCharge} + ' USD'"></div>
                 </div>
 
                 <div class="col-auto aprd-custom">
@@ -80,11 +85,6 @@
                 <div class="col-auto aprd-custom">
                     <div class="row capp-card-label">City</div>
                     <div class="row capp-card-text" th:text="${details.city}"></div>
-                </div>
-
-                <div class="col-auto aprd-custom">
-                    <div class="row capp-card-label">Order Id</div>
-                    <div class="row capp-card-text" th:text="${details.orderId}"></div>
                 </div>
 
                 <div class="col-auto aprd-custom">

@@ -19,7 +19,9 @@ public class ReservtionDetails {
     private String parkingTime;
     private String state;
     private String city;
+    private String zip;
     private String trackingNumber;
     private String billingAddress;
     private String reservationStatus;
+    private String orderNumber;
 }
