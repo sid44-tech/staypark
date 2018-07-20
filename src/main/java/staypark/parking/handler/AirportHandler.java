@@ -159,30 +159,14 @@ public class AirportHandler {
             ps.setString(1, username);
             rs = ps.executeQuery();
             while (rs.next()) {
-                String paymentStatus = rs.getString("gr_payment");
-                String reservationStatus = rs.getString("reservation_status");
-
                 AirportReservations res = new AirportReservations();
 
                 res.setDepartingAirport(parseDepartingLocation(rs.getString("gr_d_air")));
                 res.setDetails("Details");
-                String dropLocation = rs.getString("gr_d_loc");
-                if (dropLocation != null && dropLocation.indexOf("-") != -1) {
-                	dropLocation = dropLocation.split("-")[0].trim();
-                }
-                res.setDropLocation(dropLocation);
+                res.setDropLocation(rs.getString("gr_d_loc"));
                 res.setOrderNumber(rs.getString("order_id"));
-                if ("Notpaid".equals(paymentStatus)) {
-                    res.setReservationStatus("Pending");
-                } else if ("A".equals(reservationStatus)) {
-                    res.setReservationStatus("Booked");
-                } else {
-                    res.setReservationStatus("");
-                }
-
-                Date resDate = rs.getDate("gr_reservation_date");
-                res.setOrderDate(DateUtil.formatDate(resDate));
-
+                res.setReservationStatus(getReservationStatus(rs.getString("gr_payment"), rs.getString("reservation_status")));
+                res.setOrderDate(DateUtil.formatDate(rs.getDate("gr_reservation_date")));
                 res.setDetailLink("/user/reservations/" + rs.getString("order_id"));
 
                 reservations.add(res);
@@ -195,6 +179,16 @@ public class AirportHandler {
 
         return reservations;
     }
+    
+    private String getReservationStatus(final String paymentStatus, final String reservationStatus) {
+        if ("Notpaid".equals(paymentStatus)) {
+            return "Pending";
+        } else if ("A".equals(reservationStatus)) {
+            return "Booked";
+        }
+    	
+    	return "";
+    }
 
     private String parseDepartingLocation(final String location) {
         if (location == null) {
@@ -206,6 +200,16 @@ public class AirportHandler {
             depAirport = depAirport.split("-")[1].trim();
         }
         return depAirport;
+    }
+    
+    private String parseDropLocation(final String dropLocation) {
+    	String location = dropLocation;
+    	
+        if (location != null && location.indexOf("-") != -1) {
+        	location = location.split("-")[0].trim();
+        }
+        
+        return location;
     }
 
     private List<StateAirportBean> parseAirportsInStateString() {
