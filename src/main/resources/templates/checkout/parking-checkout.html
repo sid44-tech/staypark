@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{page-top-submenu.html}">
+
+<section layout:fragment="side-bar">
+</section>
+
+<section layout:fragment="main-content">
+	<form class="needs-validation" novalidate action="/parking/checkout" th:action="@{/parking/checkout}" th:object="${checkout}" method="post">
+		<div class="form-div-container">
+			<div class="form-div-container-header">Online Checkout</div>
+			<div class="form-div-container-body">
+				<span>
+				Complete this form and submit your payment to book your guaranteed reservation. After your payment goes through you will receive an email confirmation. You will need to print out the email you receive and take it with you to the parking facility.
+				<br><br>
+					For questions or to book over the phone reach us from our <a href="/contact-us">contact</a> page.
+				</span>
+				<br><br>
+				<div class="form-check form-check-inline">
+					<span class="pb-title-font">Continue as Guest or <a href="/login">Login</a></span>
+				</div>
+				<br><br>
+				<div class="align-center width-100 pb-custom">Reservation Information</div>
+				<div class="row">
+					<div class="col-sm-4 pb-label-font">Departing Airport</div>
+					<div class="col-sm-8 pb-text-font">Denver , COLORADO - Denver Int'l Airport (DEN)</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4 pb-label-font">Location</div>
+					<div class="col-sm-8 pb-text-font">Park DIA - Denver International Airport</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4 pb-label-font">Check In</div>
+					<div class="col-sm-8 pb-text-font">Sat, July 21, 2018 8:00 am MST</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4 pb-label-font">Check Out</div>
+					<div class="col-sm-8 pb-text-font">Mon, July 30, 2018 9:30 am MST</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4 pb-label-font">Total Parking Time</div>
+					<div class="col-sm-8 pb-text-font">9 day(s) and 1 hour(s)</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4 pb-label-font">Shuttle Frequency</div>
+					<div class="col-sm-8 pb-text-font">Shuttle runs 24 hours a day: Approx. Every 5 minutes - SEE CONFIRMATION EMAIL FOR PARKING INSTRUCTIONS & DIRECTIONS</div>
+				</div>
+				<br><br>
+				<div class="align-center width-100 pb-custom">Parking Rate & Charges</div>
+				<div class="row">
+					<div class="col-sm-4 pb-label-font">Base Rate</div>
+					<div class="col-sm-8 pb-text-font">69.50 USD</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4 pb-label-font">Service Fee</div>
+					<div class="col-sm-8 pb-text-font">6.00 USD</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4 pb-label-font">Sales Tax</div>
+					<div class="col-sm-8 pb-text-font">4.73USD</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4 pb-label-font">Grand Total</div>
+					<div class="col-sm-8 pb-text-font">80.23 USD</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4 pb-label-font">Total Due Now</div>
+					<div class="col-sm-8 pb-text-font">16.43 USD</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4 pb-label-font">Total Due At Lot</div>
+					<div class="col-sm-8 pb-text-font">63.81 USD</div>
+				</div>
+				<br><br>
+				<div class="align-center width-100 pb-custom">Driver Information</div>
+				<div class="row">
+					<div class="col-sm-4 pb-label-font"># of ppl traveling</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4 pb-label-font">First Name</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4 pb-label-font">Last Name</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4 pb-label-font">Make</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4 pb-label-font">Model</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4 pb-label-font">License Plate # of Car</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4 pb-label-font">How did you hear about us?</div>
+				</div>
+				<br><br>
+				<div class="align-center width-100 pb-custom">Customer Information</div>
+				<div class="row">
+					<div class="col-sm-4 pb-label-font">Billing Address</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4 pb-label-font">City</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4 pb-label-font">State</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4 pb-label-font">Zip</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4 pb-label-font">Email</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4 pb-label-font">Confirm Email?</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4 pb-label-font">Phone</div>
+				</div>
+				<br><br>
+				<div class="align-center width-100 pb-custom">Payment Information</div>
+				<div class="row">
+					<div class="col-sm-4 pb-label-font">Payment Method</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4 pb-label-font">Owner Name</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4 pb-label-font">Credit Card Type</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4 pb-label-font">Credit Card Number</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4 pb-label-font">CVV</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4 pb-label-font">Exp Date</div>
+				</div>
+				<br><br><br>
+				<div class="row">
+					<div class="col-sm-4 pb-label-font">I agree</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4 pb-label-font">I agree</div>
+				</div>
+				<div class="form-group row">
+					<div class="col-sm-9">
+						<button type="submit" class="btn btn-primary">Book Reservation</button>
+					</div>
+				</div>
+				<!--<div class="form-group row">-->
+					<!--<label for="fname" class="col-sm-4 col-form-label">First Name *</label>-->
+					<!--<div class="col-sm-8">-->
+						<!--<input type="text" class="form-control" id="fname" th:field="*{firstName}" placeholder="" required>-->
+					<!--</div>-->
+				<!--</div>-->
+			</div>
+		</div>
+	</form>
+</section>
+</html>

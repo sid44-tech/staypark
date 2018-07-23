@@ -318,7 +318,7 @@ body {
 }
 
 .logo-width {
-	width: 225px;
+	width: 180px;
 }
 
 .support-width {
@@ -327,7 +327,7 @@ body {
 
 @media (min-width: 600px) {
 	.logo-width {
-		width: 353px;
+		width: 275px;
 	}
 	
 	.support-width {
@@ -364,11 +364,6 @@ body {
 	background-color: #71a40a;
 }
 
-.navbar-height {
-	height:12px;
-	background-color: transparent !important;
-}
-
 .navbar-brand-text {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 12px;
@@ -392,6 +387,28 @@ body {
 .navbar-text {
 	color: #FFFFFF !important;
 	font-weight: bold;
+}
+
+.navbar-image {
+	position: absolute;
+	top: 3px;
+	right: 8px;
+}
+
+.navbar-height {
+	min-height: 56px;
+}
+
+@media (min-width: 600px) {
+	.navbar-image {
+		position: absolute;
+		top: 14px;
+		right: 8px;
+	}
+
+	.navbar-height {
+		min-height: 100px;
+	}
 }
 
 /* -------------------------- Footer CSS -------------------------- */
@@ -471,7 +488,7 @@ body {
 	text-align: center;
 	background-color: #FFFFFF;
   	height: 100%;
-  	min-height: 450px;
+  	min-height: 550px;
   	position: relative;
 }
 
@@ -485,8 +502,12 @@ body {
 	padding-bottom: 35px;
 }
 
+.homepage-text-section-custom {
+	margin-bottom: 24px;
+}
+
 #homepage_image_carousel .carousel-item-image {
-	height: 450px;
+	height: 550px;
 	object-fit: cover;
 }
 
@@ -548,6 +569,7 @@ body {
 	left: 0px;
 	margin-left: 8px;
 	margin-right: 8px;
+	margin-top: 55px;
 	background: rgba(0,0,0,0.2);
     border-radius: 5px;
     border: solid 1px #999690;
@@ -577,6 +599,7 @@ body {
 		left: auto;
 		margin-left: 8px;
 		margin-right: 8px;
+		margin-top: 55px;
 		background: rgba(0,0,0,0.2);
 		border-radius: 5px;
 		border: solid 1px #999690;
@@ -1351,4 +1374,36 @@ body {
 	margin-left: 16px;
 	margin-right: 16px;
 	margin-bottom: 32px;
+}
+
+
+/* -------------------------- PARKING BOOKING CSS -------------------------- */
+
+.pb-custom {
+	color: #428bca;
+	font-family: 'Roboto', sans-serif;
+	font-size: 1em;
+	font-weight: bold;
+}
+
+.pb-title-font {
+	color: #6f9702;
+	font-family: 'Roboto', sans-serif;
+	font-size: 1em;
+	font-weight: bold;
+	font-style: italic;
+}
+
+.pb-label-font {
+	color: #000000;
+	font-family: 'Roboto', sans-serif;
+	font-size: 0.85em;
+	font-weight: bold;
+}
+
+.pb-text-font {
+	color: #000000;
+	font-family: 'Roboto', sans-serif;
+	font-size: 0.80em;
+	font-weight: normal;
 }
