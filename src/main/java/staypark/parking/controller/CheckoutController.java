@@ -1,12 +1,13 @@
 package staypark.parking.controller;
 
-import com.sun.tools.javac.comp.Check;
 import staypark.parking.handler.CheckoutHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class CheckoutController {
@@ -14,9 +15,11 @@ public class CheckoutController {
     @Autowired
     private CheckoutHandler checkoutHandler;
 
-	@GetMapping("/parking/checkout")
-    public String checkoutPark(Model model) {
-        model.addAttribute("checkout", checkoutHandler.getParkingCheckout());
+	@GetMapping("/parking/checkout/{hotelId}")
+    public String checkoutPark(Model model, @PathVariable("hotelId") int hotelId, @RequestParam(name="dropOffDate") String dropOffDate,
+                               @RequestParam(name="dropOffTime") String dropOffTime, @RequestParam(name="pickUpDate") String pickUpDate,
+                               @RequestParam(name="pickUpTime") String pickUpTime) {
+        model.addAttribute("checkout", checkoutHandler.getParkingCheckout(hotelId, dropOffDate, dropOffTime, pickUpDate, pickUpTime));
 
 	    return "checkout/parking-checkout";
     }

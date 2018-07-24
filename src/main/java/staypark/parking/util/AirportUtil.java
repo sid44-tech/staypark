@@ -1,16 +1,15 @@
 package staypark.parking.util;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
-import staypark.parking.beans.City;
-import staypark.parking.beans.Country;
-import staypark.parking.beans.State;
+import staypark.parking.beans.*;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -41,6 +40,22 @@ public class AirportUtil {
 	private static String GET_COUNTRIES = "select * from dbstaypark.gp_countries order by country_name desc ";
 	private static String GET_STATES = "select * from dbstaypark.gp_state where gps_status = 'Active'  order by gps_state ";
 	private static String GET_CITIES = "select * from dbstaypark.gp_city where gpc_status = 'Active'  order by gpc_city ";
+
+	private static String GET_SPECIAL_DATE_PARKING_RANGE_INFO =
+			"select sp_date, sp_cost, sp_prk_no " +
+					"from dbstaypark.gp_sp_reservation " +
+					"WHERE sp_htl_id = ? and sp_date >= ? and sp_date <= ? ";
+
+	private static String GET_SPECIAL_DAY_PARKING_INFO =
+			"select * " +
+					"from dbstaypark.gp_sp_dy_reservation " +
+					"WHERE dy_htl_id = ? ";
+
+	private static String GET_RESERVATION_COUNT_FOR_RANGE_HOTEL =
+			"select d.rd_st_date, count(d.rd_st_date) as count " +
+					"from dbstaypark.gp_reservation_dtls as d " +
+					"WHERE d.rd_htl_id = ? and d.rd_st_date >= ? AND d.rd_st_date <= ? " +
+					"group by d.rd_st_date ";
 
 	/**
 	 * This method returns bla bla bla
@@ -264,4 +279,166 @@ public class AirportUtil {
 
 		return cities.get(stateId);
 	}
+
+	public static String parseDepartingLocation(final String location) {
+		if (location == null) {
+			return "";
+		}
+		String depAirport = location.replace("�", " ");
+
+		if (depAirport.indexOf("-") != -1) {
+			depAirport = depAirport.split("-")[1].trim();
+		}
+		return depAirport;
+	}
+
+	public static String parseDropLocation(final String dropLocation) {
+		String location = dropLocation;
+
+		if (location != null && location.indexOf("-") != -1) {
+			location = location.split("-")[0].trim();
+		}
+
+		return location;
+	}
+
+	public static BigDecimal calculateParkingCosts(final int hotelId, final BigDecimal dailyFee, final Date startDate,
+											 final Date endDate, final int totalDays, final Connection conn) {
+		BigDecimal totalCost = new BigDecimal(0);
+		Date currentDate = startDate;
+
+		Map<Date, Integer> bookedCountMap = getReservationForRangeCountbyHotel(hotelId, startDate, endDate, conn);
+		Map<Date, SpecialParkingDate> spdateMap = checkSpecialParkingForDateRange(hotelId, startDate, endDate, conn);
+		Map<Integer, SpecialParkingDay> spdayMap = checkSpecialParkingForDay(hotelId, conn);
+
+		for (int i = 0; i < totalDays; i++) {
+			currentDate = DateUtil.addDaysToDate(currentDate, i);
+
+			//Calculate cost for day if day is a special date
+			if (spdateMap.get(currentDate) != null) {
+				totalCost = totalCost.add(spdateMap.get(currentDate).getCost());
+				//Calculate cost for day if day is a special day (mon, tues, etc)
+			} else if (spdayMap.get(currentDate) != null) {
+				totalCost = totalCost.add(spdayMap.get(currentDate).getCost());
+				//Calculate cost for day if it doesn't have any special circumstances
+			} else {
+				totalCost = totalCost.add(dailyFee);
+			}
+		}
+
+		totalCost = totalCost.setScale(2);
+
+		return totalCost;
+	}
+
+	public static Map<Date, Integer> getReservationForRangeCountbyHotel(final int hotelId, final Date startDate, final Date endDate, final Connection conn) {
+		Map<Date, Integer> map = new HashMap<>();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			ps = conn.prepareStatement(GET_RESERVATION_COUNT_FOR_RANGE_HOTEL);
+			ps.setInt(1,  hotelId);
+			ps.setDate(2, new java.sql.Date(startDate.getTime()));
+			ps.setDate(3, new java.sql.Date(endDate.getTime()));
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				map.put(rs.getDate("rd_st_date"), rs.getInt("count"));
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		} finally {
+			DBUtil.closeResources(null, ps, rs);
+		}
+
+		return map;
+	}
+
+	/**
+	 * Checks if given day for a hotel is considered a special parking day with different rates and number of spaces available.
+	 * @param hotelId int
+	 * @param startDate Date
+	 * @return SpecialParkingDate - null if not special rates for given hotel and date
+	 */
+	public static Map<Date, SpecialParkingDate> checkSpecialParkingForDateRange(final int hotelId, final Date startDate, final Date endDate, final Connection conn) {
+		Map<Date, SpecialParkingDate> map = new HashMap<>();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			ps = conn.prepareStatement(GET_SPECIAL_DATE_PARKING_RANGE_INFO);
+			ps.setInt(1,  hotelId);
+			ps.setDate(2, new java.sql.Date(startDate.getTime()));
+			ps.setDate(3, new java.sql.Date(endDate.getTime()));
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				SpecialParkingDate spday = new SpecialParkingDate();
+				spday.setHotelId(hotelId);
+				spday.setDate(rs.getDate("sp_date"));
+				spday.setNumberSpaces(rs.getInt("sp_prk_no"));
+				spday.setCost(rs.getBigDecimal("sp_cost"));
+				map.put(rs.getDate("sp_date"), spday);
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		} finally {
+			DBUtil.closeResources(null, ps, rs);
+		}
+
+		return map;
+	}
+
+	public static Map<Integer, SpecialParkingDay> checkSpecialParkingForDay(final int hotelId, final Connection conn) {
+		Map<Integer, SpecialParkingDay> map = new HashMap<>();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			ps = conn.prepareStatement(GET_SPECIAL_DAY_PARKING_INFO);
+			ps.setInt(1,  hotelId);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				SpecialParkingDay spday = new SpecialParkingDay();
+				spday.setHotelId(hotelId);
+				spday.setDayId(rs.getInt("dy_day_id"));
+				spday.setNumberSpaces(rs.getInt("dy_room"));
+				spday.setCost(rs.getBigDecimal("dy_cost"));
+				map.put(rs.getInt("dy_day_id"), spday);
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		} finally {
+			DBUtil.closeResources(null, ps, rs);
+		}
+
+		return map;
+	}
+
+	public static int getNumberOfParkingDays(final Date startDate, final Date endDate,
+									   final String startTimeStr, final String endTimeStr) {
+		long diff = endDate.getTime() - startDate.getTime();
+		long days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+
+		if (days == 0) {
+			return 1;
+		}
+
+		LocalTime startTime = LocalTime.parse(startTimeStr, DateTimeFormatter.ofPattern("KK:mm a"));
+		LocalTime endTime = LocalTime.parse(endTimeStr, DateTimeFormatter.ofPattern("KK:mm a"));
+
+		if (endTime.isAfter(startTime)) {
+			days++;
+		}
+
+		return (int)days;
+	}
+
+	public static double getSalesTaxMultiplier(final BigDecimal rate) {
+		if (rate == null) {
+			return 0;
+		}
+
+		return rate.doubleValue() / 100;
+	}
+
 }

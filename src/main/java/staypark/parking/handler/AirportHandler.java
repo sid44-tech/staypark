@@ -6,6 +6,7 @@ import staypark.parking.beans.BrowseAirports;
 import staypark.parking.beans.StateAirportBean;
 import staypark.parking.beans.user.AirportReservations;
 import staypark.parking.beans.user.ReservtionDetails;
+import staypark.parking.util.AirportUtil;
 import staypark.parking.util.DBUtil;
 import staypark.parking.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -137,8 +138,8 @@ public class AirportHandler {
             ps.setString(2, orderId);
             rs = ps.executeQuery();
             if (rs.next()) {
-                rd.setDepartingAirport(parseDepartingLocation(rs.getString("gr_d_air")));
-                rd.setDropLocation(parseDropLocation(rs.getString("gr_d_loc")));
+                rd.setDepartingAirport(AirportUtil.parseDepartingLocation(rs.getString("gr_d_air")));
+                rd.setDropLocation(AirportUtil.parseDropLocation(rs.getString("gr_d_loc")));
                 rd.setOrderNumber(rs.getString("order_id"));
                 rd.setReservationStatus(getReservationStatus(rs.getString("gr_payment"), rs.getString("reservation_status")));
                 rd.setBookingDate(DateUtil.formatDate(rs.getDate("gr_reservation_date")));
@@ -185,7 +186,7 @@ public class AirportHandler {
             while (rs.next()) {
                 AirportReservations res = new AirportReservations();
 
-                res.setDepartingAirport(parseDepartingLocation(rs.getString("gr_d_air")));
+                res.setDepartingAirport(AirportUtil.parseDepartingLocation(rs.getString("gr_d_air")));
                 res.setDetails("Details");
                 res.setDropLocation(rs.getString("gr_d_loc"));
                 res.setOrderNumber(rs.getString("order_id"));
@@ -216,28 +217,6 @@ public class AirportHandler {
         }
     	
     	return "";
-    }
-
-    private String parseDepartingLocation(final String location) {
-        if (location == null) {
-            return "";
-        }
-        String depAirport = location.replace("�", " ");
-
-        if (depAirport.indexOf("-") != -1) {
-            depAirport = depAirport.split("-")[1].trim();
-        }
-        return depAirport;
-    }
-    
-    private String parseDropLocation(final String dropLocation) {
-    	String location = dropLocation;
-    	
-        if (location != null && location.indexOf("-") != -1) {
-        	location = location.split("-")[0].trim();
-        }
-        
-        return location;
     }
 
     private List<StateAirportBean> parseAirportsInStateString() {

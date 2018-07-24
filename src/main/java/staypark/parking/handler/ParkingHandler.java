@@ -57,9 +57,10 @@ public class ParkingHandler {
 			"WHERE dy_htl_id = ? ";
 
 	private static String GET_PARKING_IMAGES_FOR_HOTEL =
-			"select gppi_timage, gppi_limage " +
-			"from dbstaypark.gp_parking_image " +
-			"where gppi_p_id = ? ";
+			"select * " +
+			"from dbstaypark.gp_htl_day_range_cost as hotel " +
+			"left join dbstaypark.gp_parking_info as dep on dep.gpi_id = hotel.drc_htl_id " +
+			"where gpi_id=? and drc_status = 'Active' ";
 
 	public List<HotelInformation> getParkingSearchResults(final String airportCode, final String startDateStr, final String endDateStr,
 			final String startTimeStr, final String endTimeStr, final String sort) {
@@ -68,7 +69,7 @@ public class ParkingHandler {
 		List<HotelInformation> hotels = new ArrayList<>();
 
 		try (Connection conn = DBUtil.getConnection()) {
-			int totalParkingDays = getNumberOfParkingDays(startDate, endDate, startTimeStr, endTimeStr);
+			int totalParkingDays = AirportUtil.getNumberOfParkingDays(startDate, endDate, startTimeStr, endTimeStr);
 
 			hotels = getParkingLocations(airportCode, conn);
 
@@ -145,9 +146,9 @@ public class ParkingHandler {
 		BigDecimal totalCost = new BigDecimal(0);
 		Date currentDate = startDate;
 
-		Map<Date, Integer> bookedCountMap = getReservationForRangeCountbyHotel(hotel.getHotelId(), startDate, endDate, conn);
-		Map<Date, SpecialParkingDate> spdateMap = checkSpecialParkingForDateRange(hotel.getHotelId(), startDate, endDate, conn);
-		Map<Integer, SpecialParkingDay> spdayMap = checkSpecialParkingForDay(hotel.getHotelId(), conn);
+		Map<Date, Integer> bookedCountMap = AirportUtil.getReservationForRangeCountbyHotel(hotel.getHotelId(), startDate, endDate, conn);
+		Map<Date, SpecialParkingDate> spdateMap = AirportUtil.checkSpecialParkingForDateRange(hotel.getHotelId(), startDate, endDate, conn);
+		Map<Integer, SpecialParkingDay> spdayMap = AirportUtil.checkSpecialParkingForDay(hotel.getHotelId(), conn);
 
 		for (int i = 0; i < totalDays; i++) {
 			currentDate = DateUtil.addDaysToDate(currentDate, i);
@@ -183,89 +184,6 @@ public class ParkingHandler {
 		return hotel;
 	}
 
-	private Map<Date, Integer> getReservationForRangeCountbyHotel(final int hotelId, final Date startDate, final Date endDate, final Connection conn) {
-		Map<Date, Integer> map = new HashMap<>();
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-
-		try {
-			ps = conn.prepareStatement(GET_RESERVATION_COUNT_FOR_RANGE_HOTEL);
-			ps.setInt(1,  hotelId);
-			ps.setDate(2, new java.sql.Date(startDate.getTime()));
-			ps.setDate(3, new java.sql.Date(endDate.getTime()));
-			rs = ps.executeQuery();
-			while (rs.next()) {
-				map.put(rs.getDate("rd_st_date"), rs.getInt("count"));
-			}
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-		} finally {
-			DBUtil.closeResources(null, ps, rs);
-		}
-
-		return map;
-	}
-
-	/**
-	 * Checks if given day for a hotel is considered a special parking day with different rates and number of spaces available.
-	 * @param hotelId int
-	 * @param date Date
-	 * @return SpecialParkingDate - null if not special rates for given hotel and date
-	 */
-	private Map<Date, SpecialParkingDate> checkSpecialParkingForDateRange(final int hotelId, final Date startDate, final Date endDate, final Connection conn) {
-		Map<Date, SpecialParkingDate> map = new HashMap<>();
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-
-		try {
-			ps = conn.prepareStatement(GET_SPECIAL_DATE_PARKING_RANGE_INFO);
-			ps.setInt(1,  hotelId);
-			ps.setDate(2, new java.sql.Date(startDate.getTime()));
-			ps.setDate(3, new java.sql.Date(endDate.getTime()));
-			rs = ps.executeQuery();
-			if (rs.next()) {
-				SpecialParkingDate spday = new SpecialParkingDate();
-				spday.setHotelId(hotelId);
-				spday.setDate(rs.getDate("sp_date"));
-				spday.setNumberSpaces(rs.getInt("sp_prk_no"));
-				spday.setCost(rs.getBigDecimal("sp_cost"));
-				map.put(rs.getDate("sp_date"), spday);
-			}
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-		} finally {
-			DBUtil.closeResources(null, ps, rs);
-		}
-
-		return map;
-	}
-
-	private Map<Integer, SpecialParkingDay> checkSpecialParkingForDay(final int hotelId, final Connection conn) {
-		Map<Integer, SpecialParkingDay> map = new HashMap<>();
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-
-		try {
-			ps = conn.prepareStatement(GET_SPECIAL_DAY_PARKING_INFO);
-			ps.setInt(1,  hotelId);
-			rs = ps.executeQuery();
-			if (rs.next()) {
-				SpecialParkingDay spday = new SpecialParkingDay();
-				spday.setHotelId(hotelId);
-				spday.setDayId(rs.getInt("dy_day_id"));
-				spday.setNumberSpaces(rs.getInt("dy_room"));
-				spday.setCost(rs.getBigDecimal("dy_cost"));
-				map.put(rs.getInt("dy_day_id"), spday);
-			}
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-		} finally {
-			DBUtil.closeResources(null, ps, rs);
-		}
-
-		return map;
-	}
-	
 	private List<ImageLink> getParkingImagesForHotel(final int hotelId, final Connection conn) {
 		List<ImageLink> images = new ArrayList<>();
 		PreparedStatement ps = null;
@@ -288,24 +206,5 @@ public class ParkingHandler {
 		}
 
 		return images;
-	}
-	
-	private int getNumberOfParkingDays(final Date startDate, final Date endDate,
-			final String startTimeStr, final String endTimeStr) {
-		long diff = endDate.getTime() - startDate.getTime();
-		long days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-		
-		if (days == 0) {
-			return 1;
-		}
-		
-		LocalTime startTime = LocalTime.parse(startTimeStr, DateTimeFormatter.ofPattern("KK:mm a"));
-		LocalTime endTime = LocalTime.parse(endTimeStr, DateTimeFormatter.ofPattern("KK:mm a"));
-		
-		if (endTime.isAfter(startTime)) {
-			days++;
-		}
-		
-		return (int)days;
 	}
 }

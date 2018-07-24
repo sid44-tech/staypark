@@ -31,7 +31,7 @@
 					</div>
 					<div class="col align-right">
 						<div th:switch="${hotel.soldout}">
-							<button class="btn btn-success btn-sm" type="button" aria-expanded="false" th:case="${false}" onclick="checkout()">BOOK NOW</button>
+							<button th:id="${hotel.hotelId}" class="btn btn-success btn-sm" type="button" aria-expanded="false" th:case="${false}" onclick="checkout(this)">BOOK NOW</button>
 							<button class="btn btn-danger btn-sm" type="button" aria-expanded="false" th:case="${true}" disabled>SOLD OUT</button>
 						</div>
 					</div>
@@ -110,8 +110,9 @@
         	location.href = url;
         }
         
-        function checkout() {
-        	location.href = "/parking/checkout";
+        function checkout(e) {
+            var url = "/parking/checkout/" + e.id + location.search;
+        	location.href = url;
         }
         
 		function viewmap(lat, lon) {

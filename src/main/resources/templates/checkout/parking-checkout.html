@@ -24,45 +24,45 @@
 				<div class="align-center width-100 pb-custom">Reservation Information</div>
 				<div class="row">
 					<div class="col-sm-4 pb-label-font">Departing Airport</div>
-					<div class="col-sm-8 pb-text-font">Denver , COLORADO - Denver Int'l Airport (DEN)</div>
+					<div class="col-sm-8 pb-text-font" th:text="${checkout.departAirport}"></div>
 				</div>
 				<div class="row">
 					<div class="col-sm-4 pb-label-font">Location</div>
-					<div class="col-sm-8 pb-text-font">Park DIA - Denver International Airport</div>
+					<div class="col-sm-8 pb-text-font" th:text="${checkout.departLocation}"></div>
 				</div>
 				<div class="row">
 					<div class="col-sm-4 pb-label-font">Check In</div>
-					<div class="col-sm-8 pb-text-font">Sat, July 21, 2018 8:00 am MST</div>
+					<div class="col-sm-8 pb-text-font" th:text="${checkout.checkinTime}"></div>
 				</div>
 				<div class="row">
 					<div class="col-sm-4 pb-label-font">Check Out</div>
-					<div class="col-sm-8 pb-text-font">Mon, July 30, 2018 9:30 am MST</div>
+					<div class="col-sm-8 pb-text-font" th:text="${checkout.checkoutTime}"></div>
 				</div>
 				<div class="row">
 					<div class="col-sm-4 pb-label-font">Total Parking Time</div>
-					<div class="col-sm-8 pb-text-font">9 day(s) and 1 hour(s)</div>
+					<div class="col-sm-8 pb-text-font" th:text="${checkout.totalParkingTime}"></div>
 				</div>
 				<div class="row">
 					<div class="col-sm-4 pb-label-font">Shuttle Frequency</div>
-					<div class="col-sm-8 pb-text-font">Shuttle runs 24 hours a day: Approx. Every 5 minutes - SEE CONFIRMATION EMAIL FOR PARKING INSTRUCTIONS & DIRECTIONS</div>
+					<div class="col-sm-8 pb-text-font" th:text="${checkout.shuttleFrequency}"></div>
 				</div>
 				<br><br>
 				<div class="align-center width-100 pb-custom">Parking Rate & Charges</div>
 				<div class="row">
 					<div class="col-sm-4 pb-label-font">Base Rate</div>
-					<div class="col-sm-8 pb-text-font">69.50 USD</div>
+					<div class="col-sm-8 pb-text-font" th:text="${checkout.baseRate}"></div>
 				</div>
 				<div class="row">
 					<div class="col-sm-4 pb-label-font">Service Fee</div>
-					<div class="col-sm-8 pb-text-font">6.00 USD</div>
+					<div class="col-sm-8 pb-text-font" th:text="${checkout.serviceFee}"></div>
 				</div>
 				<div class="row">
 					<div class="col-sm-4 pb-label-font">Sales Tax</div>
-					<div class="col-sm-8 pb-text-font">4.73USD</div>
+					<div class="col-sm-8 pb-text-font" th:text="${checkout.salesTax}"></div>
 				</div>
 				<div class="row">
 					<div class="col-sm-4 pb-label-font">Grand Total</div>
-					<div class="col-sm-8 pb-text-font">80.23 USD</div>
+					<div class="col-sm-8 pb-text-font" th:text="${checkout.grandTotal}"></div>
 				</div>
 				<div class="row">
 					<div class="col-sm-4 pb-label-font">Total Due Now</div>
