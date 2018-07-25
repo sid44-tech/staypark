@@ -64,79 +64,134 @@
 					<div class="col-sm-4 pb-label-font">Grand Total</div>
 					<div class="col-sm-8 pb-text-font" th:text="${checkout.grandTotal}"></div>
 				</div>
-				<div class="row">
-					<div class="col-sm-4 pb-label-font">Total Due Now</div>
-					<div class="col-sm-8 pb-text-font">16.43 USD</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-4 pb-label-font">Total Due At Lot</div>
-					<div class="col-sm-8 pb-text-font">63.81 USD</div>
+				<div th:switch="${checkout.splitPayment}">
+					<div class="row">
+						<div class="col-sm-4 pb-label-font">Total Due Now</div>
+						<div class="col-sm-8 pb-text-font" th:text="${checkout.totalDueNow}"></div>
+					</div>
+					<div class="row">
+						<div class="col-sm-4 pb-label-font">Total Due At Lot</div>
+						<div class="col-sm-8 pb-text-font" th:text="${checkout.totalDueAtLot}"></div>
+					</div>
 				</div>
 				<br><br>
 				<div class="align-center width-100 pb-custom">Driver Information</div>
-				<div class="row">
-					<div class="col-sm-4 pb-label-font"># of ppl traveling</div>
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="numberPeopleTravelling">Number of People Travelling</label>
+						<select class="form-control" id="numberPeopleTravelling" name="numberPeopleTravelling">
+							<option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option>
+							<option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option>
+							<option value="9">9</option><option value="10">10</option>
+						</select>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="numberPeopleTravelling">How did you hear about us?</label>
+						<select class="form-control" id="hearAboutUs" name="hearAboutUs">
+							<option value="Google">Google</option><option value="Yahoo">Yahoo</option><option value="Bing">Bing</option><option value="Friend">Friend</option>
+							<option value="Magazine">Magazine</option><option value="Facebook/Twitter">Facebook/Twitter</option><option value="Other">Other</option>
+						</select>
+					</div>
 				</div>
-				<div class="row">
-					<div class="col-sm-4 pb-label-font">First Name</div>
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="firstName">First Name *</label>
+						<input type="text" class="form-control" id="firstName" name="firstName" required/>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="lastName">Last Name *</label>
+						<input type="text" class="form-control" id="lastName" name="lastName" required/>
+					</div>
 				</div>
-				<div class="row">
-					<div class="col-sm-4 pb-label-font">Last Name</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-4 pb-label-font">Make</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-4 pb-label-font">Model</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-4 pb-label-font">License Plate # of Car</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-4 pb-label-font">How did you hear about us?</div>
+				<div class="form-row">
+					<div class="form-group col-md-4">
+						<label for="carMake">Car Make</label>
+						<input type="text" class="form-control" id="carMake" name="carMake"/>
+						<small id="carMakeHelp" class="form-text text-muted">Optional</small>
+					</div>
+					<div class="form-group col-md-4">
+						<label for="carModel">Car Model</label>
+						<input type="text" class="form-control" id="carModel" name="carModel"/>
+						<small id="carModelHelp" class="form-text text-muted">Optional</small>
+					</div>
+					<div class="form-group col-md-4">
+						<label for="carModel">License Plate Number</label>
+						<input type="text" class="form-control" id="carLicensePlate" name="carLicensePlate"/>
+						<small id="carLicensePlateHelp" class="form-text text-muted">Optional</small>
+					</div>
 				</div>
 				<br><br>
 				<div class="align-center width-100 pb-custom">Customer Information</div>
-				<div class="row">
-					<div class="col-sm-4 pb-label-font">Billing Address</div>
+				<div class="form-row">
+					<div class="form-group col-md-12">
+						<label for="address">Street *</label>
+						<input type="text" class="form-control" id="address" name="address" required/>
+					</div>
 				</div>
-				<div class="row">
-					<div class="col-sm-4 pb-label-font">City</div>
+				<div class="form-row">
+					<div class="form-group col-md-4">
+						<label for="city">City *</label>
+						<input type="text" class="form-control" id="city" name="city" required/>
+					</div>
+					<div class="form-group col-md-4">
+						<label for="state">State *</label>
+						<input type="text" class="form-control" id="state" name="state" required/>
+					</div>
+					<div class="form-group col-md-4">
+						<label for="zip">Zip *</label>
+						<input type="text" class="form-control" id="zip" name="zip" required/>
+					</div>
 				</div>
-				<div class="row">
-					<div class="col-sm-4 pb-label-font">State</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-4 pb-label-font">Zip</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-4 pb-label-font">Email</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-4 pb-label-font">Confirm Email?</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-4 pb-label-font">Phone</div>
+				<div class="form-row">
+					<div class="form-group col-md-4">
+						<label for="email">Email *</label>
+						<input type="email" class="form-control" id="email" name="email" required/>
+					</div>
+					<div class="form-group col-md-4">
+						<label for="phone">Phone *</label>
+						<input type="number" class="form-control" id="phone" name="phone" required/>
+					</div>
 				</div>
 				<br><br>
 				<div class="align-center width-100 pb-custom">Payment Information</div>
-				<div class="row">
-					<div class="col-sm-4 pb-label-font">Payment Method</div>
+				<div class="form-row">
+					<div class="form-group col-md-4">
+						<label for="ownerName">Name on Credit Card *</label>
+						<input type="text" class="form-control" id="ownerName" name="ownerName" required/>
+					</div>
+					<div class="form-group col-md-4">
+						<label for="cardType">Card Type *</label>
+						<select class="form-control" id="cardType" name="cardType">
+							<option value="V">Visa</option><option value="MC">Master Card</option><option value="AMEX">American Express</option><option value="DISC">Discover</option>
+						</select>
+					</div>
+					<div class="form-group col-md-4">
+						<label for="cardNumber">Card Number *</label>
+						<input type="number" class="form-control" id="cardNumber" name="cardNumber" required/>
+					</div>
 				</div>
-				<div class="row">
-					<div class="col-sm-4 pb-label-font">Owner Name</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-4 pb-label-font">Credit Card Type</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-4 pb-label-font">Credit Card Number</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-4 pb-label-font">CVV</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-4 pb-label-font">Exp Date</div>
+				<div class="form-row">
+					<div class="form-group col-md-2">
+						<label for="cvv">CVV *</label>
+						<input type="text" class="form-control" id="cvv" name="cvv" required/>
+					</div>
+					<div class="form-group col-md-3">
+						<label for="expirationMonth">Expiration Month *</label>
+						<select class="form-control" id="expirationMonth" name="expirationMonth">
+							<option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option>
+							<option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option>
+							<option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option>
+						</select>
+					</div>
+					<div class="form-group col-md-3">
+						<label for="expirationYear">Expiration Year *</label>
+						<select class="form-control" id="expirationYear" name="expirationYear">
+							<option value="2018">2018</option><option value="2019">2019</option><option value="2020">2020</option><option value="2021">2021</option>
+							<option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2026">2026</option>
+							<option value="2027">2027</option><option value="2028">2028</option><option value="2029">2029</option><option value="2030">2030</option>
+							<option value="2031">2031</option><option value="2032">2032</option>
+						</select>
+					</div>
 				</div>
 				<br><br><br>
 				<div class="row">

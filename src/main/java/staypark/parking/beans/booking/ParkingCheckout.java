@@ -16,6 +16,7 @@ public class ParkingCheckout {
     private String grandTotal;
     private String totalDueNow;
     private String totalDueAtLot;
+    private boolean splitPayment = false;
     private String driverInformation;
     private String numberPeopleTravelling;
     private String firstName;

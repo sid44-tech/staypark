@@ -29,7 +29,6 @@ public class CheckoutHandler {
                                               final String pickUpDate, final String pickUpTime) {
         ParkingCheckout pc = new ParkingCheckout();
 
-
         Date checkinDate = DateUtil.stringMDYToDate(dropOffDate);
         Date checkoutDate = DateUtil.stringMDYToDate(pickUpDate);
         int daysDiff = AirportUtil.getNumberOfParkingDays(checkinDate, checkoutDate, dropOffTime, pickUpTime);
@@ -71,7 +70,16 @@ public class CheckoutHandler {
                 
                 BigDecimal grandTotal = getGrandTotal(baseTotalCost, serviceFee, salesTax, acFee);
                 pc.setGrandTotal(grandTotal.toString() + " USD");
-                
+
+                boolean isSplitPayment = isSplitPayment(rs.getString("gpi_split_payment_status"));
+                if (isSplitPayment) {
+                    BigDecimal payNow = calculatePayNow(rs.getInt("gpi_split_payment"), baseTotalCost, serviceFee, new BigDecimal(0));
+                    BigDecimal payAtLot = calculatePayAtLot(grandTotal, payNow);
+
+                    pc.setTotalDueNow(payNow.toString() + " USD");
+                    pc.setTotalDueAtLot(payAtLot.toString() + " USD");
+                    pc.setSplitPayment(true);
+                }
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -80,6 +88,22 @@ public class CheckoutHandler {
         }
 
         return pc;
+    }
+
+    private boolean isSplitPayment(final String status) {
+        if (status != null && status.trim().equals("1")) {
+            return true;
+        }
+        return false;
+    }
+
+    private BigDecimal calculatePayNow(final int splitPaymentPercent, final BigDecimal baseRate, final BigDecimal serviceFee, final BigDecimal discount) {
+        BigDecimal totalDue = new BigDecimal(baseRate.doubleValue() * ((double)splitPaymentPercent/100d)).setScale(2, RoundingMode.DOWN);
+        return serviceFee.add(totalDue).subtract(discount).setScale(2, RoundingMode.DOWN);
+    }
+
+    private BigDecimal calculatePayAtLot(final BigDecimal grandTotal, final BigDecimal totalDueNow) {
+        return grandTotal.subtract(totalDueNow).setScale(2, RoundingMode.DOWN);
     }
     
     private BigDecimal getGrandTotal(final BigDecimal baseCost, final BigDecimal serviceFee, 
