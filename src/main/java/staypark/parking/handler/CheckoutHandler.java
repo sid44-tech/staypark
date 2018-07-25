@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -49,20 +50,28 @@ public class CheckoutHandler {
                 pc.setShuttleFrequency(rs.getString("gpi_shuttel"));
                 pc.setCheckinTime(DateUtil.formatDate(checkinDate) + " " + dropOffTime + " " + rs.getString("gps_t_zone"));
                 pc.setCheckoutTime(DateUtil.formatDate(checkoutDate) + " " + pickUpTime + " " + rs.getString("gps_t_zone"));
-                BigDecimal totalCost = AirportUtil.calculateParkingCosts(hotelId, rs.getBigDecimal("gpi_feepday"), checkinDate, checkoutDate, daysDiff, conn);
-                pc.setBaseRate(totalCost.setScale(2).toString() + " USD");
-                pc.setServiceFee(rs.getBigDecimal("gpi_sfee").setScale(2).toString() + " USD");
-                pc.setGrandTotal(totalCost.setScale(2).toString() + " USD");
-                String gpiper = rs.getString("gpi_b_per");
-                BigDecimal weirdVariable = new BigDecimal(75);
-                if (gpiper != null && gpiper.trim().length() != 0) {
-                    weirdVariable = new BigDecimal(gpiper).setScale(2);
-                }
-                double salesTaxMultiplier = AirportUtil.getSalesTaxMultiplier(rs.getBigDecimal("gpi_stax"));
-                BigDecimal salesTax = new BigDecimal(totalCost.doubleValue() * salesTaxMultiplier);
-                pc.setSalesTax(salesTax.toString() + " USD");
-                $sales_tax=(((($cost*$gpi_b_per)/100)*$sales_tax_temp)/100);
+                
+                //Calculate Base Total Cost.  This only includes number of days * cost per day
+                BigDecimal baseTotalCost = AirportUtil.calculateParkingCosts(hotelId, rs.getBigDecimal("gpi_feepday"), checkinDate, checkoutDate, daysDiff, conn);
+                baseTotalCost = baseTotalCost.setScale(2, RoundingMode.DOWN);
+                pc.setBaseRate(baseTotalCost + " USD");
+                
+                //Set Service Fee
+                BigDecimal serviceFee = rs.getBigDecimal("gpi_sfee").setScale(2);
+                pc.setServiceFee(serviceFee + " USD");
 
+                //Set Sales Tax
+                double salesTaxMultiplier = rs.getDouble("gpi_stax");
+                String salesTaxBasePercentage = rs.getString("gpi_b_per");
+                BigDecimal salesTax = calculateSalesTax(baseTotalCost.doubleValue(), salesTaxMultiplier, salesTaxBasePercentage);
+                pc.setSalesTax(salesTax.toString() + " USD");
+                
+                //Get AC Fee.  I don't really know what this is.
+                BigDecimal acFee = getACFee(rs.getInt("gpi_ac_chk"), rs.getString("gpi_ac_fee"));
+                
+                BigDecimal grandTotal = getGrandTotal(baseTotalCost, serviceFee, salesTax, acFee);
+                pc.setGrandTotal(grandTotal.toString() + " USD");
+                
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -71,5 +80,34 @@ public class CheckoutHandler {
         }
 
         return pc;
+    }
+    
+    private BigDecimal getGrandTotal(final BigDecimal baseCost, final BigDecimal serviceFee, 
+    		final BigDecimal salesTax, final BigDecimal acFee) {
+    	return baseCost.add(serviceFee).add(salesTax).add(acFee);
+    }
+    
+    private BigDecimal calculateSalesTax(final double totalCost, final double salesTaxMultiplier, final String salesTaxBasePercentageStr) {
+    	double salesTaxBasePercentage = 0;
+    	
+    	 if (salesTaxBasePercentageStr != null && !salesTaxBasePercentageStr.trim().equals("")) {
+    		salesTaxBasePercentage = Double.valueOf(salesTaxBasePercentageStr);
+    	 } else {
+    		 salesTaxBasePercentage = 75; 
+    	 }
+    	 
+    	 double salesTaxDub = ((((totalCost*salesTaxBasePercentage)/100)*salesTaxMultiplier)/100);
+    	 BigDecimal salesTax = new BigDecimal(salesTaxDub).setScale(2, RoundingMode.DOWN);
+    	
+    	 return salesTax;
+    }
+    
+    private BigDecimal getACFee(final int acFlag, final String acAmountStr) {
+    	if (acFlag == 1 && acAmountStr != null && acAmountStr.trim().length() == 0) {
+    		return new BigDecimal(Double.parseDouble(acAmountStr)).setScale(2, RoundingMode.DOWN);
+    		
+    	}
+    	
+    	return new BigDecimal(0).setScale(2, RoundingMode.DOWN);
     }
 }

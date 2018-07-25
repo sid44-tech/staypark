@@ -60,6 +60,7 @@ public class ParkingHandler {
 			"select * " +
 			"from dbstaypark.gp_htl_day_range_cost as hotel " +
 			"left join dbstaypark.gp_parking_info as dep on dep.gpi_id = hotel.drc_htl_id " +
+			"left join dbstaypark.gp_parking_image as img on img.gppi_p_id = dep.gpi_id " +
 			"where gpi_id=? and drc_status = 'Active' ";
 
 	public List<HotelInformation> getParkingSearchResults(final String airportCode, final String startDateStr, final String endDateStr,
