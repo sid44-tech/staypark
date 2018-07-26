@@ -1,13 +1,11 @@
 package staypark.parking.controller;
 
+import staypark.parking.beans.booking.ParkingCheckout;
 import staypark.parking.handler.CheckoutHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class CheckoutController {
@@ -24,10 +22,17 @@ public class CheckoutController {
 	    return "checkout/parking-checkout";
     }
 
-    @PostMapping("/parking/checkout")
+    @PostMapping("/parking/checkout/{hotelId}")
+    public String checkoutParkPost(Model model, @PathVariable("hotelId") int hotelId, @ModelAttribute ParkingCheckout checkout) {
+	    checkout.setHotelId(String.valueOf(hotelId));
+
+        return "checkout/confirm-checkout";
+    }
+
+    @GetMapping("/parking/checkout")
     public String checkoutParkPost(Model model) {
 
-        return "checkout/parking-checkout";
+        return "checkout/confirm-checkout";
     }
 
     @GetMapping("/roompark/checkout")

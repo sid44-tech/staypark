@@ -1426,3 +1426,10 @@ body {
 	font-size: 0.85em;
 	font-weight: bold;
 }
+
+.pb-label-money-font-red {
+	color: #FF0000;
+	font-family: 'Roboto', sans-serif;
+	font-size: 0.85em;
+	font-weight: bold;
+}

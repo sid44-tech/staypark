@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class ParkingCheckout {
+    private String hotelId;
     private String departAirport;
     private String departLocation;
     private String checkinTime;
@@ -17,7 +18,6 @@ public class ParkingCheckout {
     private String totalDueNow;
     private String totalDueAtLot;
     private boolean splitPayment = false;
-    private String driverInformation;
     private String numberPeopleTravelling;
     private String firstName;
     private String lastName;
@@ -31,12 +31,14 @@ public class ParkingCheckout {
     private String zip;
     private String email;
     private String phone;
-    private String paymentMethod;
     private String ownerName;
     private String cardType;
     private String cardNumber;
     private String cvv;
-    private String expirationDate;
-    private boolean agreeTac;
-    private boolean agreeCancelPolicy;
+    private String expirationMonth;
+    private String expirationYear;
+    private String dropOffDate;
+    private String pickUpDate;
+    private String dropOffTime;
+    private String pickUpTime;
 }

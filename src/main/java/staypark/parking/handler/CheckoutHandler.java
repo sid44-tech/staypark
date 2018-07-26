@@ -33,6 +33,11 @@ public class CheckoutHandler {
         Date checkoutDate = DateUtil.stringMDYToDate(pickUpDate);
         int daysDiff = AirportUtil.getNumberOfParkingDays(checkinDate, checkoutDate, dropOffTime, pickUpTime);
         pc.setTotalParkingTime(daysDiff + " day(s)");
+        pc.setHotelId(String.valueOf(hotelId));
+        pc.setDropOffDate(dropOffDate);
+        pc.setDropOffTime(dropOffTime);
+        pc.setPickUpDate(pickUpDate);
+        pc.setPickUpTime(pickUpTime);
 
         Connection conn = null;
         PreparedStatement ps = null;
