@@ -1384,6 +1384,7 @@ body {
 	font-family: 'Roboto', sans-serif;
 	font-size: 1em;
 	font-weight: bold;
+	margin-bottom: 24px;
 }
 
 .pb-title-font {
@@ -1406,4 +1407,22 @@ body {
 	font-family: 'Roboto', sans-serif;
 	font-size: 0.80em;
 	font-weight: normal;
+}
+
+.pb-label-row {
+	margin-bottom: 16px;
+}
+
+.pb-label-label-font {
+	color: #000000;
+	font-family: 'Roboto', sans-serif;
+	font-size: 0.85em;
+	font-weight: bold;
+}
+
+.pb-label-money-font {
+	color: #71a40a;
+	font-family: 'Roboto', sans-serif;
+	font-size: 0.85em;
+	font-weight: bold;
 }
