@@ -111,6 +111,7 @@ public class AccountHandler {
                 up.setPhone(rs.getString("ph_num"));
                 up.setState(rs.getString("state_id"));
                 up.setZip(rs.getString("zip"));
+                up.setUserId(rs.getInt("id"));
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);

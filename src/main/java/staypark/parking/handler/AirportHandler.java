@@ -47,6 +47,11 @@ public class AirportHandler {
             "left join dbstaypark.gp_user_register as u on u.id = res.user_id " +
             "left join dbstaypark.gp_state as s on s.gps_state = res.loc_state " +
             "where gr_p_id != 0 and user_id != 0 and u.username = ? and res.order_id = ? ";
+    private static String GET_AFF_ID_BY_P_INFO_ID = 
+    		"select gpi_aff_id " + 
+    		"gpi_aff_id " + 
+    		"from dbstaypark.gp_parking_info " + 
+    		"where gpi_id = ? ";
 
     static {
     	initializeAirportToStateMaps();
@@ -203,6 +208,28 @@ public class AirportHandler {
         }
 
         return reservations;
+    }
+    
+    public int getAffiliateIdByParkingId(final int pid) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(GET_AFF_ID_BY_P_INFO_ID);
+            ps.setInt(1, pid);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("gpi_aff_id");
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            DBUtil.closeResources(conn, ps, rs);
+        }
+        
+        return -1;
     }
 
     private String builAddress(final String address, final String city, final String state, final String zip) {

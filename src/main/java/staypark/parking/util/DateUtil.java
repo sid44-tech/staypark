@@ -51,6 +51,14 @@ public class DateUtil {
 		}
 	}
 	
+	public static java.sql.Date utilDateToSqlDate(final Date date) {
+		if (date == null) {
+			return null;
+		}
+		
+		return new java.sql.Date(date.getTime());
+	}
+	
 	public static String formatDate(final Date date) {
 		if (date != null) {
 			return DATE_FORMAT_WITH_DAY.format(date);

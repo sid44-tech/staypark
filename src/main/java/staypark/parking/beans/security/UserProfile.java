@@ -4,6 +4,7 @@ package staypark.parking.beans.security;
 
 @Data
 public class UserProfile {
+	private int userId;
     private String firstName;
     private String lastName;
     private String phone;

@@ -152,11 +152,11 @@
 				<div class="form-row">
 					<div class="form-group col-md-4">
 						<label class="pb-label-label-font" for="firstName">First Name *</label>
-						<input type="text" class="form-control" id="firstName" name="firstName" required/>
+						<input type="text" class="form-control" id="firstName" name="firstName" th:field="*{firstName}" required/>
 					</div>
 					<div class="form-group col-md-4">
 						<label class="pb-label-label-font" for="lastName">Last Name *</label>
-						<input type="text" class="form-control" id="lastName" name="lastName" required/>
+						<input type="text" class="form-control" id="lastName" name="lastName" th:field="*{lastName}" required/>
 					</div>
 				</div>
 				<div class="form-row">
@@ -181,29 +181,29 @@
 				<div class="form-row">
 					<div class="form-group col-md-4">
 						<label class="pb-label-label-font" for="address">Street *</label>
-						<input type="text" class="form-control" id="address" name="address" required/>
+						<input type="text" class="form-control" id="address" name="address" th:field="*{address}" required/>
 					</div>
 					<div class="form-group col-md-4">
 						<label class="pb-label-label-font" for="city">City *</label>
-						<input type="text" class="form-control" id="city" name="city" required/>
+						<input type="text" class="form-control" id="city" name="city" th:field="*{city}" required/>
 					</div>
 					<div class="form-group col-md-4">
 						<label class="pb-label-label-font" for="state">State *</label>
-						<input type="text" class="form-control" id="state" name="state" required/>
+						<input type="text" class="form-control" id="state" name="state" th:field="*{state}" required/>
 					</div>
 				</div>
 				<div class="form-row">
 					<div class="form-group col-md-4">
 						<label class="pb-label-label-font" for="zip">Zip *</label>
-						<input type="text" class="form-control" id="zip" name="zip" required/>
+						<input type="text" class="form-control" id="zip" name="zip" th:field="*{zip}" required/>
 					</div>
 					<div class="form-group col-md-4">
 						<label class="pb-label-label-font" for="email">Email *</label>
-						<input type="email" class="form-control" id="email" name="email" required/>
+						<input type="email" class="form-control" id="email" name="email" th:field="*{email}" required/>
 					</div>
 					<div class="form-group col-md-4">
 						<label class="pb-label-label-font" for="phone">Phone *</label>
-						<input type="number" class="form-control" id="phone" name="phone" required/>
+						<input type="number" class="form-control" id="phone" name="phone" th:field="*{phone}" required/>
 					</div>
 				</div>
 				<br><br>

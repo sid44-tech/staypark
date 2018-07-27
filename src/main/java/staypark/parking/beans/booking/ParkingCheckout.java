@@ -13,6 +13,7 @@ public class ParkingCheckout {
     private String shuttleFrequency;
     private String baseRate;
     private String serviceFee;
+    private String acFee;
     private String salesTax;
     private String grandTotal;
     private String totalDueNow;
@@ -21,9 +22,9 @@ public class ParkingCheckout {
     private String numberPeopleTravelling;
     private String firstName;
     private String lastName;
-    private String carMake;
-    private String carModel;
-    private String carLicensePlate;
+    private String carMake = "";
+    private String carModel = "";
+    private String carLicensePlate= "";
     private String hearAboutUs;
     private String address;
     private String state;
