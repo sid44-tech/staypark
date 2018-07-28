@@ -432,13 +432,4 @@ public class AirportUtil {
 
 		return (int)days;
 	}
-
-	public static double getSalesTaxMultiplier(final BigDecimal rate) {
-		if (rate == null) {
-			return 0;
-		}
-
-		return rate.doubleValue() / 100;
-	}
-
 }

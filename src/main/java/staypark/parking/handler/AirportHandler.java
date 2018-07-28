@@ -39,7 +39,7 @@ public class AirportHandler {
             "from dbstaypark.gp_reservation as res " +
             "left join dbstaypark.gp_user_register as u on u.id = res.user_id " +
             "where gr_p_id != 0 and user_id != 0 and u.username = ?" +
-            "order by gr_reservation_date asc ";
+            "order by gr_reservation_date desc ";
     private static String GET_CUSTOMER_RESERVATION_DETAIL =
             "select order_id, gr_d_air, gr_d_loc, gr_payment, reservation_status, gr_reservation_date, gr_d_time, gr_p_time, gr_b_fee, gr_s_fee, gr_s_tax, gr_g_total, " +
             "gr_payment_type, s.gps_t_zone, gr_t_time, gr_h_time, loc_state, loc_city, gp_tracking_no, gr_add, gr_city, gr_state, gr_zip, loc_state, loc_city " +
@@ -161,7 +161,7 @@ public class AirportHandler {
                 rd.setTrackingNumber(rs.getString("gp_tracking_no"));
                 rd.setPaymentStatus(rs.getString("gr_payment"));
                 rd.setBillingAddress(builAddress(rs.getString("gr_add"), rs.getString("gr_city"), rs.getString("gr_state"), rs.getString("gr_zip")));
-                rd.setParkingTime(rs.getString("gr_t_time") + " days(s) " + rs.getString("gr_h_time") + " hours(s)");
+                rd.setParkingTime(rs.getString("gr_t_time") + " day(s) ");
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -243,7 +243,7 @@ public class AirportHandler {
             return "Booked";
         }
     	
-    	return "";
+    	return "Booked";
     }
 
     private List<StateAirportBean> parseAirportsInStateString() {

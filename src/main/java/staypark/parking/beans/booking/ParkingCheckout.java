@@ -2,6 +2,8 @@ package staypark.parking.beans.booking;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class ParkingCheckout {
     private String hotelId;
@@ -10,14 +12,19 @@ public class ParkingCheckout {
     private String checkinTime;
     private String checkoutTime;
     private String totalParkingTime;
+    private int parkingDays;
     private String shuttleFrequency;
     private String baseRate;
     private String serviceFee;
     private String acFee;
     private String salesTax;
     private String grandTotal;
-    private String totalDueNow;
-    private String totalDueAtLot;
+    private String totalDueNow = "";
+    private String totalDueAtLot = "";
+    private String couponCode = "";
+    private String couponMessage = "";
+    private String couponAmount;
+    private boolean couponValid = false;
     private boolean splitPayment = false;
     private String numberPeopleTravelling;
     private String firstName;
@@ -42,4 +49,17 @@ public class ParkingCheckout {
     private String pickUpDate;
     private String dropOffTime;
     private String pickUpTime;
+    private String discount = "";
+    private String stateName = "";
+    private String cityName = "";
+    private String timezone = "";
+    private String innAddress = "";
+    private String innPhone = "";
+    private String emailFooter = "";
+    private String affiliateEmail = "";
+    private String affiliateSecondaryEmail = "";
+    private String faxType = "";
+    private String faxNumber = "";
+    private String confirmationType = "";
+    private BigDecimal standardDailyFee;
 }

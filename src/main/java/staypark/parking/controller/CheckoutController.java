@@ -19,18 +19,19 @@ public class CheckoutController {
 	@GetMapping("/parking/checkout/{hotelId}")
     public String checkoutPark(Model model, @PathVariable("hotelId") int hotelId, @RequestParam(name="dropOffDate") String dropOffDate,
                                @RequestParam(name="dropOffTime") String dropOffTime, @RequestParam(name="pickUpDate") String pickUpDate,
-                               @RequestParam(name="pickUpTime") String pickUpTime, Authentication auth) {
+                               @RequestParam(name="pickUpTime") String pickUpTime, @RequestParam(name="couponCode", required = false) String couponCode,
+                               Authentication auth) {
 		String username = SecurityUtil.getAuthenticatedUsername(auth);
-        model.addAttribute("checkout", checkoutHandler.getParkingCheckoutInfo(hotelId, dropOffDate, dropOffTime, pickUpDate, pickUpTime, username));
+        model.addAttribute("checkout", checkoutHandler.getParkingCheckoutInfo(hotelId, dropOffDate, dropOffTime, pickUpDate, pickUpTime, username, couponCode));
 
 	    return "checkout/parking-checkout";
     }
 
     @PostMapping("/parking/checkout/{hotelId}")
-    public String checkoutParkPost(Model model, @PathVariable("hotelId") int hotelId, @ModelAttribute ParkingCheckout checkout) {
+    public String checkoutParkPost(Model model, @PathVariable("hotelId") int hotelId, @ModelAttribute ParkingCheckout checkout, Authentication auth) {
 	    checkout.setHotelId(String.valueOf(hotelId));
-	    
-	    
+
+        checkoutHandler.handleBookingSubmit(checkout, SecurityUtil.getAuthenticatedUsername(auth));
 
         return "checkout/confirm-checkout";
     }

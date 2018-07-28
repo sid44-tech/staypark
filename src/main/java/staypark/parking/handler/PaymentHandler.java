@@ -14,6 +14,13 @@ public class PaymentHandler {
 		Payment payment = new Payment();
 		
 		payment.setSuccess(true);
+		payment.setCardLastDigits("XXXX4444");
+		payment.setCardType("Visa");
+		payment.setPayerName("Jim Jimmy");
+		payment.setPaymentResponse("Successful Payment");
+		payment.setPaymentType("Credit");
+		payment.setTrackingNumber("89789798789");
+		payment.setTransactionKey("1");
 		
 		return payment;
 	}

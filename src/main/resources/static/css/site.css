@@ -280,8 +280,8 @@ body {
 }
 
 .header-top-row-padding {
-	padding-top: 5px;
-	padding-bottom: 5px;
+	padding-top: 16px;
+	padding-bottom: 8px;
 }
 
 .header-bottom-row {
@@ -294,9 +294,13 @@ body {
 .header_font {
 	color: #898989;
     font-family: 'Roboto', sans-serif;
-    font-size: 11px;
+    font-size: 14px;
     font-weight: bold;
     line-height: 1.428571429;
+}
+
+.header-font-blue {
+	color: #428bca;
 }
 
 .header_text_item_left {
@@ -1432,4 +1436,13 @@ body {
 	font-family: 'Roboto', sans-serif;
 	font-size: 0.85em;
 	font-weight: bold;
+}
+
+
+.pb-coupon-div {
+	margin-top: 40px;
+}
+
+.pb-coupon-label-padding {
+	margin-right: 16px;
 }
