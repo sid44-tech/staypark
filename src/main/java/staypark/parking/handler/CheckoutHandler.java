@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
-import sun.tools.java.Type;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -143,7 +142,7 @@ public class CheckoutHandler {
                 pc.setBaseRate(String.valueOf(baseTotalCost));
                 
                 //Set Service Fee
-                BigDecimal serviceFee = rs.getBigDecimal("gpi_sfee").setScale(2);
+                BigDecimal serviceFee = calculateServiceFee(rs.getBigDecimal("gpi_sfee").setScale(2), daysDiff);
                 pc.setServiceFee(String.valueOf(serviceFee));
 
                 //Set Sales Tax
@@ -164,11 +163,21 @@ public class CheckoutHandler {
                     pc.setCouponMessage(ap.getMessage());
                     pc.setCouponAmount(ap.getDiscountAmount().toString());
                     BigDecimal newGrandTotal = grandTotal.subtract(ap.getDiscountAmount());
+                    grandTotal = newGrandTotal;
                     pc.setGrandTotal(newGrandTotal.toString());
                     pc.setCouponValid(ap.isCouponValid());
-                } else {
+                    pc.setCouponCode(couponCode);
+                } else if (couponCode != null && !couponCode.isEmpty()) {
                     pc.setCouponMessage("Sorry, the coupon you entered is not valid at this facility.");
                     pc.setCouponValid(false);
+                }
+                
+                if (!pc.getCouponMessage().equals("")) {
+                	if (pc.isCouponValid()) {
+                		pc.setCouponClass("coupon-valid");
+                	} else {
+                		pc.setCouponClass("coupon-invalid");
+                	}
                 }
 
                 boolean isSplitPayment = isSplitPayment(rs.getString("gpi_split_payment_status"));
@@ -218,6 +227,15 @@ public class CheckoutHandler {
         }
 
         sendBookingEmails(checkout, safeCheckout, username, payment, orderId);
+    }
+    
+    private BigDecimal calculateServiceFee(final BigDecimal baseServiceFee, final int totalDays) {
+    	if(totalDays <= 9) {
+    		return baseServiceFee;
+    	} else {
+    		int multiplier = (totalDays/10) + 1;
+    		return baseServiceFee.multiply(new BigDecimal(multiplier)).setScale(2);
+    	}
     }
 
     private AppliedCoupon getCouponDiscount(final BigDecimal grandTotal, final BigDecimal serviceFee, final Coupon coupon) {
@@ -364,7 +382,7 @@ public class CheckoutHandler {
              ps.setString(50, safeCheckout.getTotalDueNow());
              ps.setString(51, safeCheckout.getTotalDueAtLot());
              ps.setBoolean(52, false);
-             ps.setNull(53, Type.NULL);
+             ps.setNull(53, Types.NULL);
              ps.setInt(54, 0);
              
              updated = ps.executeUpdate();
@@ -445,8 +463,7 @@ public class CheckoutHandler {
 
         try {
             EmailUtil.sendEmail(checkout.getEmail(), subject, body);
-            //TODO: Uncomment this before deploying
-            //EmailUtil.sendEmail(EmailUtil.SUPPORT_EMAIL, subject, body);
+            EmailUtil.sendEmail(EmailUtil.SUPPORT_EMAIL, subject, body);
 
             //TODO: Uncomment this section to send emails to affiliates
 //            if (safeCheckout.getFaxType().equals("parking_only") || safeCheckout.getFaxType().equals("both")) {
@@ -494,8 +511,9 @@ public class CheckoutHandler {
 
         body = body.replace("[SALES_TAX]", safeCheckout.getSalesTax() + " USD");
 
-        if (!checkout.getCouponCode().equals("")) {
-            //TODO:
+        if (safeCheckout.isCouponValid()) {
+        	body = body.replace("[CONFIRM_COUPON_DISCOUNT]", EmailUtil.CONFIRM_COUPON_DISCOUNT);
+        	body = body.replace("[DISCOUNT_AMOUNT]", safeCheckout.getCouponAmount() + " USD");
         } else {
             body = body.replace("[CONFIRM_COUPON_DISCOUNT]", "");
         }

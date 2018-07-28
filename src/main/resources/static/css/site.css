@@ -1446,3 +1446,17 @@ body {
 .pb-coupon-label-padding {
 	margin-right: 16px;
 }
+
+.coupon-valid {
+	color: #71a40a;
+	font-family: 'Roboto', sans-serif;
+	font-size: 0.85em;
+	font-weight: bold;
+}
+
+.coupon-invalid {
+	color: #FF0000;
+	font-family: 'Roboto', sans-serif;
+	font-size: 0.85em;
+	font-weight: bold;
+}
