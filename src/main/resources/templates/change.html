@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{page.html}">
+
+<section layout:fragment="page-content">
+	<form class="needs-validation" novalidate action="#" th:action="@{/parking/change}" th:object="${res}" method="post">
+		<div class="form-div-container">
+			<div class="form-div-container-header">Extend or Cancel Your Reservation</div>
+			<div class="form-div-container-body">
+				<span class="about-instruction-font">
+		 			If you want to extend or cancel your reservation, please enter your reservation number in the box below.
+				</span>
+				<div class="row">
+					<div class="col" th:text="${message}">
+
+					</div>
+				</div>
+				<div class="form-row change-margin-top">
+					<div class="form-group col-md-4">
+						<label for="reservationNumber">Reservation Number *</label>
+						<input type="number" class="form-control" id="reservationNumber" name="reservationNumber" th:field="*{reservationNumber}" required/>
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="col-sm-9">
+						<button type="submit" class="btn btn-primary">Submit</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+	</div>
+</section>
+</html>

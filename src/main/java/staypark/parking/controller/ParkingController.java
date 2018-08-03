@@ -1,12 +1,11 @@
 package staypark.parking.controller;
 
+import staypark.parking.beans.reservation.ChangeReservation;
 import staypark.parking.util.AirportUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import staypark.parking.handler.ParkingHandler;
 
@@ -31,8 +30,18 @@ public class ParkingController {
         return "parking";
     }
 	
-	@GetMapping("/parking/cancel")
-    public String parkingCancelRequest(Model model) {
-        return "cancel";
+	@GetMapping("/parking/change")
+    public String parkingChangeGet(Model model) {
+		model.addAttribute("res", new ChangeReservation());
+
+		return "change";
     }
+
+	@PostMapping("/parking/change")
+	public String parkingChangePost(Model model, @ModelAttribute ChangeReservation res) {
+		model.addAttribute("res", res);
+		model.addAttribute("message", "The reservation number you entered is invalid");
+
+		return "change";
+	}
 }

@@ -39,9 +39,32 @@
      return today;
  }
 
+ function dayAfterTomorrowString() {
+     var today = new Date();
+     today.setDate(today.getDate() + 2);
+     var dd = today.getDate();
+     var mm = today.getMonth()+1; //January is 0!
+
+     var yyyy = today.getFullYear();
+     if(dd<10){
+         dd='0'+dd;
+     }
+     if(mm<10){
+         mm='0'+mm;
+     }
+     var today = mm+'/'+dd+'/'+yyyy;
+     return today;
+ }
+
  function tomorrow() {
      var today = new Date();
      today.setDate(today.getDate() + 1);
+     return today;
+ }
+
+ function dayAfterTomorrow() {
+     var today = new Date();
+     today.setDate(today.getDate() + 2);
      return today;
  }
 
@@ -71,7 +94,18 @@
      if (h != 0) {
          index = (h*4) + Math.floor(m/15);
      }
-     index += 4;
+     if (index < 92) {
+         index += 4;
+     } else {
+         index = 4;
+         var dropoff_date_input=$('input[name="drop_off_date"]'); //our date input has the name "date"
+         dropoff_date_input.val(tomorrowString());
+         dropoff_date_input.datepicker("setDate", tomorrow());
+
+         var pickup_date_input=$('input[name="pick_up_date"]'); //our date input has the name "date"
+         pickup_date_input.val(dayAfterTomorrowString());
+         pickup_date_input.datepicker("setDate", dayAfterTomorrow());
+     }
 
      return index;
  }
