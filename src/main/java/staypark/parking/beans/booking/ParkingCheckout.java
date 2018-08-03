@@ -23,6 +23,7 @@ public class ParkingCheckout {
     private String totalDueAtLot = "";
     private String couponCode = "";
     private String couponMessage = "";
+    private String couponClass = "";
     private String couponAmount;
     private boolean couponValid = false;
     private boolean splitPayment = false;

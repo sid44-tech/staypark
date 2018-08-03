@@ -39,8 +39,15 @@ public class ParkingController {
 
 	@PostMapping("/parking/change")
 	public String parkingChangePost(Model model, @ModelAttribute ChangeReservation res) {
+		boolean validOrder = parkingHandler.checkValidConfirmatioNumber(res.getReservationNumber());
+		res.setValidNumber(validOrder);
 		model.addAttribute("res", res);
-		model.addAttribute("message", "The reservation number you entered is invalid");
+		if (!validOrder) {
+			res.setMessageClass("col change-error-message-custom visible");
+			model.addAttribute("message", "The reservation number you entered is invalid");
+		} else {
+			res.setMessageClass("col change-error-message-custom gone");
+		}
 
 		return "change";
 	}

@@ -63,6 +63,9 @@ public class ParkingHandler {
 			"left join dbstaypark.gp_parking_image as img on img.gppi_p_id = dep.gpi_id " +
 			"where gpi_id=? and drc_status = 'Active' ";
 
+	private static String CHECK_ORDER_ID =
+			"select * from dbstaypark.gp_reservation where order_id = ? and reservation_status = 'A'";
+
 	public List<HotelInformation> getParkingSearchResults(final String airportCode, final String startDateStr, final String endDateStr,
 			final String startTimeStr, final String endTimeStr, final String sort) {
 		Date startDate = DateUtil.stringMDYToDate(startDateStr);
@@ -207,5 +210,27 @@ public class ParkingHandler {
 		}
 
 		return images;
+	}
+
+	public boolean checkValidConfirmatioNumber(final String orderId) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			conn = DBUtil.getConnection();
+			ps = conn.prepareStatement(CHECK_ORDER_ID);
+			ps.setString(1,  orderId);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				return true;
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		} finally {
+			DBUtil.closeResources(conn, ps, rs);
+		}
+
+		return false;
 	}
 }

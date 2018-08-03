@@ -12,14 +12,12 @@
 		 			If you want to extend or cancel your reservation, please enter your reservation number in the box below.
 				</span>
 				<div class="row">
-					<div class="col" th:text="${message}">
-
-					</div>
+					<div th:class="${res.messageClass}" th:text="${message}"></div>
 				</div>
 				<div class="form-row change-margin-top">
 					<div class="form-group col-md-4">
 						<label for="reservationNumber">Reservation Number *</label>
-						<input type="number" class="form-control" id="reservationNumber" name="reservationNumber" th:field="*{reservationNumber}" required/>
+						<input type="number" class="form-control" id="reservationNumber" name="reservationNumber" default="" th:field="*{reservationNumber}" required/>
 					</div>
 				</div>
 				<div class="form-group row">

@@ -1447,9 +1447,31 @@ body {
 	margin-right: 16px;
 }
 
+.coupon-valid {
+	color: #71a40a;
+	font-family: 'Roboto', sans-serif;
+	font-size: 0.85em;
+	font-weight: bold;
+}
+
+.coupon-invalid {
+	color: #FF0000;
+	font-family: 'Roboto', sans-serif;
+	font-size: 0.85em;
+	font-weight: bold;
+}
 
 /* -------------------------- CHANGE BOOKING CSS -------------------------- */
 
 .change-margin-top {
 	margin-top: 24px;
 }
+
+.change-error-message-custom {
+	margin-top: 24px;
+	color: #FF0000;
+	font-family: 'Roboto', sans-serif;
+	font-size: 0.85em;
+	font-weight: bold;
+}
+
