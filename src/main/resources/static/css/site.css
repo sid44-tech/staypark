@@ -257,6 +257,26 @@ body {
     color: #428bca;
 }
 
+.clickable-text {
+	font-family: 'Roboto', sans-serif;
+	font-size: 15px;
+	font-weight: bold;
+	color: #428bca;
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+.label-row-margin {
+	margin-bottom: 16px;
+}
+
+.critical-button {
+	color: #fff;
+	background-color: #FF0000;
+	border-color: #FF0000;
+	margin-top: 16px;
+}
+
 /* -------------------------- Main Layout CSS -------------------------- */
 
 .flex-layout {
@@ -1438,7 +1458,6 @@ body {
 	font-weight: bold;
 }
 
-
 .pb-coupon-div {
 	margin-top: 40px;
 }
@@ -1475,3 +1494,11 @@ body {
 	font-weight: bold;
 }
 
+.change-section-title {
+	font-family: 'Roboto', sans-serif;
+	font-size: 16px;
+	font-weight: bold;
+	color: #428bca;
+	margin-left: 0px;
+	margin-bottom: 24px;
+}

@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import staypark.parking.beans.reservation.ChangeReservation;
 import staypark.parking.comparator.HotelRecommendedComparator;
 import staypark.parking.util.AirportUtil;
 import org.springframework.stereotype.Service;
@@ -212,18 +213,42 @@ public class ParkingHandler {
 		return images;
 	}
 
-	public boolean checkValidConfirmatioNumber(final String orderId) {
+	public ChangeReservation checkValidConfirmatioNumber(final ChangeReservation res) {
 		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
+		String orderId = "";
+		if (res.getType().equals("C")) {
+			orderId = res.getCancelReservationNumber();
+		} else {
+			orderId = res.getExtendReservationNumber();
+		}
+
 		try {
 			conn = DBUtil.getConnection();
 			ps = conn.prepareStatement(CHECK_ORDER_ID);
-			ps.setString(1,  orderId);
+			ps.setString(1, orderId);
 			rs = ps.executeQuery();
 			if (rs.next()) {
-				return true;
+				if (res.getType().equals("C")) {
+					String cc = rs.getString("gr_card_lastdegits");
+					if (cc != null & cc.replace("X", "").equals(res.getLastDigits())) {
+						res.setValidNumber(true);
+						res.setDepartingAirport(rs.getString("gr_d_air"));
+						res.setDropOffLocation(rs.getString("gr_d_loc"));
+						res.setDropOffTime(rs.getString("gr_d_time"));
+						res.setPickUpTime(rs.getString("gr_p_time"));
+						res.setName(rs.getString("gr_fname") + " " + rs.getString("gr_lname"));
+					}
+				} else {
+					res.setValidNumber(true);
+					res.setDepartingAirport(rs.getString("gr_d_air"));
+					res.setDropOffLocation(rs.getString("gr_d_loc"));
+					res.setDropOffTime(rs.getString("gr_d_time"));
+					res.setPickUpTime(rs.getString("gr_p_time"));
+					res.setName(rs.getString("gr_fname") + " " + rs.getString("gr_lname"));
+				}
 			}
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
@@ -231,6 +256,8 @@ public class ParkingHandler {
 			DBUtil.closeResources(conn, ps, rs);
 		}
 
-		return false;
+		return res;
 	}
+
+
 }

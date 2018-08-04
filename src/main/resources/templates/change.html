@@ -4,30 +4,23 @@
 	  layout:decorate="~{page.html}">
 
 <section layout:fragment="page-content">
-	<form class="needs-validation" novalidate action="#" th:action="@{/parking/change}" th:object="${res}" method="post">
-		<div class="form-div-container">
-			<div class="form-div-container-header">Extend or Cancel Your Reservation</div>
-			<div class="form-div-container-body">
-				<span class="about-instruction-font">
-		 			If you want to extend or cancel your reservation, please enter your reservation number in the box below.
-				</span>
-				<div class="row">
-					<div th:class="${res.messageClass}" th:text="${message}"></div>
-				</div>
-				<div class="form-row change-margin-top">
-					<div class="form-group col-md-4">
-						<label for="reservationNumber">Reservation Number *</label>
-						<input type="number" class="form-control" id="reservationNumber" name="reservationNumber" default="" th:field="*{reservationNumber}" required/>
-					</div>
-				</div>
-				<div class="form-group row">
-					<div class="col-sm-9">
-						<button type="submit" class="btn btn-primary">Submit</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</form>
-	</div>
+    <div class="form-div-container">
+        <div class="form-div-container-header">Reservation Change</div>
+        <div class="form-div-container-body">
+            <span class="about-instruction-font">
+                Would you like to <span class="clickable-text" onclick="handleCancelClick()">cancel</span> or <span class="clickable-text" onclick="handleExtendClick()">extend</span> your parking?
+            </span>
+        </div>
+    </div>
+
+    <script>
+        function handleCancelClick() {
+            location.href = "/parking/cancel";
+        }
+
+        function handleExtendClick() {
+            location.href = "/parking/extend";
+        }
+    </script>
 </section>
 </html>

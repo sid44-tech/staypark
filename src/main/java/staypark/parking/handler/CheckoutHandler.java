@@ -374,7 +374,7 @@ public class CheckoutHandler {
              ps.setString(43, checkout.getCouponCode());
              ps.setString(44, "0");
              ps.setDate(45, new java.sql.Date(new Date().getTime()));
-             ps.setString(46, "B");
+             ps.setString(46, "A");
              ps.setString(47, orderId);
              ps.setString(48, "");
              //TODO: Set discount in payment calc

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page.html}">
+
+<section layout:fragment="page-content">
+    <form class="needs-validation" novalidate action="#" th:action="@{/parking/cancel}" th:object="${res}" method="post">
+        <div class="form-div-container">
+            <div class="form-div-container-header">Cancel Reservation</div>
+            <div class="form-div-container-body">
+                <div id="cancel">
+                    <div class="row">
+                        <div th:class="${res.messageClass}" th:text="${message}"></div>
+                    </div>
+                    <div class="form-row change-margin-top change-section-title">Cancel Parking</div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="cancelReservationNumber">Reservation Number *</label>
+                            <input type="number" class="form-control" id="cancelReservationNumber" name="cancelReservationNumber" default="" th:field="*{cancelReservationNumber}" required/>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="lastDigits">Last 4 digits of card used for booking *</label>
+                            <input type="number" class="form-control" id="lastDigits" name="lastDigits" default="" th:field="*{lastDigits}" required/>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-9">
+                            <button type="submit" class="btn btn-primary">Check Reservation</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="info" class="gone">
+                    <div class="form-row change-margin-top change-section-title">Reservation Information</div>
+                    <div class="row pb-label-row">
+                        <div class="col-sm-4 label-row-margin">
+                            <div class="row">
+                                <div class="col pb-label-label-font">Name</div>
+                            </div>
+                            <div class="row">
+                                <div id="firstName" class="col pb-text-font" th:text="${res.name}"></div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 label-row-margin">
+                            <div class="row">
+                                <div class="col pb-label-label-font">Departing Airport</div>
+                            </div>
+                            <div class="row">
+                                <div id="departAirport" class="col pb-text-font" th:text="${res.departingAirport}"></div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 label-row-margin">
+                            <div class="row">
+                                <div class="col pb-label-label-font">Location</div>
+                            </div>
+                            <div class="row">
+                                <div id="departLocation" class="col pb-text-font" th:text="${res.dropOffLocation}"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row pb-label-row">
+                        <div class="col-sm-4 label-row-margin">
+                            <div class="row">
+                                <div class="col pb-label-label-font">Drop Off Time</div>
+                            </div>
+                            <div class="row">
+                                <div id="dropOffTime" class="col pb-text-font" th:text="${res.dropOffTime}"></div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 label-row-margin">
+                            <div class="row">
+                                <div class="col pb-label-label-font">Pick Up Time</div>
+                            </div>
+                            <div class="row">
+                                <div id="pickUpTime" class="col pb-text-font" th:text="${res.pickUpTime}"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row pb-label-row">
+                        <div class="col-sm-4">
+                            <button type="submit" class="btn critical-button">Cancel Reservation</button>
+                        </div>
+                    </div>
+                </div>
+                <input id="type" name="type" type="hidden" value="C">
+            </div>
+        </div>
+    </form>
+    </div>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                var message = /*[[${message}]]*/;
+                if (message != "")  {
+                    $("#cancel").show();
+                    $("#cancelReservationNumber").prop('required',true);
+                    $("#lastDigits").prop('required',true);
+                    $("#info").hide();
+                } else {
+                    $("#cancel").show();
+                    $("#extend").hide();
+                    $("#info").show();
+                }
+            }, false);
+        })();
+        /*]]>*/
+    </script>
+</section>
+</html>
