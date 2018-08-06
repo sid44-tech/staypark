@@ -18,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 import staypark.parking.beans.reservation.ChangeReservation;
 import staypark.parking.comparator.HotelRecommendedComparator;
 import staypark.parking.util.AirportUtil;
+import staypark.parking.util.EmailUtil;
 import org.springframework.stereotype.Service;
 
 import staypark.parking.beans.HotelInformation;
@@ -66,6 +67,9 @@ public class ParkingHandler {
 
 	private static String CHECK_ORDER_ID =
 			"select * from dbstaypark.gp_reservation where order_id = ? and reservation_status = 'A'";
+
+	private static String CANCEL_ORDER =
+			"update dbstaypark.gp_reservation set reservation_status = 'C' where order_id = ? or extn_order_id = ?";
 
 	public List<HotelInformation> getParkingSearchResults(final String airportCode, final String startDateStr, final String endDateStr,
 			final String startTimeStr, final String endTimeStr, final String sort) {
@@ -213,17 +217,13 @@ public class ParkingHandler {
 		return images;
 	}
 
-	public ChangeReservation checkValidConfirmatioNumber(final ChangeReservation res) {
+	public ChangeReservation checkValidConfirmatioNumber(final String orderId, final String lastDigits, final String type) {
+		ChangeReservation res = new ChangeReservation();
+		res.setCancelReservationNumber(orderId);
+		res.setLastDigits(lastDigits);
 		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-
-		String orderId = "";
-		if (res.getType().equals("C")) {
-			orderId = res.getCancelReservationNumber();
-		} else {
-			orderId = res.getExtendReservationNumber();
-		}
 
 		try {
 			conn = DBUtil.getConnection();
@@ -231,7 +231,7 @@ public class ParkingHandler {
 			ps.setString(1, orderId);
 			rs = ps.executeQuery();
 			if (rs.next()) {
-				if (res.getType().equals("C")) {
+				if ("C".equals(type)) {
 					String cc = rs.getString("gr_card_lastdegits");
 					if (cc != null & cc.replace("X", "").equals(res.getLastDigits())) {
 						res.setValidNumber(true);
@@ -240,6 +240,15 @@ public class ParkingHandler {
 						res.setDropOffTime(rs.getString("gr_d_time"));
 						res.setPickUpTime(rs.getString("gr_p_time"));
 						res.setName(rs.getString("gr_fname") + " " + rs.getString("gr_lname"));
+						res.setEmail(rs.getString("gr_email"));
+						res.setHotelId(rs.getString("gr_p_id"));
+						res.setOriginalPickUpDate(DateUtil.parseDateFromDateTimeString(rs.getString("pick_time")));
+						res.setOriginalPickUpTime(DateUtil.parseTimeFromDateTimeString(rs.getString("gr_p_time")));
+					}
+					Date dropDate = rs.getDate("drop_time");
+					if (dropDate.compareTo(new Date()) <= 0) {
+						res.setValidNumber(false);
+						res.setMessage("Your reservation cannot be cancelled because the drop off date has already passed.");
 					}
 				} else {
 					res.setValidNumber(true);
@@ -248,6 +257,19 @@ public class ParkingHandler {
 					res.setDropOffTime(rs.getString("gr_d_time"));
 					res.setPickUpTime(rs.getString("gr_p_time"));
 					res.setName(rs.getString("gr_fname") + " " + rs.getString("gr_lname"));
+					res.setEmail(rs.getString("gr_email"));
+					res.setHotelId(rs.getString("gr_p_id"));
+					res.setOriginalPickUpDate(DateUtil.parseDateFromDateTimeString(rs.getString("pick_time")));
+					res.setOriginalPickUpTime(DateUtil.parseTimeFromDateTimeString(rs.getString("gr_p_time")));
+
+					Date pickUpDate = rs.getDate("pick_time");
+					Date newMinPickUpDate = DateUtil.addDaysToDate(pickUpDate, 1);
+					res.setExtendMinPickUpDate(newMinPickUpDate);
+
+					if (pickUpDate.compareTo(new Date()) <= 0) {
+						res.setValidNumber(false);
+						res.setMessage("Your reservation cannot be extended because the pick up date has already passed.");
+					}
 				}
 			}
 		} catch (Exception e) {
@@ -259,5 +281,73 @@ public class ParkingHandler {
 		return res;
 	}
 
+	public boolean extendReservation(final ChangeReservation res) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		boolean success = false;
 
+		try {
+			conn = DBUtil.getConnection();
+			ps = conn.prepareStatement(CANCEL_ORDER);
+			ps.setString(1, res.getCancelReservationNumber());
+			ps.setString(2, res.getCancelReservationNumber());
+			int updated = ps.executeUpdate();
+			if (updated > 0) {
+				success = true;
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		} finally {
+			DBUtil.closeResources(conn, ps, null);
+		}
+
+		if (success) {
+			sendCancelEmails(res);
+		}
+
+		return false;
+	}
+
+	public boolean cancelReservation(final ChangeReservation res) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		boolean success = false;
+
+		try {
+			conn = DBUtil.getConnection();
+			ps = conn.prepareStatement(CANCEL_ORDER);
+			ps.setString(1, res.getCancelReservationNumber());
+			ps.setString(2, res.getCancelReservationNumber());
+			int updated = ps.executeUpdate();
+			if (updated > 0) {
+				success = true;
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		} finally {
+			DBUtil.closeResources(conn, ps, null);
+		}
+
+		if (success) {
+			sendCancelEmails(res);
+		}
+
+		return false;
+	}
+
+	private void sendCancelEmails(final ChangeReservation res) {
+		String body = EmailUtil.CANCEL_BOOKING_EMAIL;
+		body = body.replace("[ORDER_ID]", res.getCancelReservationNumber());
+		body = body.replace("[NAME]", res.getName());
+		body = body.replace("[AIRPORT]", res.getDepartingAirport());
+		body = body.replace("[LOCATION]", res.getDropOffLocation());
+		body = body.replace("[DROP_OFF_TIME]", res.getDropOffTime());
+		body = body.replace("[PICK_UP_TIME]", res.getPickUpTime());
+		try {
+			EmailUtil.sendEmail(res.getEmail(), "RESERVATION CANCELED", body);
+			EmailUtil.sendEmail(EmailUtil.SUPPORT_EMAIL, "RESERVATION CANCELED", body);
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
+	}
 }

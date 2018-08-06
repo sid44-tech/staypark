@@ -4,7 +4,7 @@
       layout:decorate="~{page.html}">
 
 <section layout:fragment="page-content">
-    <form class="needs-validation" novalidate action="#" th:action="@{/parking/cancel}" th:object="${res}" method="post">
+    <form id="cancelForm" class="needs-validation" novalidate action="#" th:action="@{/parking/cancel}" th:object="${res}" method="post">
         <div class="form-div-container">
             <div class="form-div-container-header">Cancel Reservation</div>
             <div class="form-div-container-body">
@@ -27,7 +27,7 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-9">
-                            <button type="submit" class="btn btn-primary">Check Reservation</button>
+                            <button type="button" class="btn btn-primary" onclick="checkReservation()">Check Reservation</button>
                         </div>
                     </div>
                 </div>
@@ -87,7 +87,6 @@
             </div>
         </div>
     </form>
-    </div>
 
     <script th:inline="javascript">
         /*<![CDATA[*/
@@ -96,18 +95,35 @@
             window.addEventListener('load', function() {
                 var message = /*[[${message}]]*/;
                 if (message != "")  {
-                    $("#cancel").show();
-                    $("#cancelReservationNumber").prop('required',true);
-                    $("#lastDigits").prop('required',true);
                     $("#info").hide();
                 } else {
-                    $("#cancel").show();
-                    $("#extend").hide();
                     $("#info").show();
                 }
             }, false);
         })();
         /*]]>*/
+    </script>
+
+    <script>
+        function checkReservation() {
+            var cres = document.getElementById("cancelReservationNumber");
+            if (!cres.checkValidity()) {
+                cres.style.borderColor = "#dc3545";
+            } else {
+                cres.style.borderColor = "#ced4da";
+            }
+
+            var ld = document.getElementById("lastDigits");
+            if (!ld.checkValidity()) {
+                ld.style.borderColor = "#dc3545";
+            } else {
+                ld.style.borderColor = "#ced4da";
+            }
+
+            if (ld.checkValidity() && cres.checkValidity()) {
+                location.href = "/parking/cancel?cancelReservationNumber=" + $("#cancelReservationNumber").val() + "&lastDigits=" + $("#lastDigits").val();
+            }
+        }
     </script>
 </section>
 </html>

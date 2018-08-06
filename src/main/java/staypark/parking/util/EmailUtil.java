@@ -12,9 +12,12 @@ import javax.mail.internet.MimeMessage;
 
 @Slf4j
 public class EmailUtil {
-    public static final String INFO_EMAIL = "info@staypark.com";
-    public static final String AFFILIATE_EMAIL = "support@staypark.com";
-    public static final String SUPPORT_EMAIL = "support@staypark.com";
+    public static final String INFO_EMAIL = "";
+    public static final String AFFILIATE_EMAIL = "";
+    public static final String SUPPORT_EMAIL = "";
+//    public static final String INFO_EMAIL = "info@staypark.com";
+//    public static final String AFFILIATE_EMAIL = "support@staypark.com";
+//    public static final String SUPPORT_EMAIL = "support@staypark.com";
     static final String FROM = "support@staypark.com";
     static final String FROMNAME = "StayPark Support";
     static final String SMTP_USERNAME = "";
@@ -132,7 +135,7 @@ public class EmailUtil {
             "<td></td>" +
             "</tr>" +
             "<tr>" +
-            "<td  align='center' colspan='2' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'> Confirmation</td>" +
+            "<td  align='center' colspan='2' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'> [CONFIRMATION]</td>" +
             "</tr>" +
             "<tr>" +
             "<td  align='center' colspan='2' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'> </td>" +
@@ -338,4 +341,42 @@ public class EmailUtil {
             "FACILITY FOR LONGER THAN YOUR BOOKED RESERVATION DATES & YOU DON'T EXTEND YOUR BOOKING OR BOOK A NEW ONE FOR THE EXTRA " +
             "DAYS NEEDED, YOUR VEHICLE WILL BE TOWED BY THE FACILITY***</span><br /><br /><strong>PAYMENT HAS BEEN MADE TO STAYPARK. " +
             "NO ADDITIONAL FEES WILL BE COLLECTED UNLESS SPECIFIED OTHERWISE.</strong>";
+
+    public static String CANCEL_BOOKING_EMAIL =
+            "<table width='100%' style='border:#000000 solid' cellspacing='0' cellpadding='0'>" +
+                    "<tr>" +
+                    "<td><img src='http://www.staypark.com/images/logo.png' width='165' height='61' /></td>" +
+                    "<td></td>" +
+                    "</tr>" +
+                    "<tr>" +
+                    "<td  align='center' colspan='2' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'> Cancellation for Reservation Number [ORDER_ID]</td>" +
+                    "</tr>" +
+                    "<tr>" +
+                    "<td  align='center' colspan='2' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'> </td>" +
+                    "</tr>" +
+                    "<tr>" +
+                    "<td style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'>Customer Name:</td>" +
+                    "<td>[NAME]</td><td></td>" +
+                    "</tr>" +
+                    "<tr>" +
+                    "<td style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'>Departing Airport:</td>" +
+                    "<td>[AIRPORT]</td><td></td>" +
+                    "</tr>" +
+                    "<tr>" +
+                    "<td style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'>Location:</td>" +
+                    "<td>[LOCATION]</td><td></td>" +
+                    "</tr>" +
+                    "<tr>" +
+                    "<td style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'>Drop Off Time:</td>" +
+                    "<td>[DROP_OFF_TIME]</td><td></td>" +
+                    "</tr>" +
+                    "<tr>" +
+                    "<td style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'>Pick Up Time:</td>" +
+                    "<td>[PICK_UP_TIME]</td><td></td>" +
+                    "</tr>" +
+                    "</table>" +
+                    "<br />" +
+                    "<font color='red'>Warm Regards</font><br />" +
+                    "<a href='www.staypark.com'>www.staypark.com</a><br />" +
+                    "<br />";
 }

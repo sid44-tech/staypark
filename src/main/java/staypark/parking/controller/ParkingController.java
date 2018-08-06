@@ -37,71 +37,98 @@ public class ParkingController {
 		return "change";
     }
 
-	@PostMapping("/parking/change")
-	public String parkingChangePost(Model model, @ModelAttribute ChangeReservation inres) {
-		ChangeReservation newRes = parkingHandler.checkValidConfirmatioNumber(inres);
+	@GetMapping("/parking/cancel")
+	public String parkingCancelGet(Model model, @RequestParam(name="cancelReservationNumber", required=false) String cancelReservationNumber,
+								   @RequestParam(name="lastDigits", required=false) String lastDigits) {
+		if (cancelReservationNumber != null && !cancelReservationNumber.isEmpty() && lastDigits != null && !lastDigits.isEmpty()) {
+			ChangeReservation newRes = parkingHandler.checkValidConfirmatioNumber(cancelReservationNumber, lastDigits, "C");
+			newRes.setLastDigits(lastDigits);
+			newRes.setCancelReservationNumber(cancelReservationNumber);
+			newRes.setType("C");
+			boolean validOrder = newRes.isValidNumber();
+			newRes.setValidNumber(validOrder);
+			if (!validOrder) {
+				if (!newRes.getMessage().equals("")) {
+					model.addAttribute("message", newRes.getMessage());
+				} else {
+					model.addAttribute("message", "The reservation number or credit card number you entered is invalid");
+				}
+				newRes.setMessageClass("col change-error-message-custom visible");
+			} else {
+				model.addAttribute("message", "");
+				newRes.setMessageClass("col change-error-message-custom gone");
+			}
+			model.addAttribute("res", newRes);
+		} else {
+			model.addAttribute("res", new ChangeReservation());
+		}
+
+		return "checkout/cancel";
+	}
+
+	@PostMapping("/parking/cancel")
+	public String parkingCancelPost(Model model, @ModelAttribute ChangeReservation inres) {
+		ChangeReservation newRes = parkingHandler.checkValidConfirmatioNumber(inres.getCancelReservationNumber(), inres.getLastDigits(), "C");
 		boolean validOrder = newRes.isValidNumber();
 		newRes.setValidNumber(validOrder);
 		if (!validOrder) {
-			if (newRes.getType().equals("E")) {
-				model.addAttribute("message", "The reservation number you entered is invalid");
-			} else if (newRes.getType().equals("C")) {
+			if (!newRes.getMessage().equals("")) {
+				model.addAttribute("message", newRes.getMessage());
+			} else {
 				model.addAttribute("message", "The reservation number or credit card number you entered is invalid");
 			}
 			newRes.setMessageClass("col change-error-message-custom visible");
 		} else {
-			model.addAttribute("message", "");
-			newRes.setMessageClass("col change-error-message-custom gone");
+			parkingHandler.cancelReservation(newRes);
+			return "checkout/cancel-confirm";
 		}
-		model.addAttribute("res", newRes);
-
-		return "change";
-	}
-
-	@GetMapping("/parking/cancel")
-	public String parkingCancelGet(Model model) {
-		model.addAttribute("res", new ChangeReservation());
 
 		return "checkout/cancel";
 	}
 
 	@GetMapping("/parking/extend")
-	public String parkingExtendGet(Model model) {
-		model.addAttribute("res", new ChangeReservation());
+	public String parkingExtendGet(Model model, @RequestParam(name="extendReservationNumber", required=false) String extendReservationNumber) {
+		if (extendReservationNumber != null && !extendReservationNumber.isEmpty()) {
+			ChangeReservation newRes = parkingHandler.checkValidConfirmatioNumber(extendReservationNumber, null, "E");
+			newRes.setExtendReservationNumber(extendReservationNumber);
+			newRes.setType("E");
+			boolean validOrder = newRes.isValidNumber();
+			newRes.setValidNumber(validOrder);
+			if (!validOrder) {
+				if (!newRes.getMessage().equals("")) {
+					model.addAttribute("message", newRes.getMessage());
+				} else {
+					model.addAttribute("message", "The reservation number you entered is invalid");
+				}
+				newRes.setMessageClass("col change-error-message-custom visible");
+			} else {
+				model.addAttribute("message", "");
+				newRes.setMessageClass("col change-error-message-custom gone");
+			}
+			model.addAttribute("res", newRes);
+		} else {
+			model.addAttribute("res", new ChangeReservation());
+		}
 
 		return "checkout/extend";
 	}
 
-	@PostMapping("/parking/cancel")
-	public String parkingCancelPost(Model model, @ModelAttribute ChangeReservation inres) {
-		ChangeReservation newRes = parkingHandler.checkValidConfirmatioNumber(inres);
-		boolean validOrder = newRes.isValidNumber();
-		newRes.setValidNumber(validOrder);
-		if (!validOrder) {
-			model.addAttribute("message", "The reservation number or credit card number you entered is invalid");
-			newRes.setMessageClass("col change-error-message-custom visible");
-		} else {
-			model.addAttribute("message", "");
-			newRes.setMessageClass("col change-error-message-custom gone");
-		}
-		model.addAttribute("res", newRes);
-
-		return "checkout/cancel";
-	}
-
 	@PostMapping("/parking/extend")
 	public String parkingExtendPost(Model model, @ModelAttribute ChangeReservation inres) {
-		ChangeReservation newRes = parkingHandler.checkValidConfirmatioNumber(inres);
+		ChangeReservation newRes = parkingHandler.checkValidConfirmatioNumber(inres.getExtendReservationNumber(), null, "E");
 		boolean validOrder = newRes.isValidNumber();
 		newRes.setValidNumber(validOrder);
 		if (!validOrder) {
-			model.addAttribute("message", "The reservation number you entered is invalid");
+			if (!newRes.getMessage().equals("")) {
+				model.addAttribute("message", newRes.getMessage());
+			} else {
+				model.addAttribute("message", "The reservation number you entered is invalid");
+			}
 			newRes.setMessageClass("col change-error-message-custom visible");
 		} else {
-			model.addAttribute("message", "");
-			newRes.setMessageClass("col change-error-message-custom gone");
+			parkingHandler.cancelReservation(newRes);
+			return "checkout/cancel-confirm";
 		}
-		model.addAttribute("res", newRes);
 
 		return "checkout/extend";
 	}

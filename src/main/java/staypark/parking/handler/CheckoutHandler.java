@@ -56,6 +56,9 @@ public class CheckoutHandler {
     		"values " + 
     		"(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
+    private String UPDATE_RESERVATION =
+            "update dbstaypark.gp_reservation set extn_order_id = ? where order_id = ? ";
+
     private String INSERT_RESERVATION_DETAIL =
             "insert into dbstaypark.gp_reservation_dtls " +
             "(rd_htl_id, rd_st_date, rd_en_date, rd_order_id, rd_cost, rd_extn_order_id) " +
@@ -67,8 +70,11 @@ public class CheckoutHandler {
 
     public ParkingCheckout getParkingCheckoutInfo(final int hotelId, final String dropOffDate, final String dropOffTime,
                                               final String pickUpDate, final String pickUpTime, final String username,
-                                                  final String couponCode) {
+                                                  final String couponCode, final String orderId) {
         ParkingCheckout pc = new ParkingCheckout();
+        if (orderId != null && !orderId.trim().isEmpty()) {
+            pc.setExtensionOrderId(orderId);
+        }
         
         UserProfile up = null;
         if (username != null) {
@@ -209,7 +215,7 @@ public class CheckoutHandler {
     	}
 
         ParkingCheckout safeCheckout = getParkingCheckoutInfo(Integer.valueOf(checkout.getHotelId()), checkout.getDropOffDate(),
-                checkout.getDropOffTime(), checkout.getPickUpDate(), checkout.getPickUpTime(), null, checkout.getCouponCode());
+                checkout.getDropOffTime(), checkout.getPickUpDate(), checkout.getPickUpTime(), null, checkout.getCouponCode(), checkout.getExtensionOrderId());
 
         int min = 100000000;
         int max = 999999999;
@@ -226,7 +232,11 @@ public class CheckoutHandler {
             return;
         }
 
-        sendBookingEmails(checkout, safeCheckout, username, payment, orderId);
+        if (checkout.getExtensionOrderId() != null && !checkout.getExtensionOrderId().trim().isEmpty()) {
+            updateExtensionReservationRecord(checkout.getExtensionOrderId(), orderId);
+        }
+
+        sendBookingEmails(checkout, safeCheckout, username, payment, orderId, checkout.getExtensionOrderId());
     }
     
     private BigDecimal calculateServiceFee(final BigDecimal baseServiceFee, final int totalDays) {
@@ -302,6 +312,30 @@ public class CheckoutHandler {
     	}
     	
     	return new BigDecimal(0).setScale(2, RoundingMode.DOWN);
+    }
+
+    private boolean updateExtensionReservationRecord(final String originalReservation, final String newReservation) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        int updated = -1;
+
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(UPDATE_RESERVATION);
+            ps.setString(1, newReservation);
+            ps.setString(2, originalReservation);
+
+            updated = ps.executeUpdate();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            DBUtil.closeResources(conn, ps, null);
+        }
+
+        if (updated > 0) {
+            return true;
+        }
+        return false;
     }
     
     private boolean insertReservationRecord(final ParkingCheckout checkout, final ParkingCheckout safeCheckout, final String username, final Payment payment,
@@ -457,9 +491,12 @@ public class CheckoutHandler {
     }
 
     private void sendBookingEmails(final ParkingCheckout checkout, final ParkingCheckout safeCheckout, final String username, final Payment payment,
-                                   final String orderId) {
+                                   final String orderId, final String extensionOrderId) {
         String subject = "Confirmation for Reservation : " + orderId;
-        String body = buildBodyEmail(checkout, safeCheckout, orderId);
+        if (extensionOrderId != null && !extensionOrderId.trim().isEmpty()) {
+            subject = "Confirmation for Reservation : " + orderId + " (EXTENDED)";
+        }
+        String body = buildBodyEmail(checkout, safeCheckout, orderId, extensionOrderId);
 
         try {
             EmailUtil.sendEmail(checkout.getEmail(), subject, body);
@@ -486,8 +523,13 @@ public class CheckoutHandler {
         }
     }
 
-    private String buildBodyEmail(final ParkingCheckout checkout, final ParkingCheckout safeCheckout, final String orderId) {
+    private String buildBodyEmail(final ParkingCheckout checkout, final ParkingCheckout safeCheckout, final String orderId, final String extensionOrderId) {
         String body = EmailUtil.CONFIRM_BOOKING_EMAIL;
+        if (extensionOrderId != null && !extensionOrderId.trim().isEmpty()) {
+            body = body.replace("[CONFIRMATION]", "Confirmation of Order Id " + orderId + " Extend from Order " + extensionOrderId);
+        } else {
+            body = body.replace("[CONFIRMATION]", "Confirmation");
+        }
         body = body.replace("[FIRST_NAME]", checkout.getFirstName());
         body = body.replace("[LAST_NAME]", checkout.getLastName());
         body = body.replace("[INN_NAME]", safeCheckout.getDepartLocation());

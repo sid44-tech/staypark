@@ -21,7 +21,7 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-9">
-                            <button type="submit" class="btn btn-primary">Check Reservation</button>
+                            <button type="button" class="btn btn-primary" onclick="checkReservation()">Check Reservation</button>
                         </div>
                     </div>
                 </div>
@@ -71,9 +71,16 @@
                             </div>
                         </div>
                     </div>
+                    <div class="form-row change-margin-top change-section-title">New Pick Up Date and Time</div>
+                    <div class="form-group flex-display">
+                        <input type="text" class="form-control parking-date-custom float parking-input-right-space flex1" id="pick_up_date" name="pick_up_date" placeholder="mm/dd/yyyy" required/>
+                        <select class="form-control parking-time-custom flex0" id="pick_up_time">
+                            <option value="12:00 AM">12:00 AM</option><option value="12:15 AM">12:15 AM</option><option value="12:30 AM">12:30 AM</option><option value="12:45 AM">12:45 AM</option><option value="01:00 AM">01:00 AM</option><option value="01:15 AM">01:15 AM</option><option value="01:30 AM">01:30 AM</option><option value="01:45 AM">01:45 AM</option><option value="02:00 AM">02:00 AM</option><option value="02:15 AM">02:15 AM</option><option value="02:30 AM">02:30 AM</option><option value="02:45 AM">02:45 AM</option><option value="03:00 AM">03:00 AM</option><option value="03:15 AM">03:15 AM</option><option value="03:30 AM">03:30 AM</option><option value="03:45 AM">03:45 AM</option><option value="04:00 AM">04:00 AM</option><option value="04:15 AM">04:15 AM</option><option value="04:30 AM">04:30 AM</option><option value="04:45 AM">04:45 AM</option><option value="05:00 AM">05:00 AM</option><option value="05:15 AM">05:15 AM</option><option value="05:30 AM">05:30 AM</option><option value="05:45 AM">05:45 AM</option><option value="06:00 AM">06:00 AM</option><option value="06:15 AM">06:15 AM</option><option value="06:30 AM">06:30 AM</option><option value="06:45 AM">06:45 AM</option><option value="07:00 AM">07:00 AM</option><option value="07:15 AM">07:15 AM</option><option value="07:30 AM">07:30 AM</option><option value="07:45 AM">07:45 AM</option><option value="08:00 AM" selected="selected">08:00 AM</option><option value="08:15 AM">08:15 AM</option><option value="08:30 AM">08:30 AM</option><option value="08:45 AM">08:45 AM</option><option value="09:00 AM">09:00 AM</option><option value="09:15 AM">09:15 AM</option><option value="09:30 AM">09:30 AM</option><option value="09:45 AM">09:45 AM</option><option value="10:00 AM">10:00 AM</option><option value="10:15 AM">10:15 AM</option><option value="10:30 AM">10:30 AM</option><option value="10:45 AM">10:45 AM</option><option value="11:00 AM">11:00 AM</option><option value="11:15 AM">11:15 AM</option><option value="11:30 AM">11:30 AM</option><option value="11:45 AM">11:45 AM</option><option value="12:00 PM">12:00 PM</option><option value="12:15 PM">12:15 PM</option><option value="12:30 PM">12:30 PM</option><option value="12:45 PM">12:45 PM</option><option value="01:00 PM">01:00 PM</option><option value="01:15 PM">01:15 PM</option><option value="01:30 PM">01:30 PM</option><option value="01:45 PM">01:45 PM</option><option value="02:00 PM">02:00 PM</option><option value="02:15 PM">02:15 PM</option><option value="02:30 PM">02:30 PM</option><option value="02:45 PM">02:45 PM</option><option value="03:00 PM">03:00 PM</option><option value="03:15 PM">03:15 PM</option><option value="03:30 PM">03:30 PM</option><option value="03:45 PM">03:45 PM</option><option value="04:00 PM">04:00 PM</option><option value="04:15 PM">04:15 PM</option><option value="04:30 PM">04:30 PM</option><option value="04:45 PM">04:45 PM</option><option value="05:00 PM">05:00 PM</option><option value="05:15 PM">05:15 PM</option><option value="05:30 PM">05:30 PM</option><option value="05:45 PM">05:45 PM</option><option value="06:00 PM">06:00 PM</option><option value="06:15 PM">06:15 PM</option><option value="06:30 PM">06:30 PM</option><option value="06:45 PM">06:45 PM</option><option value="07:00 PM">07:00 PM</option><option value="07:15 PM">07:15 PM</option><option value="07:30 PM">07:30 PM</option><option value="07:45 PM">07:45 PM</option><option value="08:00 PM">08:00 PM</option><option value="08:15 PM">08:15 PM</option><option value="08:30 PM">08:30 PM</option><option value="08:45 PM">08:45 PM</option><option value="09:00 PM">09:00 PM</option><option value="09:15 PM">09:15 PM</option><option value="09:30 PM">09:30 PM</option><option value="09:45 PM">09:45 PM</option><option value="10:00 PM">10:00 PM</option><option value="10:15 PM">10:15 PM</option><option value="10:30 PM">10:30 PM</option><option value="10:45 PM">10:45 PM</option><option value="11:00 PM">11:00 PM</option><option value="11:15 PM">11:15 PM</option><option value="11:30 PM">11:30 PM</option><option value="11:45 PM">11:45 PM</option>
+                        </select>
+                    </div>
                     <div class="row pb-label-row">
                         <div class="col-sm-4">
-                            <button type="submit" class="btn critical-button">Extend Reservation</button>
+                            <button type="button" class="btn critical-button" onclick="extendReservation()">Extend Reservation</button>
                         </div>
                     </div>
                 </div>
@@ -89,19 +96,61 @@
             'use strict';
             window.addEventListener('load', function() {
                 var message = /*[[${message}]]*/;
-                var type = /*[[${res.type}]]*/;
                 if (message != "")  {
-                    $("#extend").show();
-                    $("#extendReservationNumber").prop('required',true);
                     $("#info").hide();
                 } else {
-                    $("#cancel").hide();
-                    $("#extend").show();
                     $("#info").show();
                 }
+
+                var minDateString = /*[[${res.extendMinPickUpDate}]]*/;
+                var timeArr = minDateString.split("T");
+                var minDate = new Date(timeArr[0]);
+                minDate = addDaysToDate(minDate, 2);
+                var pickup_date_input=$('input[name="pick_up_date"]');
+                pickup_date_input.datepicker({
+                    format: 'mm/dd/yyyy',
+                    todayHighlight: true,
+                    autoclose: true,
+                    disableTouchKeyboard: true,
+                    clearBtn: true,
+                    startDate: minDate
+                })
+                //pickup_date_input.val(tomorrowString());
+                pickup_date_input.datepicker("setDate", minDate);
+
+                var index = convertCurrentTimeToSelectIndex();
+                document.getElementById('pick_up_time').selectedIndex = index;
             }, false);
         })();
+
+        function extendReservation() {
+            var hotelId = /*[[${res.hotelId}]]*/;
+            var dropOffDate = /*[[${res.originalPickUpDate}]]*/;
+            var dropOffTime = /*[[${res.originalPickUpTime}]]*/;
+            var pickUpDate = $("#pick_up_date").val().replace(/\//g, "-");
+            var pickUpTime = $("#pick_up_time").val();
+            var orderId = /*[[${res.extendReservationNumber}]]*/;
+
+            var url = "/parking/checkout/" + hotelId + "?dropOffDate=" + dropOffDate + "&dropOffTime=" + dropOffTime +
+                "&pickUpDate=" + pickUpDate + "&pickUpTime=" + pickUpTime + "&orderId=" + orderId;
+            location.href = url;
+        }
         /*]]>*/
+    </script>
+
+    <script>
+        function checkReservation() {
+            var cres = document.getElementById("extendReservationNumber");
+            if (!cres.checkValidity()) {
+                cres.style.borderColor = "#dc3545";
+            } else {
+                cres.style.borderColor = "#ced4da";
+            }
+
+            if (cres.checkValidity()) {
+                location.href = "/parking/extend?extendReservationNumber=" + $("#extendReservationNumber").val();
+            }
+        }
     </script>
 </section>
 </html>

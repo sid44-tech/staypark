@@ -20,9 +20,9 @@ public class CheckoutController {
     public String checkoutPark(Model model, @PathVariable("hotelId") int hotelId, @RequestParam(name="dropOffDate") String dropOffDate,
                                @RequestParam(name="dropOffTime") String dropOffTime, @RequestParam(name="pickUpDate") String pickUpDate,
                                @RequestParam(name="pickUpTime") String pickUpTime, @RequestParam(name="couponCode", required = false) String couponCode,
-                               Authentication auth) {
+                               @RequestParam(name="orderId", required = false) String orderId, Authentication auth) {
 		String username = SecurityUtil.getAuthenticatedUsername(auth);
-        model.addAttribute("checkout", checkoutHandler.getParkingCheckoutInfo(hotelId, dropOffDate, dropOffTime, pickUpDate, pickUpTime, username, couponCode));
+        model.addAttribute("checkout", checkoutHandler.getParkingCheckoutInfo(hotelId, dropOffDate, dropOffTime, pickUpDate, pickUpTime, username, couponCode, orderId));
 
 	    return "checkout/parking-checkout";
     }

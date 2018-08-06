@@ -63,4 +63,5 @@ public class ParkingCheckout {
     private String faxNumber = "";
     private String confirmationType = "";
     private BigDecimal standardDailyFee;
+    private String extensionOrderId = "";
 }

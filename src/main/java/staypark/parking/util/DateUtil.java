@@ -98,4 +98,26 @@ public class DateUtil {
 		int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
 		return dayOfWeek;
 	}
+
+	public static String parseTimeFromDateTimeString(final String dateTime) {
+		if (dateTime == null || dateTime.trim().isEmpty()) {
+			return "08:00 AM";
+		}
+
+		String[] arr = dateTime.split(" ");
+		String time = arr[arr.length-2] + " " + arr[arr.length-1];
+
+		return time;
+	}
+
+	public static String parseDateFromDateTimeString(final String dateTime) {
+		if (dateTime == null || dateTime.trim().isEmpty()) {
+			return "";
+		}
+
+		String[] arr = dateTime.split("-");
+		String date = arr[1] + "-"+ arr[2] + "-" + arr[0];
+
+		return date;
+	}
 }
