@@ -45,7 +45,7 @@
 								</div>
 								<div class="row rp-results-room-row-padding">
 									<div th:switch="${room.available}" class="col">
-										<button class="btn rp-results-book-button btn-sm" type="button" aria-expanded="false" th:case="${true}" onclick="checkout()">BOOK NOW</button>
+										<button class="btn rp-results-book-button btn-sm" type="submit" aria-expanded="false" th:case="${true}" onclick="checkout()">BOOK NOW</button>
 										<button class="btn btn-danger btn-sm" type="button" aria-expanded="false" th:case="${false}" disabled>UNAVAILABLE</button>
 									</div>
 								</div>
@@ -260,6 +260,54 @@
             }
         }
 
+        function checkout() {
+            var message = /*[[${results.search.searchType}]]*/;
+            if (message == "R")  {
+                $("#hotarrdtelbl").show();
+                $("#hotdepdtelbl").show();
+                $("#hottotlbl").show();
+                $("#roomslbl").show();
+                $("#adultslbl").show();
+                $("#chiildslbl").show();
+            } else if (message == "S") {
+                $("#hotarrdtelbl").show();
+                $("#hotdepdtelbl").show();
+                $("#hottotlbl").show();
+                $("#roomslbl").show();
+                $("#adultslbl").show();
+                $("#chiildslbl").show();
+                $("#cardodtelbl").show();
+                $("#cardpudtelbl").show();
+                $("#tptlbl").show();
+            } else if (message == "E") {
+                $("#hotarrdtelbl").show();
+                $("#hotdepdtelbl").show();
+                $("#hottotlbl").show();
+                $("#roomslbl").show();
+                $("#adultslbl").show();
+                $("#chiildslbl").show();
+                $("#cardodtelbl").show();
+                $("#cardpudtelbl").show();
+                $("#tptlbl").show();
+            } else if (message == "B") {
+                $("#begtriplbl").show();
+                $("#hotarrdtelbl").show();
+                $("#hotdepdtelbl").show();
+                $("#endtriplbl").show();
+                $("#hotarrdtelbl2").show();
+                $("#endhotarrdtelbl2").show();
+                $("#hottotlbl").show();
+                $("#roomslbl").show();
+                $("#adultslbl").show();
+                $("#chiildslbl").show();
+                $("#carprklbl").show();
+                $("#cardodtelbl").show();
+                $("#cardpudtelbl").show();
+                $("#tptlbl").show();
+            }
+            location.href = "/parking/checkout/279";
+        }
+
         /*]]>*/
 	</script>
 
@@ -279,10 +327,6 @@
             } else {
                 e.innerHTML = "Show More Details";
             }
-        }
-
-        function checkout() {
-            location.href = "\checkout";
         }
 
         function viewmap(lat, lon) {

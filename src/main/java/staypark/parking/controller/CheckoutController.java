@@ -36,6 +36,15 @@ public class CheckoutController {
         return "checkout/confirm-checkout";
     }
 
+    @PostMapping("/hotel-parking/checkout/{hotelId}")
+    public String checkoutHotelParkInformation(Model model, @PathVariable("hotelId") int hotelId, @ModelAttribute ParkingCheckout checkout, Authentication auth) {
+//        checkout.setHotelId(String.valueOf(hotelId));
+//
+//        checkoutHandler.handleBookingSubmit(checkout, SecurityUtil.getAuthenticatedUsername(auth));
+
+        return "checkout/parking-checkout";
+    }
+
     @GetMapping("/parking/checkout")
     public String checkoutParkPost(Model model) {
 
