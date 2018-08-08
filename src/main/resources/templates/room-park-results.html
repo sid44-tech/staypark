@@ -45,7 +45,7 @@
 								</div>
 								<div class="row rp-results-room-row-padding">
 									<div th:switch="${room.available}" class="col">
-										<button class="btn rp-results-book-button btn-sm" type="submit" aria-expanded="false" th:case="${true}" onclick="checkout()">BOOK NOW</button>
+										<button class="btn rp-results-book-button btn-sm" type="button" aria-expanded="false" th:case="${true}" th:onclick="checkout()">BOOK NOW</button>
 										<button class="btn btn-danger btn-sm" type="button" aria-expanded="false" th:case="${false}" disabled>UNAVAILABLE</button>
 									</div>
 								</div>
@@ -261,58 +261,80 @@
         }
 
         function checkout() {
-            var message = /*[[${results.search.searchType}]]*/;
-            if (message == "R")  {
-                $("#hotarrdtelbl").show();
-                $("#hotdepdtelbl").show();
-                $("#hottotlbl").show();
-                $("#roomslbl").show();
-                $("#adultslbl").show();
-                $("#chiildslbl").show();
-            } else if (message == "S") {
-                $("#hotarrdtelbl").show();
-                $("#hotdepdtelbl").show();
-                $("#hottotlbl").show();
-                $("#roomslbl").show();
-                $("#adultslbl").show();
-                $("#chiildslbl").show();
-                $("#cardodtelbl").show();
-                $("#cardpudtelbl").show();
-                $("#tptlbl").show();
-            } else if (message == "E") {
-                $("#hotarrdtelbl").show();
-                $("#hotdepdtelbl").show();
-                $("#hottotlbl").show();
-                $("#roomslbl").show();
-                $("#adultslbl").show();
-                $("#chiildslbl").show();
-                $("#cardodtelbl").show();
-                $("#cardpudtelbl").show();
-                $("#tptlbl").show();
-            } else if (message == "B") {
-                $("#begtriplbl").show();
-                $("#hotarrdtelbl").show();
-                $("#hotdepdtelbl").show();
-                $("#endtriplbl").show();
-                $("#hotarrdtelbl2").show();
-                $("#endhotarrdtelbl2").show();
-                $("#hottotlbl").show();
-                $("#roomslbl").show();
-                $("#adultslbl").show();
-                $("#chiildslbl").show();
-                $("#carprklbl").show();
-                $("#cardodtelbl").show();
-                $("#cardpudtelbl").show();
-                $("#tptlbl").show();
+            var searchType = /*[[${results.search.searchType}]]*/;
+            var hotelId = /*[[${results.search.hotelId}]]*/;
+            var roomId = /*[[${results.search.roomId}]]*/;
+            var carDropOffDateMDY = /*[[${results.search.carDropOffDateMDY}]]*/;
+            var carDropOffTime = /*[[${results.search.carDropOffTime}]]*/;
+            var carPickUpDateMDY = /*[[${results.search.carPickUpDateMDY}]]*/;
+            var carPickUpTime = /*[[${results.search.carPickUpTime}]]*/;
+            var hotelArrivalDateMDY = /*[[${results.search.hotelArrivalDateMDY}]]*/;
+            var hotelDepartureDateMDY = /*[[${results.search.hotelDepartureDateMDY}]]*/;
+            var endHotelArrivalDateMDY = /*[[${results.search.endHotelArrivalDateMDY}]]*/;
+            var endHotelDepartureDateMDY = /*[[${results.search.endHotelDepartureDateMDY}]]*/;
+
+            var rooms = /*[[${results.search.rooms}]]*/;
+            var totalAdults = /*[[${results.search.totalAdults}]]*/;
+            var children = /*[[${results.search.children}]]*/;
+
+            var url = "/parking/checkout/" + hotelId + "?";
+
+            if (searchType == "R")  {
+                url = appendRequestParameter(url, "searchType", searchType);
+                url = appendRequestParameter(url, "roomId", roomId);
+                url = appendRequestParameter(url, "hotelArrivalDateMDY", hotelArrivalDateMDY);
+                url = appendRequestParameter(url, "hotelDepartureDateMDY", hotelDepartureDateMDY);
+                url = appendRequestParameter(url, "rooms", rooms);
+                url = appendRequestParameter(url, "totalAdults", totalAdults);
+                url = appendRequestParameter(url, "children", children);
+            } else if (searchType == "S") {
+                url = appendRequestParameter(url, "searchType", searchType);
+                url = appendRequestParameter(url, "roomId", roomId);
+                url = appendRequestParameter(url, "hotelArrivalDateMDY", hotelArrivalDateMDY);
+                url = appendRequestParameter(url, "hotelDepartureDateMDY", hotelDepartureDateMDY);
+                url = appendRequestParameter(url, "rooms", rooms);
+                url = appendRequestParameter(url, "totalAdults", totalAdults);
+                url = appendRequestParameter(url, "children", children);
+                url = appendRequestParameter(url, "carDropOffDateMDY", carDropOffDateMDY);
+                url = appendRequestParameter(url, "carDropOffTime", carDropOffTime);
+                url = appendRequestParameter(url, "carPickUpDateMDY", carPickUpDateMDY);
+                url = appendRequestParameter(url, "carPickUpTime", carPickUpTime);
+            } else if (searchType == "E") {
+                url = appendRequestParameter(url, "searchType", searchType);
+                url = appendRequestParameter(url, "roomId", roomId);
+                url = appendRequestParameter(url, "endHotelArrivalDateMDY", endHotelArrivalDateMDY);
+                url = appendRequestParameter(url, "endHotelDepartureDateMDY", endHotelDepartureDateMDY);
+                url = appendRequestParameter(url, "rooms", rooms);
+                url = appendRequestParameter(url, "totalAdults", totalAdults);
+                url = appendRequestParameter(url, "children", children);
+                url = appendRequestParameter(url, "carDropOffDateMDY", carDropOffDateMDY);
+                url = appendRequestParameter(url, "carDropOffTime", carDropOffTime);
+                url = appendRequestParameter(url, "carPickUpDateMDY", carPickUpDateMDY);
+                url = appendRequestParameter(url, "carPickUpTime", carPickUpTime);
+            } else if (searchType == "B") {
+                url = appendRequestParameter(url, "searchType", searchType);
+                url = appendRequestParameter(url, "roomId", roomId);
+                url = appendRequestParameter(url, "hotelArrivalDateMDY", hotelArrivalDateMDY);
+                url = appendRequestParameter(url, "hotelDepartureDateMDY", hotelDepartureDateMDY);
+                url = appendRequestParameter(url, "endHotelArrivalDateMDY", endHotelArrivalDateMDY);
+                url = appendRequestParameter(url, "endHotelDepartureDateMDY", endHotelDepartureDateMDY);
+                url = appendRequestParameter(url, "rooms", rooms);
+                url = appendRequestParameter(url, "totalAdults", totalAdults);
+                url = appendRequestParameter(url, "children", children);
+                url = appendRequestParameter(url, "carDropOffDateMDY", carDropOffDateMDY);
+                url = appendRequestParameter(url, "carDropOffTime", carDropOffTime);
+                url = appendRequestParameter(url, "carPickUpDateMDY", carPickUpDateMDY);
+                url = appendRequestParameter(url, "carPickUpTime", carPickUpTime);
             }
-            location.href = "/parking/checkout/279";
+
+            alert(url);
+            location.href = url;
         }
 
         /*]]>*/
 	</script>
 
 	<script>
-
         function showModal(e) {
             var link = e.src;
             link = link.replace("thumb_", "");

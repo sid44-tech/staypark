@@ -70,21 +70,25 @@ public class HotelHandler {
             hotel.setRoomList(getRoomDetails(hotel, search));
         }
 
-
         results.setHotels(hotels);
-        results.setSearch(BuildSearchOptionsBean(search));
+        results.setSearch(buildSearchOptionsBean(search));
 
         return results;
     }
 
-    private RoomParkSearchOptions BuildSearchOptionsBean(final RoomParkSearch search) {
+    private RoomParkSearchOptions buildSearchOptionsBean(final RoomParkSearch search) {
         RoomParkSearchOptions searchOptions = new RoomParkSearchOptions();
 
         //Set fields related to hotel stay
         searchOptions.setHotelArrivalDate(DateUtil.formatDate(search.getPrimaryCheckInDate()));
+        searchOptions.setHotelArrivalDateMDY(DateUtil.formatDateWithYearAtEnd(search.getPrimaryCheckInDate()));
         searchOptions.setHotelDepartureDate(DateUtil.formatDate(search.getPrimaryCheckOutDate()));
+        searchOptions.setHotelDepartureDateMDY(DateUtil.formatDateWithYearAtEnd(search.getPrimaryCheckOutDate()));
         searchOptions.setEndHotelArrivalDate(DateUtil.formatDate(search.getSecondaryCheckInDate()));
+        searchOptions.setEndHotelArrivalDateMDY(DateUtil.formatDateWithYearAtEnd(search.getSecondaryCheckInDate()));
         searchOptions.setEndHotelDepartureDate(DateUtil.formatDate(search.getSecondaryCheckOutDate()));
+        searchOptions.setEndHotelDepartureDateMDY(DateUtil.formatDateWithYearAtEnd(search.getSecondaryCheckOutDate()));
+
         int numberDaysAtHotel = getNumberOfDaysForHotel(search.getHotelTimeOptions(), search.getPrimaryCheckInDate(), search.getPrimaryCheckOutDate(),
                 search.getSecondaryCheckInDate(), search.getSecondaryCheckOutDate());
         searchOptions.setTotalHotelNights(numberDaysAtHotel);
@@ -95,8 +99,12 @@ public class HotelHandler {
         searchOptions.setChildren(search.getChildren());
 
         //Set parking related information
-        searchOptions.setCarDropOffDate(DateUtil.formatDate(search.getDropOffDate()));
-        searchOptions.setCarPickUpDate(DateUtil.formatDate(search.getPickUpDate()));
+        searchOptions.setCarDropOffDate(DateUtil.formatDate(search.getDropOffDate()) + " " + search.getDropOffTime());
+        searchOptions.setCarPickUpDate(DateUtil.formatDate(search.getPickUpDate()) + " " + search.getPickUpTime());
+        searchOptions.setCarDropOffDateMDY(DateUtil.formatDateWithYearAtEnd(search.getDropOffDate()));
+        searchOptions.setCarPickUpDateMDY(DateUtil.formatDateWithYearAtEnd(search.getPickUpDate()));
+        searchOptions.setCarDropOffTime(search.getDropOffTime());
+        searchOptions.setCarPickUpTime(search.getPickUpTime());
 
         if (search.getHotelOptions().equals("R")) {
             searchOptions.setSearchType("R");

@@ -134,6 +134,11 @@
      return containsDigit;
  }
 
+ function appendRequestParameter(str, name, value) {
+    var str = str + name + "=" + value + "&";
+    return str;
+ }
+
  function parse_query_string(query) {
      var vars = query.split("&");
      var query_string = {};

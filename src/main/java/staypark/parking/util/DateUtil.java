@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class DateUtil {
 	private static SimpleDateFormat DATE_FORMAT_WITH_DAY = new SimpleDateFormat("EEEE MMMM dd, yyyy", Locale.US);
+	private static SimpleDateFormat DATE_FORMAT_YEAR_LAST = new SimpleDateFormat("dd-mm-yyyy", Locale.US);
 
 	public final static String[] PARKING_TIMES = {
 			"12:00 AM", "12:15 AM", "12:30 AM", "12:45 AM", 
@@ -62,6 +63,13 @@ public class DateUtil {
 	public static String formatDate(final Date date) {
 		if (date != null) {
 			return DATE_FORMAT_WITH_DAY.format(date);
+		}
+		return "";
+	}
+
+	public static String formatDateWithYearAtEnd(final Date date) {
+		if (date != null) {
+			return DATE_FORMAT_YEAR_LAST.format(date);
 		}
 		return "";
 	}
