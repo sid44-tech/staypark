@@ -68,6 +68,12 @@ public class CheckoutHandler {
             "select * from dbstaypark.gp_voucher " +
             "where status='Active' and now() between start_range and end_range ";
 
+    public ParkingCheckout getRoomAndParkingCheckoutInfo(final int hotelId, final String dropOffDate, final String dropOffTime,
+                                                  final String pickUpDate, final String pickUpTime, final String username,
+                                                  final String couponCode, final String orderId) {
+
+    }
+
     public ParkingCheckout getParkingCheckoutInfo(final int hotelId, final String dropOffDate, final String dropOffTime,
                                               final String pickUpDate, final String pickUpTime, final String username,
                                                   final String couponCode, final String orderId) {

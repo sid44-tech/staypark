@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{page-top-submenu.html}">
+
+<section layout:fragment="side-bar">
+</section>
+
+<section layout:fragment="main-content">
+    <form class="needs-validation" novalidate action="/parking/checkout" th:object="${checkout}" th:action="@{/parking/checkout/} + ${checkout.hotelId}" method="post">
+        <div class="form-div-container">
+            <div class="form-div-container-header">Online Checkout</div>
+            <div class="form-div-container-body">
+				<span>
+				Complete this form and submit your payment to book your guaranteed reservation. After your payment goes through you will receive an email confirmation. You will need to print out the email you receive and take it with you to the parking facility.
+				<br><br>
+					For questions or to book over the phone reach us from our <a href="/contact-us">contact</a> page.
+				</span>
+                <br><br>
+                <span sec:authorize="isAnonymous()">
+					<div class="form-check form-check-inline">
+						<span class="pb-title-font">Continue as Guest or <a href="/login">Login</a></span>
+					</div>
+					<br><br>
+				</span>
+                <div class="align-center width-100 pb-custom">Reservation Information</div>
+                <div class="row pb-label-row">
+                    <div class="col-md-3">
+                        <div class="row">
+                            <div class="col pb-label-label-font">Departing Airport</div>
+                        </div>
+                        <div class="row">
+                            <div id="departAirport" class="col pb-text-font" th:text="${checkout.departAirport}"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="row">
+                            <div class="col pb-label-label-font">Location</div>
+                        </div>
+                        <div class="row">
+                            <div id="departLocation" class="col pb-text-font" th:text="${checkout.departLocation}"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row pb-label-row">
+                    <div class="col-md-3">
+                        <div class="row">
+                            <div class="col pb-label-label-font">Check In</div>
+                        </div>
+                        <div class="row">
+                            <div id="checkinTime" class="col pb-text-font" th:text="${checkout.checkinTime} + ' ' + ${checkout.timezone}"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="row">
+                            <div class="col pb-label-label-font">Check Out</div>
+                        </div>
+                        <div class="row">
+                            <div id="checkoutTime" class="col pb-text-font" th:text="${checkout.checkoutTime} + ' ' + ${checkout.timezone}"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="row">
+                            <div class="col pb-label-label-font">Total Parking Time</div>
+                        </div>
+                        <div class="row">
+                            <div id="totalParkingTime" class="col pb-text-font" th:text="${checkout.totalParkingTime}"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row pb-label-row">
+                    <div class="col-md-3">
+                        <div class="row">
+                            <div class="col pb-label-label-font">Base Rate</div>
+                        </div>
+                        <div class="row">
+                            <div id="baseRate" class="col pb-label-money-font" th:text="${checkout.baseRate} + ' USD'"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="row">
+                            <div class="col pb-label-label-font">Service Fee</div>
+                        </div>
+                        <div class="row">
+                            <div id="serviceFee" class="col pb-label-money-font" th:text="${checkout.serviceFee} + ' USD'"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="row">
+                            <div class="col pb-label-label-font">Sales Tax</div>
+                        </div>
+                        <div class="row">
+                            <div id="salesTax" class="col pb-label-money-font" th:text="${checkout.salesTax} + ' USD'"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="row">
+                            <div class="col pb-label-label-font">Grand Total</div>
+                        </div>
+                        <div class="row">
+                            <div id="grandTotal" class="col pb-label-money-font" th:text="${checkout.grandTotal} + ' USD'"></div>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${checkout.splitPayment == true}">
+                    <div class="row pb-label-row">
+                        <div class="col-md-3">
+                            <div class="row">
+                                <div class="col pb-label-label-font">Total Due Now</div>
+                            </div>
+                            <div class="row">
+                                <div id="totalDueNow" class="col pb-label-money-font" th:text="${checkout.totalDueNow} + ' USD'"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="row">
+                                <div class="col pb-label-label-font">Total Due At Lot</div>
+                            </div>
+                            <div class="row">
+                                <div id="totalDueAtLot" class="col pb-label-money-font-red" th:text="${checkout.totalDueAtLot} + ' USD'"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row pb-label-row">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col pb-label-label-font">Shuttle Frequency</div>
+                        </div>
+                        <div class="row">
+                            <div id="shuttleFrequency" class="col pb-text-font" th:text="${checkout.shuttleFrequency}"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row form-inline pb-coupon-div">
+                    <div class="form-group col-md-4">
+                        <label class="pb-label-label-font pb-coupon-label-padding" for="firstName">Enter Coupon Code</label>
+                        <input type="text" class="form-control" id="couponCode" name="couponCode" th:field="*{couponCode}"/>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <button id="couponButton" type="button" class="btn btn-primary" onclick="checkCoupon(this)">Go!</button>
+                    </div>
+                </div>
+                <div th:if="${checkout.couponMessage != ''}" class="row">
+                    <div class="col-md-8">
+                        <span th:text="${checkout.couponMessage}" th:class="${checkout.couponClass}"></span>
+                    </div>
+                </div>
+                <br><br>
+                <div class="align-center width-100 pb-custom">Driver Information</div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label class="pb-label-label-font" for="numberPeopleTravelling">Number of People Traveling *</label>
+                        <select class="form-control" id="numberPeopleTravelling" name="numberPeopleTravelling">
+                            <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option>
+                            <option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option>
+                            <option value="9">9</option><option value="10">10</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="pb-label-label-font" for="numberPeopleTravelling">How did you hear about us? *</label>
+                        <select class="form-control" id="hearAboutUs" name="hearAboutUs">
+                            <option value="Google">Google</option><option value="Yahoo">Yahoo</option><option value="Bing">Bing</option><option value="Friend">Friend</option>
+                            <option value="Magazine">Magazine</option><option value="Facebook/Twitter">Facebook/Twitter</option><option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label class="pb-label-label-font" for="firstName">First Name *</label>
+                        <input type="text" class="form-control" id="firstName" name="firstName" th:field="*{firstName}" required/>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="pb-label-label-font" for="lastName">Last Name *</label>
+                        <input type="text" class="form-control" id="lastName" name="lastName" th:field="*{lastName}" required/>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label class="pb-label-label-font" for="carMake">Car Make</label>
+                        <input type="text" class="form-control" id="carMake" name="carMake"/>
+                        <small id="carMakeHelp" class="form-text text-muted">Optional</small>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="pb-label-label-font" for="carModel">Car Model</label>
+                        <input type="text" class="form-control" id="carModel" name="carModel"/>
+                        <small id="carModelHelp" class="form-text text-muted">Optional</small>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="pb-label-label-font" for="carModel">License Plate Number</label>
+                        <input type="text" class="form-control" id="carLicensePlate" name="carLicensePlate"/>
+                        <small id="carLicensePlateHelp" class="form-text text-muted">Optional</small>
+                    </div>
+                </div>
+                <br><br>
+                <div class="align-center width-100 pb-custom">Customer Information</div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label class="pb-label-label-font" for="address">Street *</label>
+                        <input type="text" class="form-control" id="address" name="address" th:field="*{address}" required/>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="pb-label-label-font" for="city">City *</label>
+                        <input type="text" class="form-control" id="city" name="city" th:field="*{city}" required/>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="pb-label-label-font" for="state">State *</label>
+                        <input type="text" class="form-control" id="state" name="state" th:field="*{state}" required/>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label class="pb-label-label-font" for="zip">Zip *</label>
+                        <input type="text" class="form-control" id="zip" name="zip" th:field="*{zip}" required/>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="pb-label-label-font" for="email">Email *</label>
+                        <input type="email" class="form-control" id="email" name="email" th:field="*{email}" required/>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="pb-label-label-font" for="phone">Phone *</label>
+                        <input type="number" class="form-control" id="phone" name="phone" th:field="*{phone}" required/>
+                    </div>
+                </div>
+                <br><br>
+                <div class="align-center width-100 pb-custom">Payment Information</div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label class="pb-label-label-font" for="ownerName">Name on Credit Card *</label>
+                        <input type="text" class="form-control" id="ownerName" name="ownerName" required/>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="pb-label-label-font" for="cardType">Card Type *</label>
+                        <select class="form-control" id="cardType" name="cardType">
+                            <option value="V">Visa</option><option value="MC">Master Card</option><option value="AMEX">American Express</option><option value="DISC">Discover</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="pb-label-label-font" for="cardNumber">Card Number *</label>
+                        <input type="number" class="form-control" id="cardNumber" pattern="\d*" name="cardNumber" maxlength="16" max="9999999999999999" min="0" required/>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label class="pb-label-label-font" for="cvv">CVV *</label>
+                        <input type="number" class="form-control" id="cvv" name="cvv" pattern="\d*" maxlength="4" max="9999" min="0" required/>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="pb-label-label-font" for="expirationMonth">Expiration Month *</label>
+                        <select class="form-control" id="expirationMonth" name="expirationMonth">
+                            <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option>
+                            <option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option>
+                            <option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="pb-label-label-font" for="expirationYear">Expiration Year *</label>
+                        <select class="form-control" id="expirationYear" name="expirationYear">
+                            <option value="2018">2018</option><option value="2019">2019</option><option value="2020">2020</option><option value="2021">2021</option>
+                            <option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2026">2026</option>
+                            <option value="2027">2027</option><option value="2028">2028</option><option value="2029">2029</option><option value="2030">2030</option>
+                            <option value="2031">2031</option><option value="2032">2032</option>
+                        </select>
+                    </div>
+                </div>
+                <br><br>
+                <div class="form-check form-row ur-terms">
+                    <input class="form-check-input" type="checkbox" value="" id="termsAgree" required>
+                    <label class="form-check-label pb-label-label-font" for="termsAgree">I agree to <a href="/tac" target="_blank">Terms & Conditions</a></label>
+                </div>
+                <div class="form-check form-row ur-terms">
+                    <input class="form-check-input" type="checkbox" value="" id="cancelAgree" required>
+                    <label class="form-check-label pb-label-label-font" for="cancelAgree">I agree to <a href="/cancellation" target="_blank">24 Hour Cancellation Policy</a></label>
+                </div>
+                <br><br>
+                <input type="hidden" th:value="${checkout.dropOffDate}" id="dropOffDate" name="dropOffDate">
+                <input type="hidden" th:value="${checkout.dropOffTime}" id="dropOffTime" name="dropOffTime">
+                <input type="hidden" th:value="${checkout.pickUpDate}" id="pickUpDate" name="pickUpDate">
+                <input type="hidden" th:value="${checkout.pickUpTime}" id="pickUpTime" name="pickUpTime">
+                <input type="hidden" th:value="${checkout.extensionOrderId}" id="extensionOrderId" name="extensionOrderId">
+                <div class="form-group row">
+                    <div class="col-sm-9">
+                        <button type="submit" class="btn btn-primary">Book Reservation</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <script>
+        function checkCoupon(item) {
+            var itemValue = $('#couponCode').val();
+            if (itemValue == "") {
+                return;
+            }
+            var parms = location.href.split("?")[1].split("&");
+            var parmsStr = "";
+            var couponFound = false;
+            for (i = 0; i < parms.length; i++) {
+                if (parms[i].indexOf("couponCode") != -1) {
+                    parmsStr = parmsStr + "couponCode=" + itemValue + "&";
+                    couponFound = true;
+                } else {
+                    parmsStr = parmsStr + parms[i] + "&";
+                }
+            }
+
+            if (couponFound) {
+                var url = location.href.split("?")[0] + "?" + parmsStr;
+            } else {
+                var url = location.href + "&couponCode=" + itemValue;
+            }
+
+            location.href = url;
+        }
+    </script>
+</section>
+</html>

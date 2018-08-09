@@ -45,7 +45,7 @@
 								</div>
 								<div class="row rp-results-room-row-padding">
 									<div th:switch="${room.available}" class="col">
-										<button class="btn rp-results-book-button btn-sm" type="button" aria-expanded="false" th:case="${true}" th:onclick="checkout()">BOOK NOW</button>
+										<button class="btn rp-results-book-button btn-sm" type="button" aria-expanded="false" th:case="${true}" th:onclick="'javascript:checkout(' + ${hotel.hotelId} + ', ' + ${room.roomId} + ')'">BOOK NOW</button>
 										<button class="btn btn-danger btn-sm" type="button" aria-expanded="false" th:case="${false}" disabled>UNAVAILABLE</button>
 									</div>
 								</div>
@@ -260,10 +260,8 @@
             }
         }
 
-        function checkout() {
+        function checkout(hotelId, roomId) {
             var searchType = /*[[${results.search.searchType}]]*/;
-            var hotelId = /*[[${results.search.hotelId}]]*/;
-            var roomId = /*[[${results.search.roomId}]]*/;
             var carDropOffDateMDY = /*[[${results.search.carDropOffDateMDY}]]*/;
             var carDropOffTime = /*[[${results.search.carDropOffTime}]]*/;
             var carPickUpDateMDY = /*[[${results.search.carPickUpDateMDY}]]*/;

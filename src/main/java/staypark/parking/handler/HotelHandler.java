@@ -139,6 +139,7 @@ public class HotelHandler {
             rs = ps.executeQuery();
             while (rs.next()) {
                 HotelInformation bean = new HotelInformation();
+                bean.setHotelId(rs.getInt("gpi_id"));
                 bean.setHotelTitle(rs.getString("drc_gpi_inn_name") + " - " + rs.getString("gdl_logo_title"));
                 bean.setCityState(rs.getString("gpc_city") + ", " + rs.getString("gps_state"));
                 bean.setHotelText(rs.getString("drc_gpi_desc"));

@@ -17,13 +17,47 @@ public class CheckoutController {
     private CheckoutHandler checkoutHandler;
 
 	@GetMapping("/parking/checkout/{hotelId}")
-    public String checkoutPark(Model model, @PathVariable("hotelId") int hotelId, @RequestParam(name="dropOffDate") String dropOffDate,
-                               @RequestParam(name="dropOffTime") String dropOffTime, @RequestParam(name="pickUpDate") String pickUpDate,
-                               @RequestParam(name="pickUpTime") String pickUpTime, @RequestParam(name="couponCode", required = false) String couponCode,
-                               @RequestParam(name="orderId", required = false) String orderId, Authentication auth) {
-		String username = SecurityUtil.getAuthenticatedUsername(auth);
-        model.addAttribute("checkout", checkoutHandler.getParkingCheckoutInfo(hotelId, dropOffDate, dropOffTime, pickUpDate, pickUpTime, username, couponCode, orderId));
+    public String checkoutPark(Model model,
+                               @PathVariable("hotelId") int hotelId,
+                               @RequestParam(name="dropOffDate", required = false) String dropOffDate,
+                               @RequestParam(name="dropOffTime", required = false) String dropOffTime,
+                               @RequestParam(name="pickUpDate", required = false) String pickUpDate,
+                               @RequestParam(name="pickUpTime", required = false) String pickUpTime,
+                               @RequestParam(name="couponCode", required = false) String couponCode,
+                               @RequestParam(name="searchType", required = false) String searchType,
+                               @RequestParam(name="roomId", required = false) String roomId,
+                               @RequestParam(name="hotelArrivalDateMDY", required = false) String hotelArrivalDateMDY,
+                               @RequestParam(name="hotelDepartureDateMDY", required = false) String hotelDepartureDateMDY,
+                               @RequestParam(name="endHotelArrivalDateMDY", required = false) String orderId,
+                               @RequestParam(name="endHotelDepartureDateMDY", required = false) String endHotelDepartureDateMDY,
+                               @RequestParam(name="rooms", required = false) String rooms,
+                               @RequestParam(name="totalAdults", required = false) String totalAdults,
+                               @RequestParam(name="children", required = false) String children,
+                               @RequestParam(name="carDropOffDateMDY", required = false) String carDropOffDateMDY,
+                               @RequestParam(name="carDropOffTime", required = false) String carDropOffTime,
+                               @RequestParam(name="carPickUpDateMDY", required = false) String carPickUpDateMDY,
+                               @RequestParam(name="carPickUpTime", required = false) String carPickUpTime,
+                               Authentication auth) {
 
+		String username = SecurityUtil.getAuthenticatedUsername(auth);
+
+		if (searchType != null) {
+		    if (searchType.equals("R")) {
+                model.addAttribute("checkout", checkoutHandler.getRoomAndParkingCheckoutInfo(hotelId, carDropOffDateMDY, carDropOffTime, carPickUpDateMDY, carPickUpTime, username, couponCode, orderId));
+                return "checkout/hotel-park-checkout";
+            } else if (searchType.equals("S")) {
+                model.addAttribute("checkout", checkoutHandler.getRoomAndParkingCheckoutInfo(hotelId, carDropOffDateMDY, carDropOffTime, carPickUpDateMDY, carPickUpTime, username, couponCode, orderId));
+                return "checkout/hotel-park-checkout";
+            } else if (searchType.equals("E")) {
+                model.addAttribute("checkout", checkoutHandler.getRoomAndParkingCheckoutInfo(hotelId, carDropOffDateMDY, carDropOffTime, carPickUpDateMDY, carPickUpTime, username, couponCode, orderId));
+                return "checkout/hotel-park-checkout";
+            } else if (searchType.equals("B")) {
+                model.addAttribute("checkout", checkoutHandler.getRoomAndParkingCheckoutInfo(hotelId, carDropOffDateMDY, carDropOffTime, carPickUpDateMDY, carPickUpTime, username, couponCode, orderId));
+                return "checkout/hotel-park-checkout";
+            }
+        }
+
+        model.addAttribute("checkout", checkoutHandler.getParkingCheckoutInfo(hotelId, dropOffDate, dropOffTime, pickUpDate, pickUpTime, username, couponCode, orderId));
 	    return "checkout/parking-checkout";
     }
 
