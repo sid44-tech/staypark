@@ -5,6 +5,7 @@ import staypark.parking.beans.SpecialParkingDay;
 import staypark.parking.beans.booking.AppliedCoupon;
 import staypark.parking.beans.booking.Coupon;
 import staypark.parking.beans.booking.ParkingCheckout;
+import staypark.parking.beans.booking.RoomParkInput;
 import staypark.parking.beans.payment.Payment;
 import staypark.parking.beans.security.UserProfile;
 import staypark.parking.util.AirportUtil;
@@ -68,46 +69,51 @@ public class CheckoutHandler {
             "select * from dbstaypark.gp_voucher " +
             "where status='Active' and now() between start_range and end_range ";
 
-    public ParkingCheckout getRoomAndParkingCheckoutInfo(final int hotelId, final String dropOffDate, final String dropOffTime,
-                                                  final String pickUpDate, final String pickUpTime, final String username,
-                                                  final String couponCode, final String orderId) {
-
+    public ParkingCheckout getRoomAndParkingCheckoutInfo(final RoomParkInput input) {
+    	ParkingCheckout pc = null;
+    	if (!input.getSearchType().equals("R")) {
+    		input.setDropOffDate(input.getCarDropOffDateMDY());
+    		input.setDropOffTime(input.getCarDropOffTime());
+    		input.setPickUpDate(input.getCarPickUpDateMDY());
+    		input.setPickUpTime(input.getCarPickUpTime());
+    		pc = getParkingCheckoutInfo(input);
+    	}
+    	
+    	return pc;
     }
 
-    public ParkingCheckout getParkingCheckoutInfo(final int hotelId, final String dropOffDate, final String dropOffTime,
-                                              final String pickUpDate, final String pickUpTime, final String username,
-                                                  final String couponCode, final String orderId) {
+    public ParkingCheckout getParkingCheckoutInfo(final RoomParkInput input) {
         ParkingCheckout pc = new ParkingCheckout();
-        if (orderId != null && !orderId.trim().isEmpty()) {
-            pc.setExtensionOrderId(orderId);
+        if (input.getOrderId() != null && !input.getOrderId().trim().isEmpty()) {
+            pc.setExtensionOrderId(input.getOrderId());
         }
         
         UserProfile up = null;
-        if (username != null) {
-        	up = accountHandler.getUserProfile(username);
+        if (input.getUsername() != null) {
+        	up = accountHandler.getUserProfile(input.getUsername());
         }
 
         List<Coupon> coupons = null;
         int validCouponIndex = -1;
-        if (couponCode != null && !couponCode.isEmpty()) {
+        if (input.getCouponCode() != null && !input.getCouponCode().isEmpty()) {
             coupons = getCouponInfo();
             for (int i = 0; i < coupons.size(); i++) {
-                if (couponCode.equals(coupons.get(i).getCode())) {
+                if (input.getCouponCode().equals(coupons.get(i).getCode())) {
                     validCouponIndex = i;
                 }
             }
         }
 
-        Date checkinDate = DateUtil.stringMDYToDate(dropOffDate);
-        Date checkoutDate = DateUtil.stringMDYToDate(pickUpDate);
-        int daysDiff = AirportUtil.getNumberOfParkingDays(checkinDate, checkoutDate, dropOffTime, pickUpTime);
+        Date checkinDate = DateUtil.stringMDYToDate(input.getDropOffDate());
+        Date checkoutDate = DateUtil.stringMDYToDate(input.getPickUpDate());
+        int daysDiff = AirportUtil.getNumberOfParkingDays(checkinDate, checkoutDate, input.getDropOffTime(), input.getPickUpTime());
         pc.setTotalParkingTime(daysDiff + " day(s)");
         pc.setParkingDays(daysDiff);
-        pc.setHotelId(String.valueOf(hotelId));
-        pc.setDropOffDate(dropOffDate);
-        pc.setDropOffTime(dropOffTime);
-        pc.setPickUpDate(pickUpDate);
-        pc.setPickUpTime(pickUpTime);
+        pc.setHotelId(String.valueOf(input.getHotelId()));
+        pc.setDropOffDate(input.getDropOffDate());
+        pc.setDropOffTime(input.getDropOffTime());
+        pc.setPickUpDate(input.getPickUpDate());
+        pc.setPickUpTime(input.getPickUpTime());
         
         if (up != null) {
         	pc.setFirstName(up.getFirstName());
@@ -127,7 +133,7 @@ public class CheckoutHandler {
         try {
             conn = DBUtil.getConnection();
             ps = conn.prepareStatement(GET_CHECKOUT_INFO);
-            ps.setInt(1, hotelId);
+            ps.setInt(1, input.getHotelId());
             rs = ps.executeQuery();
             if (rs.next()) {
                 pc.setDepartAirport(rs.getString("gdl_location"));
@@ -136,8 +142,8 @@ public class CheckoutHandler {
                 pc.setInnAddress(rs.getString("gpi_add"));
                 pc.setInnPhone(rs.getString("gpi_phone"));
                 pc.setEmailFooter(rs.getString("email_footer"));
-                pc.setCheckinTime(DateUtil.formatDate(checkinDate) + " " + dropOffTime);
-                pc.setCheckoutTime(DateUtil.formatDate(checkoutDate) + " " + pickUpTime);
+                pc.setCheckinTime(DateUtil.formatDate(checkinDate) + " " + input.getDropOffTime());
+                pc.setCheckoutTime(DateUtil.formatDate(checkoutDate) + " " + input.getPickUpTime());
                 pc.setTimezone(rs.getString("gps_t_zone"));
                 pc.setStateName(rs.getString("gps_state"));
                 pc.setCityName(rs.getString("gpc_city"));
@@ -149,7 +155,7 @@ public class CheckoutHandler {
                 pc.setStandardDailyFee(rs.getBigDecimal("gpi_feepday"));
                 
                 //Calculate Base Total Cost.  This only includes number of days * cost per day
-                BigDecimal baseTotalCost = AirportUtil.calculateParkingCosts(hotelId, rs.getBigDecimal("gpi_feepday"), checkinDate, checkoutDate, daysDiff, conn);
+                BigDecimal baseTotalCost = AirportUtil.calculateParkingCosts(input.getHotelId(), rs.getBigDecimal("gpi_feepday"), checkinDate, checkoutDate, daysDiff, conn);
                 baseTotalCost = baseTotalCost.setScale(2, RoundingMode.DOWN);
                 pc.setBaseRate(String.valueOf(baseTotalCost));
                 
@@ -178,8 +184,8 @@ public class CheckoutHandler {
                     grandTotal = newGrandTotal;
                     pc.setGrandTotal(newGrandTotal.toString());
                     pc.setCouponValid(ap.isCouponValid());
-                    pc.setCouponCode(couponCode);
-                } else if (couponCode != null && !couponCode.isEmpty()) {
+                    pc.setCouponCode(input.getCouponCode());
+                } else if (input.getCouponCode() != null && !input.getCouponCode().isEmpty()) {
                     pc.setCouponMessage("Sorry, the coupon you entered is not valid at this facility.");
                     pc.setCouponValid(false);
                 }
@@ -219,9 +225,17 @@ public class CheckoutHandler {
     	if (!payment.isSuccess()) {
     		return;
     	}
+    	
+    	RoomParkInput input = new RoomParkInput();
+    	input.setHotelId(Integer.valueOf(checkout.getHotelId()));
+    	input.setDropOffDate(checkout.getDropOffDate());
+    	input.setDropOffTime(checkout.getDropOffTime());
+    	input.setPickUpDate(checkout.getPickUpDate());
+    	input.setPickUpTime(checkout.getPickUpTime());
+    	input.setCouponCode(checkout.getCouponCode());
+    	input.setOrderId(checkout.getExtensionOrderId());
 
-        ParkingCheckout safeCheckout = getParkingCheckoutInfo(Integer.valueOf(checkout.getHotelId()), checkout.getDropOffDate(),
-                checkout.getDropOffTime(), checkout.getPickUpDate(), checkout.getPickUpTime(), null, checkout.getCouponCode(), checkout.getExtensionOrderId());
+        ParkingCheckout safeCheckout = getParkingCheckoutInfo(input);
 
         int min = 100000000;
         int max = 999999999;

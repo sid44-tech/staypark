@@ -1,6 +1,7 @@
 package staypark.parking.controller;
 
 import staypark.parking.beans.booking.ParkingCheckout;
+import staypark.parking.beans.booking.RoomParkInput;
 import staypark.parking.handler.CheckoutHandler;
 import staypark.parking.util.SecurityUtil;
 
@@ -40,24 +41,46 @@ public class CheckoutController {
                                Authentication auth) {
 
 		String username = SecurityUtil.getAuthenticatedUsername(auth);
-
+		
+		RoomParkInput reqParms = new RoomParkInput();
+		reqParms.setHotelId(hotelId);
+		reqParms.setDropOffDate(dropOffDate);
+		reqParms.setDropOffTime(dropOffTime);
+		reqParms.setPickUpDate(pickUpDate);
+		reqParms.setPickUpTime(pickUpTime);
+		reqParms.setCouponCode(couponCode);
+		reqParms.setSearchType(searchType);
+		reqParms.setRoomId(roomId);
+		reqParms.setHotelArrivalDateMDY(hotelArrivalDateMDY);
+		reqParms.setHotelDepartureDateMDY(hotelDepartureDateMDY);
+		reqParms.setOrderId(orderId);
+		reqParms.setEndHotelDepartureDateMDY(endHotelDepartureDateMDY);
+		reqParms.setRooms(rooms);
+		reqParms.setTotalAdults(totalAdults);
+		reqParms.setChildren(children);
+		reqParms.setCarDropOffDateMDY(carDropOffDateMDY);
+		reqParms.setCarDropOffTime(carDropOffTime);
+		reqParms.setCarPickUpDateMDY(carPickUpDateMDY);
+		reqParms.setCarPickUpTime(carPickUpTime);
+		reqParms.setUsername(username);
+		
 		if (searchType != null) {
 		    if (searchType.equals("R")) {
-                model.addAttribute("checkout", checkoutHandler.getRoomAndParkingCheckoutInfo(hotelId, carDropOffDateMDY, carDropOffTime, carPickUpDateMDY, carPickUpTime, username, couponCode, orderId));
+                model.addAttribute("checkout", checkoutHandler.getRoomAndParkingCheckoutInfo(reqParms));
                 return "checkout/hotel-park-checkout";
             } else if (searchType.equals("S")) {
-                model.addAttribute("checkout", checkoutHandler.getRoomAndParkingCheckoutInfo(hotelId, carDropOffDateMDY, carDropOffTime, carPickUpDateMDY, carPickUpTime, username, couponCode, orderId));
+                model.addAttribute("checkout", checkoutHandler.getRoomAndParkingCheckoutInfo(reqParms));
                 return "checkout/hotel-park-checkout";
             } else if (searchType.equals("E")) {
-                model.addAttribute("checkout", checkoutHandler.getRoomAndParkingCheckoutInfo(hotelId, carDropOffDateMDY, carDropOffTime, carPickUpDateMDY, carPickUpTime, username, couponCode, orderId));
+                model.addAttribute("checkout", checkoutHandler.getRoomAndParkingCheckoutInfo(reqParms));
                 return "checkout/hotel-park-checkout";
             } else if (searchType.equals("B")) {
-                model.addAttribute("checkout", checkoutHandler.getRoomAndParkingCheckoutInfo(hotelId, carDropOffDateMDY, carDropOffTime, carPickUpDateMDY, carPickUpTime, username, couponCode, orderId));
+                model.addAttribute("checkout", checkoutHandler.getRoomAndParkingCheckoutInfo(reqParms));
                 return "checkout/hotel-park-checkout";
             }
         }
 
-        model.addAttribute("checkout", checkoutHandler.getParkingCheckoutInfo(hotelId, dropOffDate, dropOffTime, pickUpDate, pickUpTime, username, couponCode, orderId));
+        model.addAttribute("checkout", checkoutHandler.getParkingCheckoutInfo(reqParms));
 	    return "checkout/parking-checkout";
     }
 

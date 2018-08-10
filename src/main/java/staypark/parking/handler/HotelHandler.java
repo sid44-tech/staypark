@@ -1,6 +1,7 @@
 package staypark.parking.handler;
 
 import staypark.parking.beans.*;
+import staypark.parking.beans.booking.RoomParkInput;
 import staypark.parking.util.AirportUtil;
 import staypark.parking.util.DBUtil;
 import staypark.parking.util.DateUtil;
@@ -47,6 +48,14 @@ public class HotelHandler {
             "from dbstaypark.gp_room as room " +
             "left join dbstaypark.gp_room_image as image on image.rm_id = room.rm_id " +
             "where room.rm_htl_id = ? and room.rm_status = 'Active'  " +
+            "order by room.rm_cost, room.rm_id ";
+    
+    //parm is drc_htl_id from above query'
+    private static String GET_ROOMS_AVAILABLE_BY_ROOM =
+            "select * " +
+            "from dbstaypark.gp_room as room " +
+            "left join dbstaypark.gp_room_image as image on image.rm_id = room.rm_id " +
+            "where room.rm_htl_id = ? and room.rm_status = 'Active' and room.rm_id = ? " +
             "order by room.rm_cost, room.rm_id ";
 
     private static String GET_ROOM_COUNT_TOTAL_USED = "select count(bk_dtls_id) as tot " +
@@ -187,6 +196,78 @@ public class HotelHandler {
         }
 
         return links;
+    }
+    
+    private BigDecimal getRoomAndParkBaseTotal(final RoomParkInput input) {
+        Room room = null;
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(GET_ROOMS_AVAILABLE_BY_ROOM);
+            ps.setInt(1, input.getHotelId());
+            ps.setInt(2, Integer.valueOf(input.getRoomId()));
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                room = new Room();
+                room.setRoomId(rs.getInt("rm_id"));
+                room.setRoomDescription(rs.getString("rm_type"));
+                room.setOccupancy(rs.getInt("rm_person"));
+                room.setMaxOccupancy(rs.getInt("rm_max_guest"));
+                room.setBaseCost(rs.getBigDecimal("rm_cost"));
+                room.setExtraPersonCost(rs.getBigDecimal("rm_extra_cost"));
+                room.setExtraChildCost(rs.getBigDecimal("rm_child_extra_cost"));
+                ImageLink il = new ImageLink();
+                il.setSmallImageLink("/images/room-images/" + rs.getString("rm_timage"));
+                il.setLargeImageLink("/images/room-images/" + rs.getString("rm_limage"));
+                room.setImage(il);
+
+                int rooms = Integer.valueOf(input.getRooms());
+                int adults = Integer.valueOf(input.getTotalAdults());
+                int children = Integer.valueOf(input.getChildren());
+                if ((room.getMaxOccupancy()*rooms) < (adults + children)) {
+                    room.setAvailable(false);
+                }
+            }
+        } catch (Exception e) {
+            DBUtil.closeResources(conn, ps, rs);
+            log.error(e.getMessage(), e);
+        }
+        
+        if (room != null) {
+            Date carStartDate = getCarStartDate(input.getSearchType(), input.getDropOffDate(),
+                    search.getPrimaryCheckInDate(), search.getSecondaryCheckInDate());
+            Date carEndDate = getCarEndDate(search.getHotelTimeOptions(), search.getPrimaryCheckOutDate(),
+                    search.getPickUpDate());
+
+            double hotelDays = DateUtil.getDaysDifference(search.getPrimaryCheckInDate(), search.getPrimaryCheckOutDate());
+            if (search.getHotelTimeOptions().equals("B")) {
+                hotelDays += DateUtil.getDaysDifference(search.getSecondaryCheckInDate(), search.getSecondaryCheckOutDate());
+            }
+
+            BigDecimal parkingCost = new BigDecimal(0);
+            if (!"R".equals(search.getHotelOptions())) {
+               parkingCost = getParkingCostForRoomAndPark(carStartDate, carEndDate, hotel.getCarBaseRate(),
+                        hotel.getCarUpToSevenRate(), hotel.getCarEightToFourteenRate(), hotel.getCarOverFifteenRate(),
+                        search.getHotelOptions());
+            }
+
+            BigDecimal roomCost = getRoomCost(search.getAdults(), search.getChildren(), search.getRooms(), hotelDays,
+                    room.getBaseCost(), room.getOccupancy(),
+                    room.getExtraPersonCost(), room.getExtraChildCost());
+
+            BigDecimal totalCost = roomCost.add(parkingCost);
+            if (totalCost != null) {
+                totalCost = totalCost.setScale(2, RoundingMode.CEILING);
+            }
+
+            room.setTotalCost(totalCost);
+        }
+
+        return null;
     }
 
     private List<Room> getRoomDetails(final HotelInformation hotel, final RoomParkSearch search) {
