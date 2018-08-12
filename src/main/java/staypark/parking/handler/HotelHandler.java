@@ -2,6 +2,7 @@ package staypark.parking.handler;
 
 import staypark.parking.beans.*;
 import staypark.parking.beans.booking.RoomParkInput;
+import staypark.parking.beans.hotel.HotelParkingRates;
 import staypark.parking.util.AirportUtil;
 import staypark.parking.util.DBUtil;
 import staypark.parking.util.DateUtil;
@@ -65,6 +66,11 @@ public class HotelHandler {
             "from gp_special_date_for_room " +
             "WHERE sp_rm_date = ? and sp_rm_room_id = ? ";
 
+    private static String GET_HOTEL_PARKING_RATES =
+            "select drc_base_rate, drc_1_7_cost, drc_8_14_cost, drc_upto_15_cost " +
+            "from dbstaypark.gp_htl_day_range_cost " +
+            "where drc_htl_id = ? ";
+
     public RoomParkSearchResults getHotelslForSearch(final RoomParkSearch search) {
     	String airportCode = AirportUtil.getAirportCodeFromSearchCityString(search.getCity());
         RoomParkSearchResults results = new RoomParkSearchResults();
@@ -126,9 +132,9 @@ public class HotelHandler {
         }
 
         Date carStartDate = getCarStartDate(search.getHotelTimeOptions(), search.getDropOffDate(),
-                search.getPrimaryCheckInDate(), search.getSecondaryCheckInDate());
-        Date carEndDate = getCarEndDate(search.getHotelTimeOptions(), search.getPrimaryCheckOutDate(),
-                search.getPickUpDate());
+                search.getSecondaryCheckInDate(), search.getPrimaryCheckOutDate());
+        Date carEndDate = getCarEndDate(search.getHotelTimeOptions(), search.getPrimaryCheckInDate(), search.getPrimaryCheckOutDate(),
+                search.getPickUpDate(), search.getSecondaryCheckInDate());
 
         searchOptions.setTotalParkingTime(DateUtil.getDaysDifference(carStartDate, carEndDate));
 
@@ -198,7 +204,8 @@ public class HotelHandler {
         return links;
     }
     
-    private BigDecimal getRoomAndParkBaseTotal(final RoomParkInput input) {
+    public HotelParkingRates getRoomAndParkBaseTotal(final RoomParkInput input) {
+        HotelParkingRates rates = new HotelParkingRates();
         Room room = null;
 
         Connection conn = null;
@@ -236,37 +243,124 @@ public class HotelHandler {
             DBUtil.closeResources(conn, ps, rs);
             log.error(e.getMessage(), e);
         }
-        
+
         if (room != null) {
-            Date carStartDate = getCarStartDate(input.getSearchType(), input.getDropOffDate(),
-                    search.getPrimaryCheckInDate(), search.getSecondaryCheckInDate());
-            Date carEndDate = getCarEndDate(search.getHotelTimeOptions(), search.getPrimaryCheckOutDate(),
-                    search.getPickUpDate());
+            Date carStartDate = getCarStartDate(input.getSearchType(), DateUtil.stringMDYToDate(input.getDropOffDate()),
+                    DateUtil.stringMDYToDate(input.getEndHotelArrivalDateMDY()), DateUtil.stringMDYToDate(input.getHotelDepartureDateMDY()));
+            Date carEndDate = getCarEndDate(input.getSearchType(), DateUtil.stringMDYToDate(input.getHotelArrivalDateMDY()), DateUtil.stringMDYToDate(input.getHotelDepartureDateMDY()),
+                    DateUtil.stringMDYToDate(input.getPickUpDate()), DateUtil.stringMDYToDate(input.getEndHotelArrivalDateMDY()));
 
-            double hotelDays = DateUtil.getDaysDifference(search.getPrimaryCheckInDate(), search.getPrimaryCheckOutDate());
-            if (search.getHotelTimeOptions().equals("B")) {
-                hotelDays += DateUtil.getDaysDifference(search.getSecondaryCheckInDate(), search.getSecondaryCheckOutDate());
+            double hotelDays = DateUtil.getDaysDifference(DateUtil.stringMDYToDate(input.getHotelArrivalDateMDY()), DateUtil.stringMDYToDate(input.getHotelDepartureDateMDY()));
+            if (input.getSearchType().equals("B")) {
+                hotelDays += DateUtil.getDaysDifference(DateUtil.stringMDYToDate(input.getEndHotelArrivalDateMDY()), DateUtil.stringMDYToDate(input.getEndHotelDepartureDateMDY()));
             }
 
+            HotelParkingRates carRates = getHotelParkingRates(input.getHotelId());
             BigDecimal parkingCost = new BigDecimal(0);
-            if (!"R".equals(search.getHotelOptions())) {
-               parkingCost = getParkingCostForRoomAndPark(carStartDate, carEndDate, hotel.getCarBaseRate(),
-                        hotel.getCarUpToSevenRate(), hotel.getCarEightToFourteenRate(), hotel.getCarOverFifteenRate(),
-                        search.getHotelOptions());
+            if (!"R".equals(input.getSearchType())) {
+               parkingCost = getParkingCostForRoomAndPark(carStartDate, carEndDate, carRates.getBaseRate(),
+                        carRates.getOneToSevenDaysRate(), carRates.getEightToFourteenDaysRate(), carRates.getUpToFifteenDaysRate(),
+                        "RP");
+               parkingCost = parkingCost.setScale(2, RoundingMode.CEILING);
             }
 
-            BigDecimal roomCost = getRoomCost(search.getAdults(), search.getChildren(), search.getRooms(), hotelDays,
+            rates.setParkingBaseRate(parkingCost);
+
+            BigDecimal roomCost = getRoomCost(Double.valueOf(input.getTotalAdults()), Double.valueOf(input.getChildren()),
+                    Double.valueOf(input.getRooms()), hotelDays,
                     room.getBaseCost(), room.getOccupancy(),
                     room.getExtraPersonCost(), room.getExtraChildCost());
+            roomCost = roomCost.setScale(2, RoundingMode.CEILING);
+
+            rates.setHotelBaseRate(roomCost);
 
             BigDecimal totalCost = roomCost.add(parkingCost);
             if (totalCost != null) {
                 totalCost = totalCost.setScale(2, RoundingMode.CEILING);
             }
+            rates.setTotalBaseRate(totalCost);
 
             room.setTotalCost(totalCost);
         }
 
+        return rates;
+    }
+
+    public BigDecimal getServiceFeeForRoomAndPark(final String stayType, final int totalDays, final BigDecimal roomOnlyServiceFee, final BigDecimal roomParkServiceFee) {
+        if(!"R".equals(stayType)) {
+            if (1 <= totalDays && totalDays <= 9) {
+                return roomParkServiceFee;
+            } else if(totalDays >= 10) {
+                double count  = (double) totalDays / 10d;
+                count = (int)count + 1;
+                return (roomParkServiceFee.multiply(new BigDecimal(count)));
+            }
+        } else {
+            if(roomOnlyServiceFee != null) {
+                return roomOnlyServiceFee;
+            } else {
+                return new BigDecimal(0).setScale(2);
+            }
+        }
+
+        return new BigDecimal(0).setScale(2);
+    }
+
+    public BigDecimal getHotelServiceFee(final BigDecimal gbHotelTax, final String splitPaymentStatus, final int splitPayment,
+                                  final HotelParkingRates rates) {
+        if((gbHotelTax.doubleValue() > 0) && (splitPaymentStatus != null && splitPaymentStatus.equals("1"))) {
+            BigDecimal cost = rates.getTotalBaseRate();
+            cost = cost.multiply(new BigDecimal(splitPayment));
+            cost = cost.divide(new BigDecimal(100));
+            cost = cost.multiply(gbHotelTax);
+            cost = cost.divide(new BigDecimal(100));
+            cost = cost.setScale(2, RoundingMode.DOWN);
+            return cost;
+        }
+
+        return new BigDecimal(0).setScale(2);
+    }
+
+    public BigDecimal getHotelSalesTax(final String salesTax, final String baseSalesTax, final HotelParkingRates rates) {
+        BigDecimal salesTaxBD = AirportUtil.convertStringAmount(salesTax);
+        BigDecimal baseSalesTaxBD = new BigDecimal(75);
+        if(baseSalesTax != null && !baseSalesTax.equals("")) {
+            baseSalesTaxBD = AirportUtil.convertStringAmount(baseSalesTax);
+        }
+
+        BigDecimal cost = rates.getTotalBaseRate();
+        cost = cost.multiply(baseSalesTaxBD);
+        cost = cost.divide(new BigDecimal(100));
+        cost = cost.multiply(salesTaxBD);
+        cost = cost.divide(new BigDecimal(100));
+        cost = cost.setScale(2, RoundingMode.DOWN);
+
+        return cost;
+    }
+
+    private HotelParkingRates getHotelParkingRates(final int hotelId) {
+        HotelParkingRates rates = new HotelParkingRates();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(GET_HOTEL_PARKING_RATES);
+            ps.setInt(1, hotelId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                rates.setBaseRate(AirportUtil.convertStringAmount(rs.getString("drc_base_rate")));
+                rates.setOneToSevenDaysRate(AirportUtil.convertStringAmount(rs.getString("drc_1_7_cost")));
+                rates.setEightToFourteenDaysRate(AirportUtil.convertStringAmount(rs.getString("drc_8_14_cost")));
+                rates.setUpToFifteenDaysRate(AirportUtil.convertStringAmount(rs.getString("drc_upto_15_cost")));
+                return rates;
+            }
+        } catch (Exception e) {
+            DBUtil.closeResources(conn, ps, rs);
+            log.error(e.getMessage(), e);
+            return null;
+        }
         return null;
     }
 
@@ -309,27 +403,35 @@ public class HotelHandler {
         
         for (Room room : rooms) {
             Date carStartDate = getCarStartDate(search.getHotelTimeOptions(), search.getDropOffDate(),
-                    search.getPrimaryCheckInDate(), search.getSecondaryCheckInDate());
-            Date carEndDate = getCarEndDate(search.getHotelTimeOptions(), search.getPrimaryCheckOutDate(),
-                    search.getPickUpDate());
+                    search.getSecondaryCheckInDate(), search.getPrimaryCheckOutDate());
+            Date carEndDate = getCarEndDate(search.getHotelTimeOptions(), search.getPrimaryCheckInDate(), search.getPrimaryCheckOutDate(),
+                    search.getPickUpDate(), search.getSecondaryCheckInDate());
 
             double hotelDays = DateUtil.getDaysDifference(search.getPrimaryCheckInDate(), search.getPrimaryCheckOutDate());
             if (search.getHotelTimeOptions().equals("B")) {
                 hotelDays += DateUtil.getDaysDifference(search.getSecondaryCheckInDate(), search.getSecondaryCheckOutDate());
             }
 
-            BigDecimal parkingCost = new BigDecimal(0);
-            if (!"R".equals(search.getHotelOptions())) {
-               parkingCost = getParkingCostForRoomAndPark(carStartDate, carEndDate, hotel.getCarBaseRate(),
-                        hotel.getCarUpToSevenRate(), hotel.getCarEightToFourteenRate(), hotel.getCarOverFifteenRate(),
-                        search.getHotelOptions());
+            BigDecimal parkingCost;
+            String stayType = "P";
+            if ("B".equals(search.getHotelOptions()) || "S".equals(search.getHotelOptions()) || "E".equals(search.getHotelOptions())
+                    || "RP".equals(search.getHotelOptions())) {
+                stayType = "RP";
+            } else if ("R".equals(search.getHotelOptions())) {
+                stayType = "R";
             }
 
+            parkingCost = getParkingCostForRoomAndPark(carStartDate, carEndDate, hotel.getCarBaseRate(),
+                        hotel.getCarUpToSevenRate(), hotel.getCarEightToFourteenRate(), hotel.getCarOverFifteenRate(),
+                        stayType);
             BigDecimal roomCost = getRoomCost(search.getAdults(), search.getChildren(), search.getRooms(), hotelDays,
                     room.getBaseCost(), room.getOccupancy(),
                     room.getExtraPersonCost(), room.getExtraChildCost());
 
-            BigDecimal totalCost = roomCost.add(parkingCost);
+            BigDecimal totalCost = roomCost;
+            if (!search.getHotelOptions().equals("R")) {
+                totalCost = totalCost.add(parkingCost);
+            }
             if (totalCost != null) {
                 totalCost = totalCost.setScale(2, RoundingMode.CEILING);
             }
@@ -381,22 +483,27 @@ public class HotelHandler {
         return new BigDecimal(totalCost);
     }
 
-    private Date getCarStartDate(final String stayType, final Date carDropOffDate, final Date hotelCheckInDate,
-                                 final Date secondaryHotelCheckInDate) {
+    private Date getCarStartDate(final String stayType, final Date carDropOffDate,
+                                 final Date secondaryHotelCheckInDate, final Date primaryHotelCheckOutDate) {
         if ("S".equals(stayType)) {
             return carDropOffDate;
         } else if ("E".equals(stayType)) {
-            return hotelCheckInDate;
+            return carDropOffDate;
+        } else if  ("B".equals(stayType)) {
+            return primaryHotelCheckOutDate;
         } else {
             return secondaryHotelCheckInDate;
         }
     }
 
-    private Date getCarEndDate(final String stayType, final Date hotelCheckOutDate, final Date pickUpDate) {
+    private Date getCarEndDate(final String stayType, final Date hotelCheckInDate, final Date hotelCheckOutDate,
+                               final Date pickUpDate, final Date endHotelCheckInDate) {
         if ("S".equals(stayType)) {
             return pickUpDate;
         } else if ("E".equals(stayType)) {
-            return pickUpDate;
+            return hotelCheckInDate;
+        } else if  ("B".equals(stayType)) {
+            return endHotelCheckInDate;
         } else {
             return DateUtil.addDaysToDate(hotelCheckOutDate, 1);
         }

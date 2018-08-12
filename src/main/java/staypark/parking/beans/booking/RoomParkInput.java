@@ -2,6 +2,8 @@ package staypark.parking.beans.booking;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class RoomParkInput {
 	 private int hotelId;
@@ -16,6 +18,7 @@ public class RoomParkInput {
      private String hotelDepartureDateMDY;
      private String orderId;
      private String endHotelDepartureDateMDY;
+     private String endHotelArrivalDateMDY;
      private String rooms;
      private String totalAdults;
      private String children;

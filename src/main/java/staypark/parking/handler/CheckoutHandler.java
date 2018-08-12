@@ -6,6 +6,7 @@ import staypark.parking.beans.booking.AppliedCoupon;
 import staypark.parking.beans.booking.Coupon;
 import staypark.parking.beans.booking.ParkingCheckout;
 import staypark.parking.beans.booking.RoomParkInput;
+import staypark.parking.beans.hotel.HotelParkingRates;
 import staypark.parking.beans.payment.Payment;
 import staypark.parking.beans.security.UserProfile;
 import staypark.parking.util.AirportUtil;
@@ -36,6 +37,8 @@ public class CheckoutHandler {
 	private PaymentHandler paymentHandler;
 	@Autowired
 	private AirportHandler airportHandler;
+	@Autowired
+    private HotelHandler hotelHandler;
 	
     private String GET_CHECKOUT_INFO =
             "select * " +
@@ -70,16 +73,26 @@ public class CheckoutHandler {
             "where status='Active' and now() between start_range and end_range ";
 
     public ParkingCheckout getRoomAndParkingCheckoutInfo(final RoomParkInput input) {
-    	ParkingCheckout pc = null;
     	if (!input.getSearchType().equals("R")) {
-    		input.setDropOffDate(input.getCarDropOffDateMDY());
-    		input.setDropOffTime(input.getCarDropOffTime());
-    		input.setPickUpDate(input.getCarPickUpDateMDY());
-    		input.setPickUpTime(input.getCarPickUpTime());
-    		pc = getParkingCheckoutInfo(input);
+    	    if (input.getSearchType().equals("E")) {
+                input.setDropOffDate(input.getCarDropOffDateMDY());
+                input.setDropOffTime(input.getCarDropOffTime());
+                input.setPickUpDate(input.getHotelArrivalDateMDY());
+                input.setPickUpTime(input.getCarDropOffTime());
+            } else if (input.getSearchType().equals("B")) {
+                input.setDropOffDate(input.getHotelDepartureDateMDY());
+                input.setDropOffTime(input.getCarDropOffTime());
+                input.setPickUpDate(input.getEndHotelArrivalDateMDY());
+                input.setPickUpTime(input.getCarDropOffTime());
+            } else {
+                input.setDropOffDate(input.getCarDropOffDateMDY());
+                input.setDropOffTime(input.getCarDropOffTime());
+                input.setPickUpDate(input.getCarPickUpDateMDY());
+                input.setPickUpTime(input.getCarPickUpTime());
+            }
     	}
-    	
-    	return pc;
+
+        return getParkingCheckoutInfo(input);
     }
 
     public ParkingCheckout getParkingCheckoutInfo(final RoomParkInput input) {
@@ -106,6 +119,9 @@ public class CheckoutHandler {
 
         Date checkinDate = DateUtil.stringMDYToDate(input.getDropOffDate());
         Date checkoutDate = DateUtil.stringMDYToDate(input.getPickUpDate());
+        if (input.getSearchType().equals("E")) {
+            checkoutDate = DateUtil.stringMDYToDate(input.getHotelArrivalDateMDY());
+        }
         int daysDiff = AirportUtil.getNumberOfParkingDays(checkinDate, checkoutDate, input.getDropOffTime(), input.getPickUpTime());
         pc.setTotalParkingTime(daysDiff + " day(s)");
         pc.setParkingDays(daysDiff);
@@ -129,6 +145,14 @@ public class CheckoutHandler {
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
+        String roomOnlyServiceFee = null;
+        String roomParkServiceFee = null;
+        BigDecimal gbHotelTax = new BigDecimal(0);
+        String splitPaymentStatus = null;
+        String hotelSalesTax = "";
+        String hotelBaseSalesTax = "";
+
+        int splitPayment = -1;
 
         try {
             conn = DBUtil.getConnection();
@@ -136,6 +160,13 @@ public class CheckoutHandler {
             ps.setInt(1, input.getHotelId());
             rs = ps.executeQuery();
             if (rs.next()) {
+                roomOnlyServiceFee = rs.getString("drc_htl_onlt_srv_tax");
+                roomParkServiceFee = rs.getString("drc_srv_tax");
+                gbHotelTax = rs.getBigDecimal("drc_gb_tax");
+                splitPaymentStatus = rs.getString("drc_split_payment_status");
+                splitPayment = rs.getInt("drc_split_payment");
+                hotelSalesTax = rs.getString("drc_sl_tax");
+                hotelBaseSalesTax = rs.getString("drc_bse_sl_tax");
                 pc.setDepartAirport(rs.getString("gdl_location"));
                 pc.setDepartLocation(AirportUtil.parseDropLocation(rs.getString("drc_gpi_inn_name")));
                 pc.setShuttleFrequency(rs.getString("gpi_shuttel"));
@@ -212,6 +243,32 @@ public class CheckoutHandler {
             log.error(e.getMessage(), e);
         } finally {
             DBUtil.closeResources(conn, ps, rs);
+        }
+
+        if (input.getSearchType() != null && !input.getSearchType().equals("")) {
+            HotelParkingRates rates = hotelHandler.getRoomAndParkBaseTotal(input);
+            if (input.getSearchType().equals("R")) {
+                pc.setBaseRate(rates.getHotelBaseRate().toString());
+            } else {
+                pc.setBaseRate(rates.getTotalBaseRate().toString());
+            }
+            BigDecimal baseServiceFee = hotelHandler.getServiceFeeForRoomAndPark(input.getSearchType(), daysDiff, AirportUtil.convertStringAmount(roomOnlyServiceFee), AirportUtil.convertStringAmount(roomParkServiceFee));
+            BigDecimal hotelServiceFee = hotelHandler.getHotelServiceFee(gbHotelTax, splitPaymentStatus, splitPayment, rates);
+            pc.setServiceFee(baseServiceFee.add(hotelServiceFee).toString());
+            BigDecimal salesTax = hotelHandler.getHotelSalesTax(hotelSalesTax, hotelBaseSalesTax, rates);
+            pc.setSalesTax(salesTax.toString());
+            BigDecimal gtotal = rates.getTotalBaseRate().add(baseServiceFee).add(hotelServiceFee).add(salesTax);
+            pc.setGrandTotal(gtotal.toString());
+
+            boolean isSplitPayment = isSplitPayment(splitPaymentStatus);
+            if (isSplitPayment) {
+                BigDecimal payNow = calculatePayNow(splitPayment, rates.getTotalBaseRate(), baseServiceFee.add(hotelServiceFee), new BigDecimal(0));
+                BigDecimal payAtLot = calculatePayAtLot(gtotal, payNow);
+
+                pc.setTotalDueNow(payNow.toString());
+                pc.setTotalDueAtLot(payAtLot.toString());
+                pc.setSplitPayment(true);
+            }
         }
 
         return pc;

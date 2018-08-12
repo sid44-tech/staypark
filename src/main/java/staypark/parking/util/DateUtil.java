@@ -43,6 +43,9 @@ public class DateUtil {
 	};
 	
 	public static Date stringMDYToDate(final String dateStr) {
+		if (dateStr == null) {
+			return null;
+		}
 		 try {
 			Date date = new SimpleDateFormat("MM-dd-yyyy").parse(dateStr);
 			return date;

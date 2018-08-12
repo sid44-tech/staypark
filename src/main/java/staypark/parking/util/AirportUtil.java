@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 import staypark.parking.beans.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.parameters.P;
 
 @Slf4j
 public class AirportUtil {
@@ -336,6 +337,10 @@ public class AirportUtil {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
+		if (startDate == null || endDate == null) {
+			return map;
+		}
+
 		try {
 			ps = conn.prepareStatement(GET_RESERVATION_COUNT_FOR_RANGE_HOTEL);
 			ps.setInt(1,  hotelId);
@@ -362,6 +367,9 @@ public class AirportUtil {
 	 */
 	public static Map<Date, SpecialParkingDate> checkSpecialParkingForDateRange(final int hotelId, final Date startDate, final Date endDate, final Connection conn) {
 		Map<Date, SpecialParkingDate> map = new HashMap<>();
+		if (startDate == null || endDate == null) {
+			return map;
+		}
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
@@ -416,6 +424,10 @@ public class AirportUtil {
 
 	public static int getNumberOfParkingDays(final Date startDate, final Date endDate,
 									   final String startTimeStr, final String endTimeStr) {
+		if (startDate == null || endDate == null) {
+			return 0;
+		}
+
 		long diff = endDate.getTime() - startDate.getTime();
 		long days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
 
@@ -431,5 +443,17 @@ public class AirportUtil {
 		}
 
 		return (int)days;
+	}
+
+	public static BigDecimal convertStringAmount(final String str) {
+		if (str != null && !str.trim().isEmpty()) {
+			try {
+				return new BigDecimal(str).setScale(2);
+			} catch (Exception e) {
+				return null;
+			}
+		}
+
+		return null;
 	}
 }

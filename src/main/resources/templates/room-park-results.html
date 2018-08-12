@@ -300,6 +300,8 @@
             } else if (searchType == "E") {
                 url = appendRequestParameter(url, "searchType", searchType);
                 url = appendRequestParameter(url, "roomId", roomId);
+                url = appendRequestParameter(url, "hotelArrivalDateMDY", hotelArrivalDateMDY);
+                url = appendRequestParameter(url, "hotelDepartureDateMDY", hotelDepartureDateMDY);
                 url = appendRequestParameter(url, "endHotelArrivalDateMDY", endHotelArrivalDateMDY);
                 url = appendRequestParameter(url, "endHotelDepartureDateMDY", endHotelDepartureDateMDY);
                 url = appendRequestParameter(url, "rooms", rooms);
@@ -324,8 +326,6 @@
                 url = appendRequestParameter(url, "carPickUpDateMDY", carPickUpDateMDY);
                 url = appendRequestParameter(url, "carPickUpTime", carPickUpTime);
             }
-
-            alert(url);
             location.href = url;
         }
 

@@ -11,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+
 @Controller
 public class CheckoutController {
 
@@ -31,6 +33,7 @@ public class CheckoutController {
                                @RequestParam(name="hotelDepartureDateMDY", required = false) String hotelDepartureDateMDY,
                                @RequestParam(name="endHotelArrivalDateMDY", required = false) String orderId,
                                @RequestParam(name="endHotelDepartureDateMDY", required = false) String endHotelDepartureDateMDY,
+                               @RequestParam(name="endHotelArrivalDateMDY", required = false) String endHotelArrivalDateMDY,
                                @RequestParam(name="rooms", required = false) String rooms,
                                @RequestParam(name="totalAdults", required = false) String totalAdults,
                                @RequestParam(name="children", required = false) String children,
@@ -55,6 +58,7 @@ public class CheckoutController {
 		reqParms.setHotelDepartureDateMDY(hotelDepartureDateMDY);
 		reqParms.setOrderId(orderId);
 		reqParms.setEndHotelDepartureDateMDY(endHotelDepartureDateMDY);
+		reqParms.setEndHotelArrivalDateMDY(endHotelArrivalDateMDY);
 		reqParms.setRooms(rooms);
 		reqParms.setTotalAdults(totalAdults);
 		reqParms.setChildren(children);
