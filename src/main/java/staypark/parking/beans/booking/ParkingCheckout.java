@@ -64,4 +64,10 @@ public class ParkingCheckout {
     private String confirmationType = "";
     private BigDecimal standardDailyFee;
     private String extensionOrderId = "";
+    private String checkoutType;
+    private String primaryHotelCheckInDate;
+    private String primaryHotelCheckOutDate;
+    private String secondaryHotelCheckInDate;
+    private String secondaryHotelCheckOutDate;
+    private String totalHotelNights;
 }

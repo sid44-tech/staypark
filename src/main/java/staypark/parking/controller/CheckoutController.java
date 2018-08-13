@@ -7,6 +7,7 @@ import staypark.parking.util.SecurityUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -67,25 +68,40 @@ public class CheckoutController {
 		reqParms.setCarPickUpDateMDY(carPickUpDateMDY);
 		reqParms.setCarPickUpTime(carPickUpTime);
 		reqParms.setUsername(username);
-		
+
+        ParkingCheckout checkout;
+        String template;
+
 		if (searchType != null) {
 		    if (searchType.equals("R")) {
-                model.addAttribute("checkout", checkoutHandler.getRoomAndParkingCheckoutInfo(reqParms));
-                return "checkout/hotel-park-checkout";
+                checkout = checkoutHandler.getRoomAndParkingCheckoutInfo(reqParms);
+                checkout.setCheckoutType("R");
+                template = "checkout/parking-checkout";
             } else if (searchType.equals("S")) {
-                model.addAttribute("checkout", checkoutHandler.getRoomAndParkingCheckoutInfo(reqParms));
-                return "checkout/hotel-park-checkout";
+                checkout = checkoutHandler.getRoomAndParkingCheckoutInfo(reqParms);
+                checkout.setCheckoutType("S");
+                template = "checkout/parking-checkout";
             } else if (searchType.equals("E")) {
-                model.addAttribute("checkout", checkoutHandler.getRoomAndParkingCheckoutInfo(reqParms));
-                return "checkout/hotel-park-checkout";
+                checkout = checkoutHandler.getRoomAndParkingCheckoutInfo(reqParms);
+                checkout.setCheckoutType("E");
+                template = "checkout/parking-checkout";
             } else if (searchType.equals("B")) {
-                model.addAttribute("checkout", checkoutHandler.getRoomAndParkingCheckoutInfo(reqParms));
-                return "checkout/hotel-park-checkout";
+                checkout = checkoutHandler.getRoomAndParkingCheckoutInfo(reqParms);
+                checkout.setCheckoutType("B");
+                template = "checkout/parking-checkout";
+            } else {
+                checkout = checkoutHandler.getParkingCheckoutInfo(reqParms);
+                checkout.setCheckoutType("P");
+                template = "checkout/parking-checkout";
             }
+        } else {
+            checkout = checkoutHandler.getParkingCheckoutInfo(reqParms);
+            checkout.setCheckoutType("P");
+            template = "checkout/parking-checkout";
         }
 
-        model.addAttribute("checkout", checkoutHandler.getParkingCheckoutInfo(reqParms));
-	    return "checkout/parking-checkout";
+        model.addAttribute("checkout", checkout);
+	    return template;
     }
 
     @PostMapping("/parking/checkout/{hotelId}")

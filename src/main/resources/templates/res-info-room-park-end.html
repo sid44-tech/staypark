@@ -1,0 +1,118 @@
+<div class="container" th:fragment='res-info-room-park-end'>
+
+    <div class="row pb-label-row">
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col pb-label-label-font">Departing Airport</div>
+            </div>
+            <div class="row">
+                <div id="departAirport" class="col pb-text-font" th:text="${checkout.departAirport}"></div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col pb-label-label-font">Location</div>
+            </div>
+            <div class="row">
+                <div id="departLocation" class="col pb-text-font" th:text="${checkout.departLocation}"></div>
+            </div>
+        </div>
+    </div>
+    <div class="row pb-label-row">
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col pb-label-label-font">Check In</div>
+            </div>
+            <div class="row">
+                <div id="checkinTime" class="col pb-text-font" th:text="${checkout.checkinTime} + ' ' + ${checkout.timezone}"></div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col pb-label-label-font">Check Out</div>
+            </div>
+            <div class="row">
+                <div id="checkoutTime" class="col pb-text-font" th:text="${checkout.checkoutTime} + ' ' + ${checkout.timezone}"></div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col pb-label-label-font">Total Parking Time</div>
+            </div>
+            <div class="row">
+                <div id="totalParkingTime" class="col pb-text-font" th:text="${checkout.totalParkingTime}"></div>
+            </div>
+        </div>
+    </div>
+    <div class="row pb-label-row">
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col pb-label-label-font" th:switch="${checkout.checkoutType}">
+                    <span th:case="'R'">Hotel Room Charges</span>
+                    <span th:case="'B'">Room + Parking Rate</span>
+                    <span th:case="'S'">Room + Parking Rate</span>
+                    <span th:case="'E'">Room + Parking Rate</span>
+                    <span th:case="*">Base Rate</span>
+                </div>
+            </div>
+            <div class="row">
+                <div id="baseRate" class="col pb-label-money-font" th:text="${checkout.baseRate} + ' USD'"></div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col pb-label-label-font">Service Fee</div>
+            </div>
+            <div class="row">
+                <div id="serviceFee" class="col pb-label-money-font" th:text="${checkout.serviceFee} + ' USD'"></div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col pb-label-label-font">Sales Tax</div>
+            </div>
+            <div class="row">
+                <div id="salesTax" class="col pb-label-money-font" th:text="${checkout.salesTax} + ' USD'"></div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col pb-label-label-font">Grand Total</div>
+            </div>
+            <div class="row">
+                <div id="grandTotal" class="col pb-label-money-font" th:text="${checkout.grandTotal} + ' USD'"></div>
+            </div>
+        </div>
+    </div>
+    <div th:if="${checkout.splitPayment == true}">
+        <div class="row pb-label-row">
+            <div class="col-md-3">
+                <div class="row">
+                    <div class="col pb-label-label-font">Total Due Now</div>
+                </div>
+                <div class="row">
+                    <div id="totalDueNow" class="col pb-label-money-font" th:text="${checkout.totalDueNow} + ' USD'"></div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="row">
+                    <div class="col pb-label-label-font">Total Due At Lot</div>
+                </div>
+                <div class="row">
+                    <div id="totalDueAtLot" class="col pb-label-money-font-red" th:text="${checkout.totalDueAtLot} + ' USD'"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row pb-label-row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col pb-label-label-font">Shuttle Frequency</div>
+            </div>
+            <div class="row">
+                <div id="shuttleFrequency" class="col pb-text-font" th:text="${checkout.shuttleFrequency}"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
