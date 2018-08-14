@@ -7,7 +7,7 @@
 </section>
 
 <section layout:fragment="main-content">
-	<form class="needs-validation" novalidate action="/parking/checkout" th:object="${checkout}" th:action="@{/parking/checkout/} + ${checkout.hotelId}" method="post">
+	<form class="needs-validation" novalidate th:object="${checkout}" th:action="@{/parking/checkout/} + ${checkout.hotelId}" method="post">
 		<div class="form-div-container">
 			<div class="form-div-container-header">Online Checkout</div>
 			<div class="form-div-container-body">
@@ -189,6 +189,10 @@
 				<input type="hidden" th:value="${checkout.pickUpDate}" id="pickUpDate" name="pickUpDate">
 				<input type="hidden" th:value="${checkout.pickUpTime}" id="pickUpTime" name="pickUpTime">
 				<input type="hidden" th:value="${checkout.extensionOrderId}" id="extensionOrderId" name="extensionOrderId">
+				<input type="hidden" th:value="${checkout.rooms}" id="rooms" name="rooms">
+				<input type="hidden" th:value="${checkout.totalAdults}" id="totalAdults" name="totalAdults">
+				<input type="hidden" th:value="${checkout.children}" id="children" name="children">
+				<input type="hidden" th:value="${checkout.roomId}" id="roomId" name="roomId">
 				<div class="form-group row">
 					<div class="col-sm-9">
 						<button type="submit" class="btn btn-primary">Book Reservation</button>

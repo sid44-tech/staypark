@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 @Data
 public class ParkingCheckout {
     private String hotelId;
+    private String roomId;
     private String departAirport;
     private String departLocation;
     private String checkinTime;
@@ -70,4 +71,8 @@ public class ParkingCheckout {
     private String secondaryHotelCheckInDate;
     private String secondaryHotelCheckOutDate;
     private String totalHotelNights;
+    private String rooms;
+    private String totalAdults;
+    private String children;
+    private String roomType;
 }

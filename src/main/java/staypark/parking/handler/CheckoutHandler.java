@@ -60,6 +60,19 @@ public class CheckoutHandler {
     		"values " + 
     		"(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
+    private String INSERT_ROOM_AND_PARK_RESERVATION =
+            "insert into dbstaypark.gp_hotel_parking_reservation " +
+            "(bk_order_id,bk_htl_id,bk_aff_id,bk_loc_state,bk_loc_city,bk_rsvn_date,bk_chkin_date,bk_chkout_date,bk_days, " +
+            "bk_room,bk_persn,bk_children,bk_rm_type,bk_rm_persn,bk_rm_cost,bk_base_rate,bk_total_cost,bk_drc_sl_tax, " +
+            "bk_drc_srv_tax,bk_inn_desc,bk_location,bk_airport_lcn,bk_state,bk_room_id,bk_car_drop_off_date,bk_car_chkin_date, " +
+            "bk_car_chkin_time,bk_car_days,bk_car_hours,bk_prk_cost,bk_en_days,bk_parking_type,bk_se_en_htl_chkin_date,bk_bk_se_en_htl_chkout_date, " +
+            "bk_discount,bk_first_name,bk_last_name,bk_make,model,bk_licence,bk_gr_hear,bk_address,bk_prsn_state,bk_city,bk_zip,bk_email, " +
+            "bk_c_email,bk_gr_phone,owner_name,card_type,card_number,cvv_cord,card_year,card_month,bk_payment_status,bk_payment_reason,bk_tracking_no, " +
+            "bk_transaction_key,bk_card_lastdegits,bk_reservation_status,bk_extn_order_id,bk_due_at_lot,bk_due_payment,bk_ac_fee,extn_bk_order_id, " +
+            "bk_tax_name1,bk_tax_total1,bk_tax_name2,bk_tax_total2,ex_gen, bk_drc_gb_tax, bk_cancel_date) " +
+            "values " +
+            "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
     private String UPDATE_RESERVATION =
             "update dbstaypark.gp_reservation set extn_order_id = ? where order_id = ? ";
 
@@ -133,6 +146,10 @@ public class CheckoutHandler {
         pc.setDropOffTime(input.getDropOffTime());
         pc.setPickUpDate(input.getPickUpDate());
         pc.setPickUpTime(input.getPickUpTime());
+        pc.setChildren(input.getChildren());
+        pc.setTotalAdults(input.getTotalAdults());
+        pc.setRooms(input.getRooms());
+        pc.setRoomId(input.getRoomId());
         
         if (up != null) {
         	pc.setFirstName(up.getFirstName());
@@ -187,6 +204,7 @@ public class CheckoutHandler {
                 pc.setFaxNumber(rs.getString("gal_fax_number"));
                 pc.setConfirmationType(rs.getString("gal_confirmation_type"));
                 pc.setStandardDailyFee(rs.getBigDecimal("gpi_feepday"));
+                pc.setRoomType(rs.getString(""));
                 
                 //Calculate Base Total Cost.  This only includes number of days * cost per day
                 BigDecimal baseTotalCost = AirportUtil.calculateParkingCosts(input.getHotelId(), rs.getBigDecimal("gpi_feepday"), checkinDate, checkoutDate, daysDiff, conn);
@@ -258,15 +276,7 @@ public class CheckoutHandler {
                 pc.setPrimaryHotelCheckOutDate(DateUtil.formatDate(hotelDepartDate));
                 int days = DateUtil.getDaysDifference(hotelArrivalDate, hotelDepartDate);
                 pc.setTotalHotelNights(String.valueOf(days) + " day(s)");
-            } else if (input.getSearchType().equals("S")) {
-                pc.setBaseRate(rates.getTotalBaseRate().toString());
-                Date hotelArrivalDate = DateUtil.stringMDYToDate(input.getHotelArrivalDateMDY());
-                Date hotelDepartDate = DateUtil.stringMDYToDate(input.getHotelDepartureDateMDY());
-                pc.setPrimaryHotelCheckInDate(DateUtil.formatDate(hotelArrivalDate));
-                pc.setPrimaryHotelCheckOutDate(DateUtil.formatDate(hotelDepartDate));
-                int days = DateUtil.getDaysDifference(hotelArrivalDate, hotelDepartDate);
-                pc.setTotalHotelNights(String.valueOf(days) + " day(s)");
-            } else if (input.getSearchType().equals("E")) {
+            } else if (input.getSearchType().equals("S") || input.getSearchType().equals("E")) {
                 pc.setBaseRate(rates.getTotalBaseRate().toString());
                 Date hotelArrivalDate = DateUtil.stringMDYToDate(input.getHotelArrivalDateMDY());
                 Date hotelDepartDate = DateUtil.stringMDYToDate(input.getHotelDepartureDateMDY());
@@ -547,6 +557,120 @@ public class CheckoutHandler {
          return false;
     }
 
+    private boolean insertHotelParkReservationRecord(final ParkingCheckout checkout, final ParkingCheckout safeCheckout, final String username, final Payment payment,
+                                            final String orderId) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        int updated = -1;
+        int affId = airportHandler.getAffiliateIdByParkingId(Integer.valueOf(checkout.getHotelId()));
+
+        UserProfile up = null;
+        int userId = 0;
+        if (username != null) {
+            up = accountHandler.getUserProfile(username);
+            userId = up.getUserId();
+        }
+
+//        1-bk_order_id, 2-bk_htl_id, 3-bk_aff_id, 4-bk_loc_state, 5-bk_loc_city, 6-bk_rsvn_date, 7-bk_chkin_date, 8-bk_chkout_date, 9-bk_days, 10-bk_room,
+//        11-bk_persn, 12-bk_children, 13-bk_rm_type, 14-bk_rm_persn, 15-bk_rm_cost, 16-bk_base_rate, 17-bk_total_cost, 18-bk_drc_sl_tax, 19-bk_drc_srv_tax,
+//        20-bk_inn_desc, 21-bk_location, 22-bk_airport_lcn, 23-bk_state, 24-bk_room_id, 25-bk_car_drop_off_date, 26-bk_car_chkin_date, 27-bk_car_chkin_time, 28-bk_car_days, 29-bk_car_hours,
+//        30-bk_prk_cost, 31-bk_en_days, 32-bk_parking_type, 33-bk_se_en_htl_chkin_date, 34-bk_bk_se_en_htl_chkout_date, 35-bk_discount, 36-bk_first_name, 37-bk_last_name, 38-bk_make,model, 39-bk_licence,
+//        40-bk_gr_hear, 41-bk_address, 42-bk_prsn_state, 43-bk_city, 44-bk_zip, 45-bk_email, 46-bk_c_email, 47-bk_gr_phone, 48-owner_name, 49-card_type,
+//        50-card_number, 51-cvv_cord, 52-card_year, 53-card_month, 54-bk_payment_status, 55-bk_payment_reason, 56-bk_tracking_no, 57-bk_transaction_key, 58-bk_card_lastdegits, 59-bk_reservation_status,
+//        60-bk_extn_order_id, 61-bk_due_at_lot, 62-bk_due_payment, 63-bk_ac_fee, 64-extn_bk_order_id, 65-bk_tax_name1, 66-bk_tax_total1, 67-bk_tax_name2, 68-bk_tax_total2, 69-ex_gen,
+//        70-bk_drc_gb_tax, 71-bk_cancel_date
+
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(INSERT_ROOM_AND_PARK_RESERVATION);
+            ps.setString(1, orderId);
+            ps.setInt(2, Integer.valueOf(checkout.getHotelId()));
+            ps.setInt(3,  affId);
+            ps.setString(4, safeCheckout.getStateName());
+            ps.setString(5, safeCheckout.getCityName());
+            ps.setDate(6, new java.sql.Date(new Date().getTime()));
+            ps.setDate(7, DateUtil.utilDateToSqlDate(DateUtil.stringMDYToDate(safeCheckout.getPrimaryHotelCheckInDate())));
+            ps.setDate(8, DateUtil.utilDateToSqlDate(DateUtil.stringMDYToDate(safeCheckout.getPrimaryHotelCheckOutDate())));
+            ps.setInt(9, new Integer(safeCheckout.getTotalHotelNights()));
+            ps.setInt(10, 1);
+            ps.setInt(11, Integer.valueOf(safeCheckout.getNumberPeopleTravelling()));
+            ps.setInt(12, Integer.valueOf(checkout.getChildren()));
+            ps.setString(13, checkout.getRoomType());
+            ps.setInt(14, Integer.valueOf(checkout.getTotalAdults()));
+            ps.setString(15, safeCheckout.getServiceFee());
+//            ps.setString(16, safeCheckout.getAcFee());
+//            ps.setString(17, safeCheckout.getSalesTax());
+//            ps.setString(18, safeCheckout.getGrandTotal());
+//            ps.setString(19, checkout.getNumberPeopleTravelling());
+//            ps.setString(20, safeCheckout.getStateName());
+//            ps.setString(21, safeCheckout.getCityName());
+//            ps.setString(22, checkout.getFirstName());
+//            ps.setString(23, checkout.getLastName());
+//            ps.setInt(24, checkout.getCarMake());
+//            ps.setDate(25, checkout.getCarModel());
+//            ps.setDate(26, checkout.getCarLicensePlate());
+//            ps.setString(27, checkout.getHearAboutUs());
+//            ps.setString(28, checkout.getAddress());
+//            ps.setString(29, checkout.getCity());
+//            ps.setString(30, checkout.getState());
+//            ps.setString(31, checkout.getZip());
+//            ps.setString(32, checkout.getEmail());
+//            ps.setString(33, checkout.getPhone());
+//            ps.setDate(34, "Paid");
+//
+//            ps.setString(35, payment.getTrackingNumber());
+//            ps.setString(36, payment.getTransactionKey());
+//            ps.setString(37, payment.getPaymentResponse());
+//            ps.setString(38, payment.getCardLastDigits());
+//            ps.setString(39, "Credit");
+//            ps.setString(40, checkout.getOwnerName());
+//            ps.setString(41, checkout.getCardType());
+//            ps.setString(42, "Active");
+//            ps.setString(43, checkout.getCouponCode());
+//            ps.setString(44, "0");
+//            ps.setString(45, payment.getTrackingNumber());
+//            ps.setString(46, payment.getTransactionKey());
+//            ps.setString(47, payment.getPaymentResponse());
+//            ps.setString(48, payment.getCardLastDigits());
+//            ps.setString(49, "Credit");
+//            ps.setString(50, checkout.getOwnerName());
+//            ps.setString(51, checkout.getCardType());
+//            ps.setString(52, "Active");
+//            ps.setString(53, checkout.getCouponCode());
+//            ps.setString(54, "0");
+//            ps.setString(55, payment.getTrackingNumber());
+//            ps.setString(56, payment.getTransactionKey());
+//            ps.setString(57, payment.getPaymentResponse());
+//            ps.setString(58, payment.getCardLastDigits());
+//            ps.setString(59, "Credit");
+//            ps.setString(60, checkout.getOwnerName());
+//            ps.setString(61, checkout.getCardType());
+//            ps.setString(62, "Active");
+//            ps.setString(63, checkout.getCouponCode());
+//            ps.setString(64, "0");
+//            ps.setString(65, payment.getTrackingNumber());
+//            ps.setString(66, payment.getTransactionKey());
+//            ps.setString(67, payment.getPaymentResponse());
+//            ps.setString(68, payment.getCardLastDigits());
+//            ps.setString(69, "Credit");
+//            ps.setInt(70, new java.sql.Date(new Date().getTime()));
+//            ps.setString(71, "A");
+//            ps.setDate(72, orderId);
+//
+//            updated = ps.executeUpdate();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            DBUtil.closeResources(conn, ps, rs);
+        }
+
+        if (updated > 0) {
+            return true;
+        }
+        return false;
+    }
+
     private boolean insertReservationDetailRecords(final ParkingCheckout checkout, final ParkingCheckout safeCheckout, final String orderId) {
         Date startDate = DateUtil.stringMDYToDate(safeCheckout.getDropOffDate());
         Date endDate = DateUtil.stringMDYToDate(safeCheckout.getPickUpDate());
@@ -726,5 +850,7 @@ public class CheckoutHandler {
 
         return list;
     }
+
+    private String getRoomType
 
 }

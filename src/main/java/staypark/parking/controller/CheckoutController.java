@@ -48,6 +48,7 @@ public class CheckoutController {
 		
 		RoomParkInput reqParms = new RoomParkInput();
 		reqParms.setHotelId(hotelId);
+
 		reqParms.setDropOffDate(dropOffDate);
 		reqParms.setDropOffTime(dropOffTime);
 		reqParms.setPickUpDate(pickUpDate);
