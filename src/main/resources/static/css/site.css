@@ -1480,6 +1480,13 @@ body {
 	font-weight: bold;
 }
 
+.pb-form-sub-title {
+	color: #428bca;
+	font-family: 'Roboto', sans-serif;
+	font-size: .85em;
+	font-weight: bold;
+}
+
 /* -------------------------- CHANGE BOOKING CSS -------------------------- */
 
 .change-margin-top {

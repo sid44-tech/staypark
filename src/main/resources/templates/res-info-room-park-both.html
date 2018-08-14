@@ -19,9 +19,61 @@
         </div>
     </div>
     <div class="row pb-label-row">
+        <div class="col-md-3 pb-form-sub-title">Beginning Of Trip (Hotel Room)</div>
+    </div>
+    <div class="row pb-label-row">
         <div class="col-md-3">
             <div class="row">
-                <div class="col pb-label-label-font">Check In</div>
+                <div class="col pb-label-label-font">Hotel Check In Date</div>
+            </div>
+            <div class="row">
+                <div id="primaryHotelCheckInDate" class="col pb-text-font" th:text="${checkout.primaryHotelCheckInDate} + ' ' + ${checkout.timezone}"></div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col pb-label-label-font">Hotel Check Out Date</div>
+            </div>
+            <div class="row">
+                <div id="primaryHotelCheckOutDate" class="col pb-text-font" th:text="${checkout.primaryHotelCheckOutDate} + ' ' + ${checkout.timezone}"></div>
+            </div>
+        </div>
+    </div>
+    <div class="row pb-label-row">
+        <div class="col-md-3 pb-form-sub-title">End Of Trip (Hotel Room)</div>
+    </div>
+    <div class="row pb-label-row">
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col pb-label-label-font">Hotel Check In Date</div>
+            </div>
+            <div class="row">
+                <div id="primaryHotelCheckInDate" class="col pb-text-font" th:text="${checkout.secondaryHotelCheckInDate} + ' ' + ${checkout.timezone}"></div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col pb-label-label-font">Hotel Check Out Date</div>
+            </div>
+            <div class="row">
+                <div id="primaryHotelCheckOutDate" class="col pb-text-font" th:text="${checkout.secondaryHotelCheckOutDate} + ' ' + ${checkout.timezone}"></div>
+            </div>
+        </div>
+    </div>
+    <div class="row pb-label-row">
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col pb-label-label-font">Total Hotel Nights</div>
+            </div>
+            <div class="row">
+                <div id="totalHotelNights" class="col pb-text-font" th:text="${checkout.totalHotelNights}"></div>
+            </div>
+        </div>
+    </div>
+    <div class="row pb-label-row">
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col pb-label-label-font">Car Drop Off Date</div>
             </div>
             <div class="row">
                 <div id="checkinTime" class="col pb-text-font" th:text="${checkout.checkinTime} + ' ' + ${checkout.timezone}"></div>
@@ -29,7 +81,7 @@
         </div>
         <div class="col-md-3">
             <div class="row">
-                <div class="col pb-label-label-font">Check Out</div>
+                <div class="col pb-label-label-font">Car Pick Up Date</div>
             </div>
             <div class="row">
                 <div id="checkoutTime" class="col pb-text-font" th:text="${checkout.checkoutTime} + ' ' + ${checkout.timezone}"></div>

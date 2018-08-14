@@ -250,7 +250,7 @@ public class CheckoutHandler {
 
         if (input.getSearchType() != null && !input.getSearchType().equals("")) {
             HotelParkingRates rates = hotelHandler.getRoomAndParkBaseTotal(input);
-            if (input.getSearchType().equals("R") || input.getSearchType().equals("S")) {
+            if (input.getSearchType().equals("R")) {
                 pc.setBaseRate(rates.getHotelBaseRate().toString());
                 Date hotelArrivalDate = DateUtil.stringMDYToDate(input.getHotelArrivalDateMDY());
                 Date hotelDepartDate = DateUtil.stringMDYToDate(input.getHotelDepartureDateMDY());
@@ -258,8 +258,37 @@ public class CheckoutHandler {
                 pc.setPrimaryHotelCheckOutDate(DateUtil.formatDate(hotelDepartDate));
                 int days = DateUtil.getDaysDifference(hotelArrivalDate, hotelDepartDate);
                 pc.setTotalHotelNights(String.valueOf(days) + " day(s)");
-            } else {
+            } else if (input.getSearchType().equals("S")) {
                 pc.setBaseRate(rates.getTotalBaseRate().toString());
+                Date hotelArrivalDate = DateUtil.stringMDYToDate(input.getHotelArrivalDateMDY());
+                Date hotelDepartDate = DateUtil.stringMDYToDate(input.getHotelDepartureDateMDY());
+                pc.setPrimaryHotelCheckInDate(DateUtil.formatDate(hotelArrivalDate));
+                pc.setPrimaryHotelCheckOutDate(DateUtil.formatDate(hotelDepartDate));
+                int days = DateUtil.getDaysDifference(hotelArrivalDate, hotelDepartDate);
+                pc.setTotalHotelNights(String.valueOf(days) + " day(s)");
+            } else if (input.getSearchType().equals("E")) {
+                pc.setBaseRate(rates.getTotalBaseRate().toString());
+                Date hotelArrivalDate = DateUtil.stringMDYToDate(input.getHotelArrivalDateMDY());
+                Date hotelDepartDate = DateUtil.stringMDYToDate(input.getHotelDepartureDateMDY());
+                pc.setPrimaryHotelCheckInDate(DateUtil.formatDate(hotelArrivalDate));
+                pc.setPrimaryHotelCheckOutDate(DateUtil.formatDate(hotelDepartDate));
+                int days = DateUtil.getDaysDifference(hotelArrivalDate, hotelDepartDate);
+                pc.setTotalHotelNights(String.valueOf(days) + " day(s)");
+            } else if (input.getSearchType().equals("B")) {
+                pc.setBaseRate(rates.getTotalBaseRate().toString());
+                Date hotelArrivalDate = DateUtil.stringMDYToDate(input.getHotelArrivalDateMDY());
+                Date hotelDepartDate = DateUtil.stringMDYToDate(input.getHotelDepartureDateMDY());
+                pc.setPrimaryHotelCheckInDate(DateUtil.formatDate(hotelArrivalDate));
+                pc.setPrimaryHotelCheckOutDate(DateUtil.formatDate(hotelDepartDate));
+                Date endHotelArrivalDate = DateUtil.stringMDYToDate(input.getEndHotelArrivalDateMDY());
+                Date endHotelDepartDate = DateUtil.stringMDYToDate(input.getEndHotelDepartureDateMDY());
+                pc.setSecondaryHotelCheckInDate(DateUtil.formatDate(endHotelArrivalDate));
+                pc.setSecondaryHotelCheckOutDate(DateUtil.formatDate(endHotelDepartDate));
+                int days = DateUtil.getDaysDifference(hotelArrivalDate, hotelDepartDate);
+                days += DateUtil.getDaysDifference(endHotelArrivalDate, endHotelDepartDate);
+                pc.setTotalHotelNights(String.valueOf(days) + " day(s)");
+            } else {
+            	pc.setBaseRate(rates.getTotalBaseRate().toString());
             }
             BigDecimal baseServiceFee = hotelHandler.getServiceFeeForRoomAndPark(input.getSearchType(), daysDiff, AirportUtil.convertStringAmount(roomOnlyServiceFee), AirportUtil.convertStringAmount(roomParkServiceFee));
             BigDecimal hotelServiceFee = hotelHandler.getHotelServiceFee(gbHotelTax, splitPaymentStatus, splitPayment, rates);
