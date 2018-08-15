@@ -54,6 +54,19 @@ public class DateUtil {
 			return null;
 		}
 	}
+
+	public static Date longAssDateStringToDate(final String dateStr) {
+		if (dateStr == null) {
+			return null;
+		}
+		try {
+			Date date = new SimpleDateFormat("EEEE MMMM dd, yyyy").parse(dateStr);
+			return date;
+		} catch (ParseException e) {
+			log.error(e.getMessage(), e);
+			return null;
+		}
+	}
 	
 	public static java.sql.Date utilDateToSqlDate(final Date date) {
 		if (date == null) {

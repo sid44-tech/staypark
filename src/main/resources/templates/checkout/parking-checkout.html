@@ -194,6 +194,12 @@
 				<input type="hidden" th:value="${checkout.children}" id="children" name="children">
 				<input type="hidden" th:value="${checkout.roomId}" id="roomId" name="roomId">
 				<input type="hidden" th:value="${checkout.checkoutType}" id="checkoutType" name="checkoutType">
+				<input type="hidden" th:value="${checkout.totalHotelNights}" id="totalHotelNights" name="totalHotelNights">
+				<input type="hidden" th:value="${checkout.primaryHotelCheckInDate}" id="primaryHotelCheckInDate" name="primaryHotelCheckInDate">
+				<input type="hidden" th:value="${checkout.primaryHotelCheckOutDate}" id="primaryHotelCheckOutDate" name="primaryHotelCheckOutDate">
+				<input type="hidden" th:value="${checkout.secondaryHotelCheckInDate}" id="secondaryHotelCheckInDate" name="secondaryHotelCheckInDate">
+				<input type="hidden" th:value="${checkout.totalHotelNights}" id="secondaryHotelCheckOutDate" name="secondaryHotelCheckOutDate">
+
 				<div class="form-group row">
 					<div class="col-sm-9">
 						<button type="submit" class="btn btn-primary">Book Reservation</button>

@@ -340,6 +340,8 @@ public class CheckoutHandler {
     	input.setPickUpTime(checkout.getPickUpTime());
     	input.setCouponCode(checkout.getCouponCode());
     	input.setOrderId(checkout.getExtensionOrderId());
+        input.setSearchType(checkout.getCheckoutType());
+        input.setRoomId(checkout.getRoomId());
 
         ParkingCheckout safeCheckout = getParkingCheckoutInfo(input);
 
@@ -347,22 +349,29 @@ public class CheckoutHandler {
         int max = 999999999;
         Random r = new Random();
         String orderId = String.valueOf(r.nextInt((max - min) + 1) + min);
-    	
-    	boolean recordUpdated = insertReservationRecord(checkout, safeCheckout, username, payment, orderId);
-    	if (!recordUpdated) {
-    	    return;
+
+        if (checkout.getCheckoutType() != null && !checkout.getCheckoutType().isEmpty() && !checkout.getCheckoutType().equals("P")) {
+            boolean recordUpdated = insertHotelParkReservationRecord(checkout, safeCheckout, username, payment, orderId);
+            if (!recordUpdated) {
+                return;
+            }
+        } else {
+            boolean recordUpdated = insertReservationRecord(checkout, safeCheckout, username, payment, orderId);
+            if (!recordUpdated) {
+                return;
+            }
+
+            boolean detailRecordsUpdated = insertReservationDetailRecords(checkout, safeCheckout, orderId);
+            if (!detailRecordsUpdated) {
+                return;
+            }
+
+            if (checkout.getExtensionOrderId() != null && !checkout.getExtensionOrderId().trim().isEmpty()) {
+                updateExtensionReservationRecord(checkout.getExtensionOrderId(), orderId);
+            }
         }
 
-        boolean detailRecordsUpdated = insertReservationDetailRecords(checkout, safeCheckout, orderId);
-        if (!detailRecordsUpdated) {
-            return;
-        }
-
-        if (checkout.getExtensionOrderId() != null && !checkout.getExtensionOrderId().trim().isEmpty()) {
-            updateExtensionReservationRecord(checkout.getExtensionOrderId(), orderId);
-        }
-
-        sendBookingEmails(checkout, safeCheckout, username, payment, orderId, checkout.getExtensionOrderId());
+        //sendBookingEmails(checkout, safeCheckout, username, payment, orderId, checkout.getExtensionOrderId());
     }
     
     private BigDecimal calculateServiceFee(final BigDecimal baseServiceFee, final int totalDays) {
@@ -574,7 +583,31 @@ public class CheckoutHandler {
         }
         
         Room room = hotelHandler.getRoomInfo(Integer.valueOf(checkout.getRoomId()));
-;
+        int days = 0;
+        Date hotelArrivalDate = null;
+        Date hotelDepartDate = null;
+        Date endHotelArrivalDate = null;
+        Date endHotelDepartDate = null;
+
+        if (checkout.getCheckoutType() == null || checkout.getCheckoutType().isEmpty()) {
+            days = 0;
+        } else if (checkout.getCheckoutType().equals("R")) {
+            hotelArrivalDate = DateUtil.longAssDateStringToDate(checkout.getPrimaryHotelCheckInDate());
+            hotelDepartDate = DateUtil.longAssDateStringToDate(checkout.getPrimaryHotelCheckOutDate());
+            days = DateUtil.getDaysDifference(hotelArrivalDate, hotelDepartDate);
+        } else if (checkout.getCheckoutType().equals("S") || checkout.getCheckoutType().equals("E")) {
+            hotelArrivalDate = DateUtil.longAssDateStringToDate(checkout.getPrimaryHotelCheckInDate());
+            hotelDepartDate = DateUtil.longAssDateStringToDate(checkout.getPrimaryHotelCheckOutDate());
+            days = DateUtil.getDaysDifference(hotelArrivalDate, hotelDepartDate);
+        } else if (checkout.getCheckoutType().equals("B")) {
+            hotelArrivalDate = DateUtil.longAssDateStringToDate(checkout.getPrimaryHotelCheckInDate());
+            hotelDepartDate = DateUtil.longAssDateStringToDate(checkout.getPrimaryHotelCheckOutDate());
+            endHotelArrivalDate = DateUtil.longAssDateStringToDate(checkout.getSecondaryHotelCheckInDate());
+            endHotelDepartDate = DateUtil.longAssDateStringToDate(checkout.getSecondaryHotelCheckOutDate());
+            days = DateUtil.getDaysDifference(hotelArrivalDate, hotelDepartDate);
+            days += DateUtil.getDaysDifference(endHotelArrivalDate, endHotelDepartDate);
+        }
+
 //        1-bk_order_id, 2-bk_htl_id, 3-bk_aff_id, 4-bk_loc_state, 5-bk_loc_city, 6-bk_rsvn_date, 7-bk_chkin_date, 8-bk_chkout_date, 9-bk_days, 10-bk_room,
 //        11-bk_persn, 12-bk_children, 13-bk_rm_type, 14-bk_rm_persn, 15-bk_rm_cost, 16-bk_base_rate, 17-bk_total_cost, 18-bk_drc_sl_tax, 19-bk_drc_srv_tax,
 //        20-bk_inn_desc, 21-bk_location, 22-bk_airport_lcn, 23-bk_state, 24-bk_room_id, 25-bk_car_drop_off_date, 26-bk_car_chkin_date, 27-bk_car_chkin_time, 28-bk_car_days, 29-bk_car_hours,
@@ -589,15 +622,16 @@ public class CheckoutHandler {
             ps = conn.prepareStatement(INSERT_ROOM_AND_PARK_RESERVATION);
             ps.setString(1, orderId);
             ps.setInt(2, Integer.valueOf(checkout.getHotelId()));
-            ps.setInt(3,  affId);
+            ps.setInt(3, affId);
             ps.setString(4, safeCheckout.getStateName());
             ps.setString(5, safeCheckout.getCityName());
             ps.setDate(6, new java.sql.Date(new Date().getTime()));
-            ps.setDate(7, DateUtil.utilDateToSqlDate(DateUtil.stringMDYToDate(safeCheckout.getPrimaryHotelCheckInDate())));
-            ps.setDate(8, DateUtil.utilDateToSqlDate(DateUtil.stringMDYToDate(safeCheckout.getPrimaryHotelCheckOutDate())));
-            ps.setInt(9, new Integer(safeCheckout.getTotalHotelNights()));
-            ps.setInt(10, Integer.valueOf(safeCheckout.getRooms()));
-            ps.setInt(11, Integer.valueOf(safeCheckout.getNumberPeopleTravelling()));
+            ps.setDate(7, new java.sql.Date(hotelArrivalDate.getTime()));
+            ps.setDate(8, new java.sql.Date(hotelDepartDate.getTime()));
+
+            ps.setInt(9, days);
+            ps.setInt(10, Integer.valueOf(checkout.getRooms()));
+            ps.setInt(11, Integer.valueOf(checkout.getNumberPeopleTravelling()));
             ps.setInt(12, Integer.valueOf(checkout.getChildren()));
             ps.setString(13, room.getRoomDescription());
             ps.setInt(14, room.getMaxOccupancy());
@@ -611,21 +645,32 @@ public class CheckoutHandler {
             ps.setString(22, room.getAirport());
             ps.setInt(23, room.getStateId());
             ps.setInt(24, room.getRoomId());
-            ps.setDate(25,  DateUtil.utilDateToSqlDate(DateUtil.stringMDYToDate(safeCheckout.getDropOffDate())));
-            ps.setDate(26,  DateUtil.utilDateToSqlDate(DateUtil.stringMDYToDate(safeCheckout.getPickUpDate())));
-            ps.setString(27, safeCheckout.getCheckinTime());
+            ps.setDate(25, DateUtil.utilDateToSqlDate(DateUtil.stringMDYToDate(safeCheckout.getDropOffDate())));
+            ps.setDate(26, DateUtil.utilDateToSqlDate(DateUtil.stringMDYToDate(safeCheckout.getPickUpDate())));
+            ps.setString(27, "0");
             ps.setString(28, String.valueOf(safeCheckout.getParkingDays()));
             ps.setString(29, "0");
             ps.setString(30, safeCheckout.getBaseParkingFee());
             ps.setString(31, "");
             ps.setString(32, getCheckoutType(checkout.getCheckoutType()));
-            ps.setString(33, safeCheckout.getSecondaryHotelCheckInDate());
-            if (safeCheckout.getSecondaryHotelCheckOutDate() != null && !safeCheckout.getSecondaryHotelCheckOutDate().isEmpty()) {
-                ps.setDate(34, DateUtil.utilDateToSqlDate(DateUtil.stringMDYToDate(safeCheckout.getSecondaryHotelCheckOutDate())));
+
+            if (endHotelArrivalDate == null) {
+                ps.setString(33, "");
+            } else {
+                ps.setString(33, endHotelArrivalDate.toString());
+            }
+
+            if (endHotelDepartDate != null) {
+                ps.setDate(34, new java.sql.Date(endHotelDepartDate.getTime()));
             } else {
             	ps.setNull(34, Types.NULL);
             }
-            ps.setString(35, safeCheckout.getCouponAmount());
+
+            if (safeCheckout.getCouponAmount() == null) {
+                ps.setString(35, "");
+            } else {
+                ps.setString(35, safeCheckout.getCouponAmount());
+            }
             ps.setString(36, checkout.getFirstName());
             ps.setString(37, checkout.getLastName());
             ps.setString(38, checkout.getCarMake());
@@ -639,33 +684,32 @@ public class CheckoutHandler {
             ps.setString(46, checkout.getEmail());
             ps.setString(47, checkout.getEmail());
             ps.setString(48, checkout.getPhone());
+            ps.setString(49, checkout.getOwnerName());
+            ps.setString(50, checkout.getCardType());
+            ps.setString(51, payment.getCardLastDigits());
+            ps.setString(52, checkout.getCvv());
+            ps.setString(53, checkout.getExpirationYear());
+            ps.setString(54, checkout.getExpirationMonth());
+            ps.setString(55, "Paid");
+            ps.setString(56, "Transaction Approved");
+            ps.setString(57, payment.getTrackingNumber());
+            ps.setString(58, payment.getTransactionKey());
+            ps.setString(59, payment.getCardLastDigits());
+            ps.setString(60, "A");
+            ps.setString(61, "");
+            ps.setString(62, safeCheckout.getTotalDueAtLot());
+            ps.setString(63, safeCheckout.getTotalDueNow());
+            ps.setString(64, safeCheckout.getAcFee());
+            ps.setString(65, "");
+            ps.setString(66, "");
+            ps.setString(67, "0.00");
+            ps.setString(68, "");
+            ps.setString(69, "0.00");
+            ps.setInt(70, 0);
+            ps.setString(71, "0.00");
+            ps.setNull(72, Types.NULL);
 
-//            ps.setString(49, "Credit");
-//            ps.setString(50, checkout.getOwnerName());
-//            ps.setString(51, checkout.getCardType());
-//            ps.setString(52, "Active");
-//            ps.setString(53, checkout.getCouponCode());
-//            ps.setString(54, "0");
-//            ps.setString(55, payment.getTrackingNumber());
-//            ps.setString(56, payment.getTransactionKey());
-//            ps.setString(57, payment.getPaymentResponse());
-//            ps.setString(58, payment.getCardLastDigits());
-//            ps.setString(59, "Credit");
-//            ps.setString(60, checkout.getOwnerName());
-//            ps.setString(61, checkout.getCardType());
-//            ps.setString(62, "Active");
-//            ps.setString(63, checkout.getCouponCode());
-//            ps.setString(64, "0");
-//            ps.setString(65, payment.getTrackingNumber());
-//            ps.setString(66, payment.getTransactionKey());
-//            ps.setString(67, payment.getPaymentResponse());
-//            ps.setString(68, payment.getCardLastDigits());
-//            ps.setString(69, "Credit");
-//            ps.setInt(70, new java.sql.Date(new Date().getTime()));
-//            ps.setString(71, "A");
-//            ps.setDate(72, orderId);
-//
-//            updated = ps.executeUpdate();
+            updated = ps.executeUpdate();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         } finally {

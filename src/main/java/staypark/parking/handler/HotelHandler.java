@@ -397,11 +397,6 @@ public class HotelHandler {
                 room.setHotelDescription(rs.getString("gpi_inn_name"));
                 room.setLocation(rs.getString("gpc_city") + ", " + rs.getString("gps_state"));
                 room.setAirport("gdl_location");
-                
-                ImageLink il = new ImageLink();
-                il.setSmallImageLink("/images/room-images/" + rs.getString("rm_timage"));
-                il.setLargeImageLink("/images/room-images/" + rs.getString("rm_limage"));
-                room.setImage(il);
             }
         } catch (Exception e) {
             DBUtil.closeResources(conn, ps, rs);
