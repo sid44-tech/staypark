@@ -1,5 +1,6 @@
 package staypark.parking.handler;
 
+import staypark.parking.beans.Room;
 import staypark.parking.beans.SpecialParkingDate;
 import staypark.parking.beans.SpecialParkingDay;
 import staypark.parking.beans.booking.AppliedCoupon;
@@ -204,7 +205,7 @@ public class CheckoutHandler {
                 pc.setFaxNumber(rs.getString("gal_fax_number"));
                 pc.setConfirmationType(rs.getString("gal_confirmation_type"));
                 pc.setStandardDailyFee(rs.getBigDecimal("gpi_feepday"));
-                pc.setRoomType(rs.getString(""));
+                pc.setBaseParkingFee(rs.getString("gpi_feepday"));
                 
                 //Calculate Base Total Cost.  This only includes number of days * cost per day
                 BigDecimal baseTotalCost = AirportUtil.calculateParkingCosts(input.getHotelId(), rs.getBigDecimal("gpi_feepday"), checkinDate, checkoutDate, daysDiff, conn);
@@ -571,7 +572,9 @@ public class CheckoutHandler {
             up = accountHandler.getUserProfile(username);
             userId = up.getUserId();
         }
-
+        
+        Room room = hotelHandler.getRoomInfo(Integer.valueOf(checkout.getRoomId()));
+;
 //        1-bk_order_id, 2-bk_htl_id, 3-bk_aff_id, 4-bk_loc_state, 5-bk_loc_city, 6-bk_rsvn_date, 7-bk_chkin_date, 8-bk_chkout_date, 9-bk_days, 10-bk_room,
 //        11-bk_persn, 12-bk_children, 13-bk_rm_type, 14-bk_rm_persn, 15-bk_rm_cost, 16-bk_base_rate, 17-bk_total_cost, 18-bk_drc_sl_tax, 19-bk_drc_srv_tax,
 //        20-bk_inn_desc, 21-bk_location, 22-bk_airport_lcn, 23-bk_state, 24-bk_room_id, 25-bk_car_drop_off_date, 26-bk_car_chkin_date, 27-bk_car_chkin_time, 28-bk_car_days, 29-bk_car_hours,
@@ -593,46 +596,50 @@ public class CheckoutHandler {
             ps.setDate(7, DateUtil.utilDateToSqlDate(DateUtil.stringMDYToDate(safeCheckout.getPrimaryHotelCheckInDate())));
             ps.setDate(8, DateUtil.utilDateToSqlDate(DateUtil.stringMDYToDate(safeCheckout.getPrimaryHotelCheckOutDate())));
             ps.setInt(9, new Integer(safeCheckout.getTotalHotelNights()));
-            ps.setInt(10, 1);
+            ps.setInt(10, Integer.valueOf(safeCheckout.getRooms()));
             ps.setInt(11, Integer.valueOf(safeCheckout.getNumberPeopleTravelling()));
             ps.setInt(12, Integer.valueOf(checkout.getChildren()));
-            ps.setString(13, checkout.getRoomType());
-            ps.setInt(14, Integer.valueOf(checkout.getTotalAdults()));
-            ps.setString(15, safeCheckout.getServiceFee());
-//            ps.setString(16, safeCheckout.getAcFee());
-//            ps.setString(17, safeCheckout.getSalesTax());
-//            ps.setString(18, safeCheckout.getGrandTotal());
-//            ps.setString(19, checkout.getNumberPeopleTravelling());
-//            ps.setString(20, safeCheckout.getStateName());
-//            ps.setString(21, safeCheckout.getCityName());
-//            ps.setString(22, checkout.getFirstName());
-//            ps.setString(23, checkout.getLastName());
-//            ps.setInt(24, checkout.getCarMake());
-//            ps.setDate(25, checkout.getCarModel());
-//            ps.setDate(26, checkout.getCarLicensePlate());
-//            ps.setString(27, checkout.getHearAboutUs());
-//            ps.setString(28, checkout.getAddress());
-//            ps.setString(29, checkout.getCity());
-//            ps.setString(30, checkout.getState());
-//            ps.setString(31, checkout.getZip());
-//            ps.setString(32, checkout.getEmail());
-//            ps.setString(33, checkout.getPhone());
-//            ps.setDate(34, "Paid");
-//
-//            ps.setString(35, payment.getTrackingNumber());
-//            ps.setString(36, payment.getTransactionKey());
-//            ps.setString(37, payment.getPaymentResponse());
-//            ps.setString(38, payment.getCardLastDigits());
-//            ps.setString(39, "Credit");
-//            ps.setString(40, checkout.getOwnerName());
-//            ps.setString(41, checkout.getCardType());
-//            ps.setString(42, "Active");
-//            ps.setString(43, checkout.getCouponCode());
-//            ps.setString(44, "0");
-//            ps.setString(45, payment.getTrackingNumber());
-//            ps.setString(46, payment.getTransactionKey());
-//            ps.setString(47, payment.getPaymentResponse());
-//            ps.setString(48, payment.getCardLastDigits());
+            ps.setString(13, room.getRoomDescription());
+            ps.setInt(14, room.getMaxOccupancy());
+            ps.setString(15, room.getBaseCost().toString());
+            ps.setString(16, safeCheckout.getBaseRate());
+            ps.setString(17, safeCheckout.getGrandTotal());
+            ps.setString(18, safeCheckout.getSalesTax());
+            ps.setString(19, safeCheckout.getServiceFee());
+            ps.setString(20, room.getHotelDescription());
+            ps.setString(21, room.getLocation());
+            ps.setString(22, room.getAirport());
+            ps.setInt(23, room.getStateId());
+            ps.setInt(24, room.getRoomId());
+            ps.setDate(25,  DateUtil.utilDateToSqlDate(DateUtil.stringMDYToDate(safeCheckout.getDropOffDate())));
+            ps.setDate(26,  DateUtil.utilDateToSqlDate(DateUtil.stringMDYToDate(safeCheckout.getPickUpDate())));
+            ps.setString(27, safeCheckout.getCheckinTime());
+            ps.setString(28, String.valueOf(safeCheckout.getParkingDays()));
+            ps.setString(29, "0");
+            ps.setString(30, safeCheckout.getBaseParkingFee());
+            ps.setString(31, "");
+            ps.setString(32, getCheckoutType(checkout.getCheckoutType()));
+            ps.setString(33, safeCheckout.getSecondaryHotelCheckInDate());
+            if (safeCheckout.getSecondaryHotelCheckOutDate() != null && !safeCheckout.getSecondaryHotelCheckOutDate().isEmpty()) {
+                ps.setDate(34, DateUtil.utilDateToSqlDate(DateUtil.stringMDYToDate(safeCheckout.getSecondaryHotelCheckOutDate())));
+            } else {
+            	ps.setNull(34, Types.NULL);
+            }
+            ps.setString(35, safeCheckout.getCouponAmount());
+            ps.setString(36, checkout.getFirstName());
+            ps.setString(37, checkout.getLastName());
+            ps.setString(38, checkout.getCarMake());
+            ps.setString(39, checkout.getCarModel());
+            ps.setString(40, checkout.getCarLicensePlate());
+            ps.setString(41, checkout.getHearAboutUs());
+            ps.setString(42, checkout.getAddress());
+            ps.setString(43, checkout.getState());
+            ps.setString(44, checkout.getCity());
+            ps.setString(45, checkout.getZip());
+            ps.setString(46, checkout.getEmail());
+            ps.setString(47, checkout.getEmail());
+            ps.setString(48, checkout.getPhone());
+
 //            ps.setString(49, "Credit");
 //            ps.setString(50, checkout.getOwnerName());
 //            ps.setString(51, checkout.getCardType());
@@ -850,7 +857,20 @@ public class CheckoutHandler {
 
         return list;
     }
-
-    private String getRoomType
-
+    
+    private String getCheckoutType(final String type) {
+    	if (type == null || type.equals("")) {
+    		return "parking_only";
+    	} else if (type.equals("S")) {
+    		return "start_trip";
+    	} else if (type.equals("E")) {
+    		return "end_trip";
+    	} else if (type.equals("B")) {
+    		return "start_and_end_trip";
+    	} else if (type.equals("R")) {
+    		return "room_only";
+    	}
+    	
+    	return "";
+    }
 }

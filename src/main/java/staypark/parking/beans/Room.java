@@ -15,5 +15,9 @@ public class Room {
     private BigDecimal totalCost;
     private BigDecimal extraPersonCost;
     private BigDecimal extraChildCost;
+    private String hotelDescription;
+    private String location;
+    private String airport;
+    private int stateId;
     private boolean available = true;
 }

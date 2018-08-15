@@ -15,6 +15,7 @@ public class ParkingCheckout {
     private String totalParkingTime;
     private int parkingDays;
     private String shuttleFrequency;
+    private String baseParkingFee;
     private String baseRate;
     private String serviceFee;
     private String acFee;
@@ -75,4 +76,5 @@ public class ParkingCheckout {
     private String totalAdults;
     private String children;
     private String roomType;
+    private String roomPersonCapacity;
 }

@@ -70,6 +70,15 @@ public class HotelHandler {
             "select drc_base_rate, drc_1_7_cost, drc_8_14_cost, drc_upto_15_cost " +
             "from dbstaypark.gp_htl_day_range_cost " +
             "where drc_htl_id = ? ";
+    
+    private static String GET_ROOM_INFO =
+    		"select * " + 
+    		"from dbstaypark.gp_room as room " + 
+    		"left join dbstaypark.gp_parking_info as hotel on hotel.gpi_id = room.rm_htl_id " + 
+    		"left join dbstaypark.gp_city as city on hotel.gpi_city_id = city.gpc_id " +
+    		"left join dbstaypark.gp_state as state on hotel.gpi_state_id = state.gps_id " +
+    		"left join dbstaypark.gp_deperture_location as dep on dep.gdl_id = hotel.gpi_dep_id " +
+    		"where room.rm_id = ? ";
 
     public RoomParkSearchResults getHotelslForSearch(final RoomParkSearch search) {
     	String airportCode = AirportUtil.getAirportCodeFromSearchCityString(search.getCity());
@@ -362,6 +371,44 @@ public class HotelHandler {
             return null;
         }
         return null;
+    }
+    
+    public Room getRoomInfo(final int roomId) {
+    	Room room = null;
+    	Connection conn = null;
+    	PreparedStatement ps = null;
+    	ResultSet rs = null;
+    	
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(GET_ROOM_INFO);
+            ps.setInt(1, roomId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                room = new Room();
+                room.setRoomId(rs.getInt("rm_id"));
+                room.setStateId(rs.getInt("gpi_state_id"));
+                room.setRoomDescription(rs.getString("rm_type"));
+                room.setOccupancy(rs.getInt("rm_person"));
+                room.setMaxOccupancy(rs.getInt("rm_max_guest"));
+                room.setBaseCost(rs.getBigDecimal("rm_cost"));
+                room.setExtraPersonCost(rs.getBigDecimal("rm_extra_cost"));
+                room.setExtraChildCost(rs.getBigDecimal("rm_child_extra_cost"));
+                room.setHotelDescription(rs.getString("gpi_inn_name"));
+                room.setLocation(rs.getString("gpc_city") + ", " + rs.getString("gps_state"));
+                room.setAirport("gdl_location");
+                
+                ImageLink il = new ImageLink();
+                il.setSmallImageLink("/images/room-images/" + rs.getString("rm_timage"));
+                il.setLargeImageLink("/images/room-images/" + rs.getString("rm_limage"));
+                room.setImage(il);
+            }
+        } catch (Exception e) {
+            DBUtil.closeResources(conn, ps, rs);
+            log.error(e.getMessage(), e);
+        }
+        
+        return room;
     }
 
     private List<Room> getRoomDetails(final HotelInformation hotel, final RoomParkSearch search) {
