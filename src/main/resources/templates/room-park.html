@@ -8,7 +8,7 @@
 	<br>
 	<span class="section-text">Thank you for choosing the NEW StayPark Room & Park service. We have several options catered to every traveler. Whether one is looking for a hotel room with parking or just simply a hotel room only, we can provide these options at affordable and discounted rates.</span>
 	<br><br><br>
-	<form class="needs-validation" novalidate action="#" th:action="@{/room-park-results}" method="post">
+	<form id="rp-form" class="needs-validation" novalidate action="#" th:action="@{/room-park-results}" method="post">
 		<div class="form-div-container">
 			<div class="form-div-container-header">Search For Hotel Room & Parking</div>
 			<div class="form-div-container-body">
@@ -56,7 +56,7 @@
 					<div class="col-sm-8">
 						<div class="message-bar">Select City</div>
 						<div class="form-group flex-display">
-							<input type="text" data-toggle="modal" data-target="#parking_selection_modal" class="form-control float parking-select-text flex1" id="city" name="city" placeholder="- Select a city -" readonly required>
+							<input type="text" data-toggle="modal" data-target="#parking_selection_modal" class="form-control float parking-select-text flex1" id="city" name="city" placeholder="- Select a city -" required readonly>
 							<button type="button" class="btn parking-select-button flex0" data-toggle="modal" data-target="#parking_selection_modal"><img src="/images/down-arrow-green.png" class="parking-select-button-image"/></button>
 						</div>
 						<!--<div class="form-group">-->
@@ -179,7 +179,7 @@
 						</div>
 						<div class="form-group row">
 							<div class="col-sm-9">
-								<button type="submit" class="btn btn-primary">Search</button>
+								<button type="button" class="btn btn-primary" onclick="submitForm()">Search</button>
 							</div>
 						</div>
 					</div>
@@ -335,7 +335,27 @@
 
             }, false);
         })();
-        
+
+        function submitForm() {
+            var cityVal = $("#city").val();
+            var validationPassed = true;
+            if (cityVal == "") {
+                validationPassed = false;
+                $("#city").addClass("errorBorder");
+            } else {
+                $("#city").removeClass("errorBorder");
+            }
+
+            if (!validationPassed) {
+                return;
+			} else {
+                $('#rp-form').validate();
+                if ($('#rp-form').valid()) {
+                    $('#rp-form').submit();
+                }
+			}
+		}
+
         function updateMinValues(datefield1, datefield2, datefield3, datefield4, datefield5, datefield6) {
             datefield1.datepicker("setStartDate", new Date());
             datefield2.datepicker("setStartDate", addDaysToDate(new Date(), 1));
