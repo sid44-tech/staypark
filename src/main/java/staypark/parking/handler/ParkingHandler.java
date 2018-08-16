@@ -73,8 +73,14 @@ public class ParkingHandler {
 
 	public List<HotelInformation> getParkingSearchResults(final String airportCode, final String startDateStr, final String endDateStr,
 			final String startTimeStr, final String endTimeStr, final String sort) {
-		Date startDate = DateUtil.stringMDYToDate(startDateStr);
-		Date endDate = DateUtil.stringMDYToDate(endDateStr);
+		Date startDate = null;
+		Date endDate = null;
+		try {
+			startDate = DateUtil.stringMDYToDate(startDateStr);
+			endDate = DateUtil.stringMDYToDate(endDateStr);
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
 		List<HotelInformation> hotels = new ArrayList<>();
 
 		try (Connection conn = DBUtil.getConnection()) {

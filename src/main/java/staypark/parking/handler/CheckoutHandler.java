@@ -131,10 +131,21 @@ public class CheckoutHandler {
             }
         }
 
-        Date checkinDate = DateUtil.stringMDYToDate(input.getDropOffDate());
-        Date checkoutDate = DateUtil.stringMDYToDate(input.getPickUpDate());
+        Date checkinDate = null;
+        Date checkoutDate = null;
+		try {
+			checkinDate = DateUtil.stringMDYToDate(input.getDropOffDate());
+			checkoutDate = DateUtil.stringMDYToDate(input.getPickUpDate());
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
+
         if (input.getSearchType() != null && input.getSearchType().equals("E")) {
-            checkoutDate = DateUtil.stringMDYToDate(input.getHotelArrivalDateMDY());
+            try {
+				checkoutDate = DateUtil.unknownDateStringFormatToDate(input.getHotelArrivalDateMDY());
+			} catch (Exception e) {
+				log.error(e.getMessage(), e);
+			}
         }
         int daysDiff = AirportUtil.getNumberOfParkingDays(checkinDate, checkoutDate, input.getDropOffTime(), input.getPickUpTime());
         if (input.getSearchType() != null && input.getSearchType().equals("S")) {
@@ -271,28 +282,28 @@ public class CheckoutHandler {
             HotelParkingRates rates = hotelHandler.getRoomAndParkBaseTotal(input);
             if (input.getSearchType().equals("R")) {
                 pc.setBaseRate(rates.getHotelBaseRate().toString());
-                Date hotelArrivalDate = DateUtil.stringMDYToDate(input.getHotelArrivalDateMDY());
-                Date hotelDepartDate = DateUtil.stringMDYToDate(input.getHotelDepartureDateMDY());
+                Date hotelArrivalDate = DateUtil.unknownDateStringFormatToDate(input.getHotelArrivalDateMDY());
+                Date hotelDepartDate = DateUtil.unknownDateStringFormatToDate(input.getHotelDepartureDateMDY());
                 pc.setPrimaryHotelCheckInDate(DateUtil.formatDate(hotelArrivalDate));
                 pc.setPrimaryHotelCheckOutDate(DateUtil.formatDate(hotelDepartDate));
                 int days = DateUtil.getDaysDifference(hotelArrivalDate, hotelDepartDate);
                 pc.setTotalHotelNights(String.valueOf(days) + " day(s)");
             } else if (input.getSearchType().equals("S") || input.getSearchType().equals("E")) {
                 pc.setBaseRate(rates.getTotalBaseRate().toString());
-                Date hotelArrivalDate = DateUtil.stringMDYToDate(input.getHotelArrivalDateMDY());
-                Date hotelDepartDate = DateUtil.stringMDYToDate(input.getHotelDepartureDateMDY());
+                Date hotelArrivalDate = DateUtil.unknownDateStringFormatToDate(input.getHotelArrivalDateMDY());
+                Date hotelDepartDate = DateUtil.unknownDateStringFormatToDate(input.getHotelDepartureDateMDY());
                 pc.setPrimaryHotelCheckInDate(DateUtil.formatDate(hotelArrivalDate));
                 pc.setPrimaryHotelCheckOutDate(DateUtil.formatDate(hotelDepartDate));
                 int days = DateUtil.getDaysDifference(hotelArrivalDate, hotelDepartDate);
                 pc.setTotalHotelNights(String.valueOf(days) + " day(s)");
             } else if (input.getSearchType().equals("B")) {
                 pc.setBaseRate(rates.getTotalBaseRate().toString());
-                Date hotelArrivalDate = DateUtil.stringMDYToDate(input.getHotelArrivalDateMDY());
-                Date hotelDepartDate = DateUtil.stringMDYToDate(input.getHotelDepartureDateMDY());
+                Date hotelArrivalDate = DateUtil.unknownDateStringFormatToDate(input.getHotelArrivalDateMDY());
+                Date hotelDepartDate = DateUtil.unknownDateStringFormatToDate(input.getHotelDepartureDateMDY());
                 pc.setPrimaryHotelCheckInDate(DateUtil.formatDate(hotelArrivalDate));
                 pc.setPrimaryHotelCheckOutDate(DateUtil.formatDate(hotelDepartDate));
-                Date endHotelArrivalDate = DateUtil.stringMDYToDate(input.getEndHotelArrivalDateMDY());
-                Date endHotelDepartDate = DateUtil.stringMDYToDate(input.getEndHotelDepartureDateMDY());
+                Date endHotelArrivalDate = DateUtil.unknownDateStringFormatToDate(input.getEndHotelArrivalDateMDY());
+                Date endHotelDepartDate = DateUtil.unknownDateStringFormatToDate(input.getEndHotelDepartureDateMDY());
                 pc.setSecondaryHotelCheckInDate(DateUtil.formatDate(endHotelArrivalDate));
                 pc.setSecondaryHotelCheckOutDate(DateUtil.formatDate(endHotelDepartDate));
                 int days = DateUtil.getDaysDifference(hotelArrivalDate, hotelDepartDate);
@@ -342,6 +353,14 @@ public class CheckoutHandler {
     	input.setOrderId(checkout.getExtensionOrderId());
         input.setSearchType(checkout.getCheckoutType());
         input.setRoomId(checkout.getRoomId());
+        input.setRooms(checkout.getRooms());
+        input.setTotalAdults(checkout.getTotalAdults());
+        input.setChildren(checkout.getChildren());
+        input.setSearchType(checkout.getCheckoutType());
+        input.setHotelArrivalDateMDY(checkout.getPrimaryHotelCheckInDate());
+        input.setHotelDepartureDateMDY(checkout.getPrimaryHotelCheckOutDate());
+        input.setEndHotelArrivalDateMDY(checkout.getSecondaryHotelCheckInDate());
+        input.setEndHotelDepartureDateMDY(checkout.getSecondaryHotelCheckOutDate());
 
         ParkingCheckout safeCheckout = getParkingCheckoutInfo(input);
 
@@ -592,18 +611,18 @@ public class CheckoutHandler {
         if (checkout.getCheckoutType() == null || checkout.getCheckoutType().isEmpty()) {
             days = 0;
         } else if (checkout.getCheckoutType().equals("R")) {
-            hotelArrivalDate = DateUtil.longAssDateStringToDate(checkout.getPrimaryHotelCheckInDate());
-            hotelDepartDate = DateUtil.longAssDateStringToDate(checkout.getPrimaryHotelCheckOutDate());
+            hotelArrivalDate = DateUtil.unknownDateStringFormatToDate(checkout.getPrimaryHotelCheckInDate());
+            hotelDepartDate = DateUtil.unknownDateStringFormatToDate(checkout.getPrimaryHotelCheckOutDate());
             days = DateUtil.getDaysDifference(hotelArrivalDate, hotelDepartDate);
         } else if (checkout.getCheckoutType().equals("S") || checkout.getCheckoutType().equals("E")) {
-            hotelArrivalDate = DateUtil.longAssDateStringToDate(checkout.getPrimaryHotelCheckInDate());
-            hotelDepartDate = DateUtil.longAssDateStringToDate(checkout.getPrimaryHotelCheckOutDate());
+            hotelArrivalDate = DateUtil.unknownDateStringFormatToDate(checkout.getPrimaryHotelCheckInDate());
+            hotelDepartDate = DateUtil.unknownDateStringFormatToDate(checkout.getPrimaryHotelCheckOutDate());
             days = DateUtil.getDaysDifference(hotelArrivalDate, hotelDepartDate);
         } else if (checkout.getCheckoutType().equals("B")) {
-            hotelArrivalDate = DateUtil.longAssDateStringToDate(checkout.getPrimaryHotelCheckInDate());
-            hotelDepartDate = DateUtil.longAssDateStringToDate(checkout.getPrimaryHotelCheckOutDate());
-            endHotelArrivalDate = DateUtil.longAssDateStringToDate(checkout.getSecondaryHotelCheckInDate());
-            endHotelDepartDate = DateUtil.longAssDateStringToDate(checkout.getSecondaryHotelCheckOutDate());
+            hotelArrivalDate = DateUtil.unknownDateStringFormatToDate(checkout.getPrimaryHotelCheckInDate());
+            hotelDepartDate = DateUtil.unknownDateStringFormatToDate(checkout.getPrimaryHotelCheckOutDate());
+            endHotelArrivalDate = DateUtil.unknownDateStringFormatToDate(checkout.getSecondaryHotelCheckInDate());
+            endHotelDepartDate = DateUtil.unknownDateStringFormatToDate(checkout.getSecondaryHotelCheckOutDate());
             days = DateUtil.getDaysDifference(hotelArrivalDate, hotelDepartDate);
             days += DateUtil.getDaysDifference(endHotelArrivalDate, endHotelDepartDate);
         }
@@ -657,7 +676,7 @@ public class CheckoutHandler {
             if (endHotelArrivalDate == null) {
                 ps.setString(33, "");
             } else {
-                ps.setString(33, endHotelArrivalDate.toString());
+                ps.setString(33, endHotelArrivalDate.toString().substring(0, 19));
             }
 
             if (endHotelDepartDate != null) {
@@ -723,8 +742,14 @@ public class CheckoutHandler {
     }
 
     private boolean insertReservationDetailRecords(final ParkingCheckout checkout, final ParkingCheckout safeCheckout, final String orderId) {
-        Date startDate = DateUtil.stringMDYToDate(safeCheckout.getDropOffDate());
-        Date endDate = DateUtil.stringMDYToDate(safeCheckout.getPickUpDate());
+        Date startDate = null;;
+        Date endDate = null;;
+		try {
+			startDate = DateUtil.stringMDYToDate(safeCheckout.getDropOffDate());
+			endDate = DateUtil.stringMDYToDate(safeCheckout.getPickUpDate());
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
         int totalDays = AirportUtil.getNumberOfParkingDays(startDate, endDate, safeCheckout.getDropOffTime(), safeCheckout.getPickUpTime());
         int hotelId = Integer.valueOf(safeCheckout.getHotelId());
 

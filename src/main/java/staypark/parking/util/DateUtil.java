@@ -42,30 +42,37 @@ public class DateUtil {
 			"11:00 PM", "11:15 PM", "11:30 PM", "11:45 PM"
 	};
 	
-	public static Date stringMDYToDate(final String dateStr) {
+	public static Date unknownDateStringFormatToDate(final String dateStr) {
+		Date date = null;
+		try {
+			date = stringMDYToDate(dateStr);
+			return date;
+		} catch(Exception e) {}
+		
+		try {
+			date = longAssDateStringToDate(dateStr);
+			return date;
+		} catch(Exception e) {}
+		
+		return null;
+	}
+	
+	public static Date stringMDYToDate(final String dateStr) throws ParseException {
 		if (dateStr == null) {
 			return null;
 		}
-		 try {
-			Date date = new SimpleDateFormat("MM-dd-yyyy").parse(dateStr);
-			return date;
-		} catch (ParseException e) {
-			log.error(e.getMessage(), e);
-			return null;
-		}
+		
+		Date date = new SimpleDateFormat("MM-dd-yyyy").parse(dateStr);
+		return date;
 	}
 
-	public static Date longAssDateStringToDate(final String dateStr) {
+	public static Date longAssDateStringToDate(final String dateStr) throws ParseException {
 		if (dateStr == null) {
 			return null;
 		}
-		try {
-			Date date = new SimpleDateFormat("EEEE MMMM dd, yyyy").parse(dateStr);
-			return date;
-		} catch (ParseException e) {
-			log.error(e.getMessage(), e);
-			return null;
-		}
+		
+		Date date = new SimpleDateFormat("EEEE MMMM dd, yyyy").parse(dateStr);
+		return date;
 	}
 	
 	public static java.sql.Date utilDateToSqlDate(final Date date) {

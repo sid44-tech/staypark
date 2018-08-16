@@ -244,6 +244,7 @@ public class HotelHandler {
                 int rooms = Integer.valueOf(input.getRooms());
                 int adults = Integer.valueOf(input.getTotalAdults());
                 int children = Integer.valueOf(input.getChildren());
+                
                 if ((room.getMaxOccupancy()*rooms) < (adults + children)) {
                     room.setAvailable(false);
                 }
@@ -254,15 +255,23 @@ public class HotelHandler {
         }
 
         if (room != null) {
-            Date carStartDate = getCarStartDate(input.getSearchType(), DateUtil.stringMDYToDate(input.getDropOffDate()),
-                    DateUtil.stringMDYToDate(input.getEndHotelArrivalDateMDY()), DateUtil.stringMDYToDate(input.getHotelDepartureDateMDY()));
-            Date carEndDate = getCarEndDate(input.getSearchType(), DateUtil.stringMDYToDate(input.getHotelArrivalDateMDY()), DateUtil.stringMDYToDate(input.getHotelDepartureDateMDY()),
-                    DateUtil.stringMDYToDate(input.getPickUpDate()), DateUtil.stringMDYToDate(input.getEndHotelArrivalDateMDY()));
-
-            double hotelDays = DateUtil.getDaysDifference(DateUtil.stringMDYToDate(input.getHotelArrivalDateMDY()), DateUtil.stringMDYToDate(input.getHotelDepartureDateMDY()));
-            if (input.getSearchType().equals("B")) {
-                hotelDays += DateUtil.getDaysDifference(DateUtil.stringMDYToDate(input.getEndHotelArrivalDateMDY()), DateUtil.stringMDYToDate(input.getEndHotelDepartureDateMDY()));
+        	Date carStartDate = null;
+        	Date carEndDate = null;
+        	double hotelDays = 0;
+        	try {
+	            carStartDate = getCarStartDate(input.getSearchType(), DateUtil.unknownDateStringFormatToDate(input.getDropOffDate()),
+	                    DateUtil.unknownDateStringFormatToDate(input.getEndHotelArrivalDateMDY()), DateUtil.unknownDateStringFormatToDate(input.getHotelDepartureDateMDY()));
+	            carEndDate = getCarEndDate(input.getSearchType(), DateUtil.unknownDateStringFormatToDate(input.getHotelArrivalDateMDY()), DateUtil.unknownDateStringFormatToDate(input.getHotelDepartureDateMDY()),
+	                    DateUtil.unknownDateStringFormatToDate(input.getPickUpDate()), DateUtil.unknownDateStringFormatToDate(input.getEndHotelArrivalDateMDY()));
+	
+	            hotelDays = DateUtil.getDaysDifference(DateUtil.unknownDateStringFormatToDate(input.getHotelArrivalDateMDY()), DateUtil.unknownDateStringFormatToDate(input.getHotelDepartureDateMDY()));
+	            if (input.getSearchType().equals("B")) {
+	                hotelDays += DateUtil.getDaysDifference(DateUtil.unknownDateStringFormatToDate(input.getEndHotelArrivalDateMDY()), DateUtil.unknownDateStringFormatToDate(input.getEndHotelDepartureDateMDY()));
+	            } 
+        	} catch (Exception e) {
+            	log.error(e.getMessage(), e);
             }
+            
 
             HotelParkingRates carRates = getHotelParkingRates(input.getHotelId());
             BigDecimal parkingCost = new BigDecimal(0);
