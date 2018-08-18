@@ -374,6 +374,11 @@ public class CheckoutHandler {
             if (!recordUpdated) {
                 return;
             }
+
+//            boolean detailRecordsUpdated = insertHotelParkReservationDetailRecords(checkout, safeCheckout, orderId);
+//            if (!detailRecordsUpdated) {
+//                return;
+//            }
         } else {
             boolean recordUpdated = insertReservationRecord(checkout, safeCheckout, username, payment, orderId);
             if (!recordUpdated) {

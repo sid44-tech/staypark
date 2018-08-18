@@ -1509,3 +1509,10 @@ body {
 	margin-left: 0px;
 	margin-bottom: 24px;
 }
+
+
+/* -------------------------- AFFILIATE RESERVATIONS CSS -------------------------- */
+
+.res-time-label {
+	padding-top: 8px;
+}

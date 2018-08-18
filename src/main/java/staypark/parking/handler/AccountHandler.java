@@ -2,6 +2,7 @@ package staypark.parking.handler;
 
 import staypark.parking.beans.AffiliateRegister;
 import staypark.parking.beans.UserRegister;
+import staypark.parking.beans.reservation.AffiliateReservation;
 import staypark.parking.beans.security.AuthProfile;
 import staypark.parking.beans.security.UserProfile;
 import staypark.parking.util.DBUtil;
@@ -13,7 +14,9 @@ import org.springframework.stereotype.Service;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -90,6 +93,24 @@ public class AccountHandler {
     private String UPDATE_PASSWORD_CUSTOMER = "update dbstaypark.gp_user_register set password = ? where username = ? ";
     private String UPDATE_PASSWORD_AFFILIATE = "update dbstaypark.gp_affiliate_login set gal_password = ? where gal_email = ? ";
 
+    private String GET_RESERVATIONS_FOR_AFFILIATE =
+            "select * from ( " +
+            "select gr_id as id, order_id as order_id, gr_reservation_date as res_date, gr_payment as pay_status, gr_email as email, concat(gr_fname, ' ',gr_lname) as owner_name, 'P' as type " +
+            "from dbstaypark.gp_reservation " +
+            "where gr_aff_id = ? " +
+            "union " +
+            "select bk_id as id , bk_order_id as order_id, bk_rsvn_date as res_date, bk_payment_status as pay_status, bk_email as email, owner_name as owner_name, 'RP' as type " +
+            "from dbstaypark.gp_hotel_parking_reservation " +
+            "where bk_aff_id = ?) as res " +
+            //[RANGE_REPLACE]
+            "order by res.id desc " +
+            "limit 0, 50 ";
+
+
+    private String GET_AFFILIATE_ID_FROM_USERNAME =
+            "select gal_id " +
+            "from dbstaypark.gp_affiliate_login " +
+            "where gal_email = ? ";
 
     public UserProfile getUserProfile(final String username) {
         UserProfile up = new UserProfile();
@@ -313,6 +334,55 @@ public class AccountHandler {
         return null;
     }
 
+    public  List<AffiliateReservation> getAffiliateReservations(final String username, final String range) {
+        List<AffiliateReservation> list = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        int affId = getAffiliateIdFromUsername(username);
+        if (affId == -1) {
+            return list;
+        }
+
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(GET_RESERVATIONS_FOR_AFFILIATE);
+            ps.setInt(1, affId);
+            ps.setInt(2, affId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                AffiliateReservation aff = new AffiliateReservation();
+
+                aff.setDate(rs.getString("res_date"));
+                aff.setDetail("X");
+                aff.setEmail(rs.getString("email"));
+                aff.setName(rs.getString("owner_name"));
+                aff.setOrder(rs.getString("order_id"));
+                aff.setPayment(rs.getString("pay_status"));
+                aff.setType(getBookingTypeText(rs.getString("type")));
+
+                list.add(aff);
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            DBUtil.closeResources(conn, ps, rs);
+        }
+
+        return list;
+    }
+
+    private String getBookingTypeText(final String type) {
+        if (type == null) {
+            return "Parking";
+        } else if (type.equals("RP")) {
+            return "Room and Park";
+        } else {
+            return "Parking";
+        }
+    }
+
     private String createCustomerDBRecord(UserRegister user){
         String success = "false";
 
@@ -464,5 +534,29 @@ public class AccountHandler {
 
     private String encryptPassword(final String password) {
         return BCrypt.hashpw(password, BCrypt.gensalt());
+    }
+
+    private int getAffiliateIdFromUsername(final String username) {
+        int id = -1;
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(GET_AFFILIATE_ID_FROM_USERNAME);
+            ps.setString(1, username);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("gal_id");
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            DBUtil.closeResources(conn, ps, rs);
+        }
+
+        return id;
     }
 }

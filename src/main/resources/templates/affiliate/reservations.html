@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page.html}">
+
+<section layout:fragment="page-content">
+    <div class="form-row">
+        <div class="col-md-auto section-title"><span class="section-title res-time-label">MY RESERVATIONS</span></div>
+        <div class="col-md-3">
+            <select class="form-control" id="timeWindow" name="timeWindow" onchange="onTimeChange(this)">
+                <option value="TODAY" th:selected="${range} == 'TODAY'">Today</option>
+                <option value="YESTERDAY" th:selected="${range} == 'YESTERDAY'">Yesterday</option>
+                <option value="PREVIOUS_WEEK" th:selected="${range} == 'PREVIOUS_WEEK'">Previous Week</option>
+                <option value="PREVIOUS_MONTH" th:selected="${range} == 'PREVIOUS_MONTH'">Previous Month</option>
+                <option value="PREVIOUS_6_MONTHS" th:selected="${range} == 'PREVIOUS_6_MONTHS'">Previous 6 months</option>
+                <option value="SELECT" th:selected="${range} == 'SELECT'">(Select Dates)</option>
+            </select>
+        </div>
+    </div>
+    <br>
+    <div class="table-responsive">
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col-auto">Reservation Date</th>
+                <th scope="col">Order #</th>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Payment</th>
+                <th scope="col">Type</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr th:each="reservation : ${res}">
+                    <td th:text="${reservation.date}"></td>
+                    <td><a th:href="'order/' + ${reservation.order}" th:text="${reservation.order}"></a></td>
+                    <td th:text="${reservation.name}"></td>
+                    <td th:text="${reservation.email}"></td>
+                    <td th:text="${reservation.payment}"></td>
+                    <td th:text="${reservation.type}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <ul class="pagination">
+        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+        <li class="page-item"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+    </ul>
+
+    <script>
+        function onTimeChange(e) {
+            location.href="/affiliate/reservations?range=" + e.value;
+        }
+    </script>
+</section>
+</html>
