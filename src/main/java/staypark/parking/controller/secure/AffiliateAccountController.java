@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class AffiliateAccountController {
         Principal p = (Principal) auth.getPrincipal();
         String username = p.getUsername();
         if (username == null || username.trim().isEmpty()) {
-            return "affiliate/reservations";
+            return "login";
         }
 
         List<AffiliateReservation> list = accountHandler.getAffiliateReservations(username, range, startDate, endDate);
@@ -45,5 +46,16 @@ public class AffiliateAccountController {
         }
 
         return "affiliate/reservations";
+    }
+
+    @GetMapping("/affiliate/reservations/{orderId}")
+    public String getAffiliateReservationOrderDetail(Model model, Authentication auth, @PathVariable(name = "orderId") String orderId) {
+        Principal p = (Principal) auth.getPrincipal();
+        String username = p.getUsername();
+        if (username == null || username.trim().isEmpty()) {
+            return "login";
+        }
+
+        return "affiliate/reservations-order";
     }
 }

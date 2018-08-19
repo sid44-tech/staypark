@@ -1520,3 +1520,7 @@ body {
 .res-field-c-margin {
 	margin-bottom: 5px;
 }
+
+.res-table-bg {
+	background-color: white;
+}

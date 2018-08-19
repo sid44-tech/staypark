@@ -12,7 +12,7 @@
                 <option value="YESTERDAY" th:selected="${range} == 'YESTERDAY'">Yesterday</option>
                 <option value="PREVIOUS_WEEK" th:selected="${range} == 'PREVIOUS_WEEK'">Previous Week</option>
                 <option value="PREVIOUS_MONTH" th:selected="${range} == 'PREVIOUS_MONTH'">Previous Month</option>
-                <option value="PREVIOUS_6_MONTHS" th:selected="${range} == 'PREVIOUS_6_MONTHS'">Previous 6 months</option>
+                <option value="PREVIOUS_6_MONTHS" th:selected="${range} == 'PREVIOUS_6_MONTHS'">Previous 6 Months</option>
                 <option value="SELECT" th:selected="${range} == 'SELECT'">(Select Date Range)</option>
             </select>
         </div>
@@ -31,7 +31,7 @@
         <div class="col-md-auto section-title"><span class="section-title res-time-label" th:text="${resCount}"></span></div>
     </div>
     <div class="table-responsive">
-        <table class="table">
+        <table class="table res-table-bg">
             <thead class="thead-dark">
             <tr>
                 <th scope="col-auto">Reservation Date</th>
@@ -45,7 +45,7 @@
             <tbody>
                 <tr th:each="reservation : ${res}">
                     <td th:text="${reservation.date}"></td>
-                    <td><a th:href="'order/' + ${reservation.order}" th:text="${reservation.order}"></a></td>
+                    <td><a th:href="'reservations/' + ${reservation.order}" th:text="${reservation.order}"></a></td>
                     <td th:text="${reservation.name}"></td>
                     <td th:text="${reservation.email}"></td>
                     <td th:text="${reservation.payment}"></td>
