@@ -6,6 +6,21 @@
 	 location.href = "/";
  }
 
+ function dateToStringMDY(date) {
+     var dd = date.getDate();
+     var mm = date.getMonth()+1; //January is 0!
+
+     var yyyy = date.getFullYear();
+     if(dd<10){
+         dd='0'+dd;
+     }
+     if(mm<10){
+         mm='0'+mm;
+     }
+     var dateStr = mm+'/'+dd+'/'+yyyy;
+     return dateStr;
+ }
+
  function todayString() {
      var today = new Date();
      var dd = today.getDate();
@@ -83,6 +98,10 @@
          enableOnReadonly: false
      })
      pickup_date_input.datepicker("setDate", date);
+ }
+
+ function daysDifference(first, second) {
+     return Math.round((second-first)/(1000*60*60*24));
  }
 
  function convertCurrentTimeToSelectIndex() {

@@ -6,6 +6,7 @@ import staypark.parking.beans.reservation.AffiliateReservation;
 import staypark.parking.beans.security.AuthProfile;
 import staypark.parking.beans.security.UserProfile;
 import staypark.parking.util.DBUtil;
+import staypark.parking.util.DateUtil;
 import staypark.parking.util.EmailUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -16,6 +17,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -102,10 +104,9 @@ public class AccountHandler {
             "select bk_id as id , bk_order_id as order_id, bk_rsvn_date as res_date, bk_payment_status as pay_status, bk_email as email, owner_name as owner_name, 'RP' as type " +
             "from dbstaypark.gp_hotel_parking_reservation " +
             "where bk_aff_id = ?) as res " +
-            //[RANGE_REPLACE]
-            "order by res.id desc " +
+            "[RANGE_REPLACE] " +
+            "order by res.res_date desc, res.id desc " +
             "limit 0, 50 ";
-
 
     private String GET_AFFILIATE_ID_FROM_USERNAME =
             "select gal_id " +
@@ -334,7 +335,7 @@ public class AccountHandler {
         return null;
     }
 
-    public  List<AffiliateReservation> getAffiliateReservations(final String username, final String range) {
+    public  List<AffiliateReservation> getAffiliateReservations(final String username, final String range, final String startDate, final String endDate) {
         List<AffiliateReservation> list = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ps = null;
@@ -347,9 +348,13 @@ public class AccountHandler {
 
         try {
             conn = DBUtil.getConnection();
-            ps = conn.prepareStatement(GET_RESERVATIONS_FOR_AFFILIATE);
+            ps = conn.prepareStatement(GET_RESERVATIONS_FOR_AFFILIATE.replace("[RANGE_REPLACE]", getRangeWhereClause(range)));
             ps.setInt(1, affId);
             ps.setInt(2, affId);
+            if (range != null && range.equals("SELECT")) {
+                ps.setDate(3, new java.sql.Date(DateUtil.stringMDYToDate(startDate).getTime()));
+                ps.setDate(4, new java.sql.Date(DateUtil.stringMDYToDate(endDate).getTime()));
+            }
             rs = ps.executeQuery();
             while (rs.next()) {
                 AffiliateReservation aff = new AffiliateReservation();
@@ -361,6 +366,7 @@ public class AccountHandler {
                 aff.setOrder(rs.getString("order_id"));
                 aff.setPayment(rs.getString("pay_status"));
                 aff.setType(getBookingTypeText(rs.getString("type")));
+                aff.setRange(range);
 
                 list.add(aff);
             }
@@ -371,6 +377,26 @@ public class AccountHandler {
         }
 
         return list;
+    }
+
+    private String getRangeWhereClause(final String type) {
+        if (type == null || type.isEmpty()) {
+            return "where res_date > DATE_SUB(now(), INTERVAL 7 DAY)";
+        } else if (type.equals("TODAY")) {
+            return "where res_date = now()";
+        } else if (type.equals("YESTERDAY")) {
+            return "where res_date > DATE_SUB(now(), INTERVAL 1 DAY)";
+        } else if (type.equals("PREVIOUS_WEEK")) {
+            return "where res_date > DATE_SUB(now(), INTERVAL 7 DAY)";
+        } else if (type.equals("PREVIOUS_MONTH")) {
+            return "where res_date > DATE_SUB(now(), INTERVAL 1 MONTH)";
+        } else if (type.equals("PREVIOUS_6_MONTHS")) {
+            return "where res_date > DATE_SUB(now(), INTERVAL 6 MONTH)";
+        } else if (type.equals("SELECT")) {
+            return "where res_date >= ? and res_date <= ? ";
+        }
+
+        return "where res_date > DATE_SUB(now(), INTERVAL 7 DAY)";
     }
 
     private String getBookingTypeText(final String type) {

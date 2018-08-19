@@ -11,4 +11,5 @@ public class AffiliateReservation {
     private String payment;
     private String detail;
     private String type;
+    private String range;
 }

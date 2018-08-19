@@ -1,5 +1,6 @@
 package staypark.parking.controller.secure;
 
+import staypark.parking.beans.reservation.AffiliateReservation;
 import staypark.parking.beans.security.Principal;
 import staypark.parking.handler.AccountHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @Controller
 public class AffiliateAccountController {
 
@@ -16,19 +19,31 @@ public class AffiliateAccountController {
     private AccountHandler accountHandler;
 
     @GetMapping("/affiliate/reservations")
-    public String getAffiliateReservations(Model model, Authentication auth, @RequestParam(name="range", required=false) String range) {
+    public String getAffiliateReservations(Model model, Authentication auth, @RequestParam(name="range", required=false) String range,
+                                           @RequestParam(name="startDate", required=false) String startDate, @RequestParam(name="endDate", required=false) String endDate) {
         Principal p = (Principal) auth.getPrincipal();
         String username = p.getUsername();
         if (username == null || username.trim().isEmpty()) {
             return "affiliate/reservations";
         }
 
-        model.addAttribute("res", accountHandler.getAffiliateReservations(username, range));
+        List<AffiliateReservation> list = accountHandler.getAffiliateReservations(username, range, startDate, endDate);
+
+        model.addAttribute("res", list);
         if (range == null || range.trim().isEmpty()) {
-            model.addAttribute("range", "TODAY");
+            model.addAttribute("range", "PREVIOUS_WEEK");
         } else {
             model.addAttribute("range", range);
         }
+
+        if (list == null || list.isEmpty()) {
+            model.addAttribute("resCount", "No reservations in time range");
+        } else if (list.size() == 1) {
+            model.addAttribute("resCount", list.size() + " reservation in time range");
+        } else {
+            model.addAttribute("resCount", list.size() + " reservations in time range");
+        }
+
         return "affiliate/reservations";
     }
 }
