@@ -11,5 +11,5 @@ public class AirportReservations {
     private String reservationStatus;
     private String details;
     private String detailLink;
-
+    private String bookingType;
 }

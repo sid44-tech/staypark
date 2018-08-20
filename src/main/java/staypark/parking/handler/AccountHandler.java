@@ -113,6 +113,25 @@ public class AccountHandler {
             "from dbstaypark.gp_affiliate_login " +
             "where gal_email = ? ";
 
+    private String GET_AFF_USER_FOR_ORDER =
+                    "select gal_email " +
+                    "from dbstaypark.gp_reservation res " +
+                    "left join dbstaypark.gp_affiliate_login aff on aff.gal_id = res.gr_aff_id " +
+                    "where order_id = ? " +
+                    "union " +
+                    "select gal_email " +
+                    "from dbstaypark.gp_hotel_parking_reservation res " +
+                    "left join dbstaypark.gp_affiliate_login aff on aff.gal_id = res.bk_aff_id " +
+                    "where bk_order_id = ? ";
+
+    private static String GET_CUSTOMER_RESERVATION_DETAIL_ORDER_ONLY =
+            "select order_id, gr_d_air, gr_d_loc, gr_payment, reservation_status, gr_reservation_date, gr_d_time, gr_p_time, gr_b_fee, gr_s_fee, gr_s_tax, gr_g_total, " +
+                    "gr_payment_type, s.gps_t_zone, gr_t_time, gr_h_time, loc_state, loc_city, gp_tracking_no, gr_add, gr_city, gr_state, gr_zip, loc_state, loc_city " +
+                    "from dbstaypark.gp_reservation as res " +
+                    "left join dbstaypark.gp_user_register as u on u.id = res.user_id " +
+                    "left join dbstaypark.gp_state as s on s.gps_state = res.loc_state " +
+                    "where gr_p_id != 0 and res.order_id = ? ";
+
     public UserProfile getUserProfile(final String username) {
         UserProfile up = new UserProfile();
         Connection conn = null;
@@ -379,6 +398,15 @@ public class AccountHandler {
         return list;
     }
 
+    public boolean checkAffiliateCanAccessOrder(final String orderId, final String username) {
+        String affUsername = getAffiliateIdFromOrder(orderId);
+        if (affUsername == null || !username.equals(username)) {
+            return false;
+        }
+
+        return true;
+    }
+
     private String getRangeWhereClause(final String type) {
         if (type == null || type.isEmpty()) {
             return "where res_date > DATE_SUB(now(), INTERVAL 7 DAY)";
@@ -584,5 +612,28 @@ public class AccountHandler {
         }
 
         return id;
+    }
+
+    private String getAffiliateIdFromOrder(final String order) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(GET_AFF_USER_FOR_ORDER);
+            ps.setString(1, order);
+            ps.setString(2, order);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString("gal_email");
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            DBUtil.closeResources(conn, ps, rs);
+        }
+
+        return null;
     }
 }

@@ -3,6 +3,7 @@ package staypark.parking.controller.secure;
 import staypark.parking.beans.reservation.AffiliateReservation;
 import staypark.parking.beans.security.Principal;
 import staypark.parking.handler.AccountHandler;
+import staypark.parking.handler.AirportHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,9 @@ public class AffiliateAccountController {
 
     @Autowired
     private AccountHandler accountHandler;
+
+    @Autowired
+    private AirportHandler airportHandler;
 
     @GetMapping("/affiliate/reservations")
     public String getAffiliateReservations(Model model, Authentication auth, @RequestParam(name="range", required=false) String range,
@@ -52,10 +56,10 @@ public class AffiliateAccountController {
     public String getAffiliateReservationOrderDetail(Model model, Authentication auth, @PathVariable(name = "orderId") String orderId) {
         Principal p = (Principal) auth.getPrincipal();
         String username = p.getUsername();
-        if (username == null || username.trim().isEmpty()) {
-            return "login";
-        }
+        boolean validAccess = accountHandler.checkAffiliateCanAccessOrder(orderId, username);
 
-        return "affiliate/reservations-order";
+        model.addAttribute("details", airportHandler.getCustomerReservationDetails(username, orderId, true));
+
+        return "user/airport-parking-reservation-detail";
     }
 }

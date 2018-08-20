@@ -48,7 +48,7 @@ public class UserAccountController {
         Principal p = (Principal) auth.getPrincipal();
         String username = p.getUsername();
 
-        model.addAttribute("details", airportHandler.getCustomerReservationDetails(username, orderId));
+        model.addAttribute("details", airportHandler.getCustomerReservationDetails(username, orderId, false));
 
         return "user/airport-parking-reservation-detail";
     }

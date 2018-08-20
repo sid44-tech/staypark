@@ -24,4 +24,5 @@ public class ReservtionDetails {
     private String billingAddress;
     private String reservationStatus;
     private String orderNumber;
+    private String bookingType;
 }

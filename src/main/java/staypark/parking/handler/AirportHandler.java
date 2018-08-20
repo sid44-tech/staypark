@@ -35,11 +35,20 @@ public class AirportHandler {
             "left join dbstaypark.gp_state as s on d.gdl_state_id = s.gps_id " +
             "where d.gdl_scode = ? ";
     private static String GET_CUSTOMER_RESERVATIONS =
-            "select order_id, gr_d_air, gr_d_loc, gr_payment, reservation_status, gr_reservation_date " +
-            "from dbstaypark.gp_reservation as res " +
-            "left join dbstaypark.gp_user_register as u on u.id = res.user_id " +
-            "where gr_p_id != 0 and user_id != 0 and u.username = ?" +
-            "order by gr_reservation_date desc ";
+           "select * from " +
+           "(select order_id, gr_d_air, gr_d_loc, gr_payment, reservation_status, gr_reservation_date, 'P' as type " +
+           "from dbstaypark.gp_reservation as res " +
+           "left join dbstaypark.gp_user_register as u on u.id = res.user_id " +
+           "where gr_p_id != 0 and user_id != 0 and u.username = ?" +
+
+           "union " +
+
+           "select bk_order_id, bk_loc_city, bk_inn_desc, bk_payment_status, bk_reservation_status, bk_rsvn_date, 'RP' as type " +
+           "from dbstaypark.gp_hotel_parking_reservation as res " +
+           "left join dbstaypark.gp_user_register as u on u.email = res.bk_email " +
+           "where u.username = ?) as res " +
+
+           "order by gr_reservation_date desc ";
     private static String GET_CUSTOMER_RESERVATION_DETAIL =
             "select order_id, gr_d_air, gr_d_loc, gr_payment, reservation_status, gr_reservation_date, gr_d_time, gr_p_time, gr_b_fee, gr_s_fee, gr_s_tax, gr_g_total, " +
             "gr_payment_type, s.gps_t_zone, gr_t_time, gr_h_time, loc_state, loc_city, gp_tracking_no, gr_add, gr_city, gr_state, gr_zip, loc_state, loc_city " +
@@ -47,6 +56,13 @@ public class AirportHandler {
             "left join dbstaypark.gp_user_register as u on u.id = res.user_id " +
             "left join dbstaypark.gp_state as s on s.gps_state = res.loc_state " +
             "where gr_p_id != 0 and user_id != 0 and u.username = ? and res.order_id = ? ";
+    private static String GET_CUSTOMER_RESERVATION_DETAIL_AFFILIATE =
+            "select order_id, gr_d_air, gr_d_loc, gr_payment, reservation_status, gr_reservation_date, gr_d_time, gr_p_time, gr_b_fee, gr_s_fee, gr_s_tax, gr_g_total, " +
+            "gr_payment_type, s.gps_t_zone, gr_t_time, gr_h_time, loc_state, loc_city, gp_tracking_no, gr_add, gr_city, gr_state, gr_zip, loc_state, loc_city " +
+            "from dbstaypark.gp_reservation as res " +
+            "left join dbstaypark.gp_user_register as u on u.id = res.user_id " +
+            "left join dbstaypark.gp_state as s on s.gps_state = res.loc_state " +
+            "where gr_p_id != 0 and res.order_id = ? ";
     private static String GET_AFF_ID_BY_P_INFO_ID = 
     		"select gpi_aff_id " + 
     		"gpi_aff_id " + 
@@ -129,7 +145,7 @@ public class AirportHandler {
         return bean;
     }
 
-    public ReservtionDetails getCustomerReservationDetails(final String username, final String orderId) {
+    public ReservtionDetails getCustomerReservationDetails(final String username, final String orderId, final boolean affiliate) {
         ReservtionDetails rd = new ReservtionDetails();
 
         Connection conn = null;
@@ -138,9 +154,14 @@ public class AirportHandler {
 
         try {
             conn = DBUtil.getConnection();
-            ps = conn.prepareStatement(GET_CUSTOMER_RESERVATION_DETAIL);
-            ps.setString(1, username);
-            ps.setString(2, orderId);
+            if (affiliate) {
+                ps = conn.prepareStatement(GET_CUSTOMER_RESERVATION_DETAIL_AFFILIATE);
+                ps.setString(1, orderId);
+            } else {
+                ps = conn.prepareStatement(GET_CUSTOMER_RESERVATION_DETAIL);
+                ps.setString(1, username);
+                ps.setString(2, orderId);
+            }
             rs = ps.executeQuery();
             if (rs.next()) {
                 rd.setDepartingAirport(AirportUtil.parseDepartingLocation(rs.getString("gr_d_air")));
@@ -187,6 +208,7 @@ public class AirportHandler {
             conn = DBUtil.getConnection();
             ps = conn.prepareStatement(GET_CUSTOMER_RESERVATIONS);
             ps.setString(1, username);
+            ps.setString(2, username);
             rs = ps.executeQuery();
             while (rs.next()) {
                 AirportReservations res = new AirportReservations();
@@ -198,6 +220,11 @@ public class AirportHandler {
                 res.setReservationStatus(getReservationStatus(rs.getString("gr_payment"), rs.getString("reservation_status")));
                 res.setOrderDate(DateUtil.formatDate(rs.getDate("gr_reservation_date")));
                 res.setDetailLink("/user/reservations/" + rs.getString("order_id"));
+                if (rs.getString("type").equals("P")) {
+                    res.setBookingType("Parking Only");
+                } else {
+                    res.setBookingType("Room & Parking");
+                }
 
                 reservations.add(res);
             }
