@@ -9,7 +9,10 @@
 
 <section layout:fragment="main-content">
     <div class="form-div-container">
-        <div class="form-div-container-header">Reservation Details</div>
+        <div class="form-div-container-header" th:switch="${details.bookingType}">
+                <span th:case="'P'">Parking Reservation Details</span>
+                <span th:case="'RP'">Room and Park Reservation Details</span>
+        </div>
         <div class="form-div-container-body-white">
             <div class="row">
                 <div class="col-auto aprd-custom">
@@ -25,6 +28,31 @@
                 <div class="col-auto aprd-custom">
                     <div class="row capp-card-label">Drop Location</div>
                     <div class="row capp-card-text" th:text="${details.dropLocation}"></div>
+                </div>
+
+                <div th:if="${details.primaryCheckInDate != ''}" class="col-auto aprd-custom">
+                    <div class="row capp-card-label">Primary Hotel Check In Date</div>
+                    <div class="row capp-card-text" th:text="${details.primaryCheckInDate}"></div>
+                </div>
+                
+                <div th:if="${details.primaryCheckoutDate != ''}" class="col-auto aprd-custom">
+                    <div class="row capp-card-label">Primary Hotel Check Out Date</div>
+                    <div class="row capp-card-text" th:text="${details.primaryCheckoutDate}"></div>
+                </div>
+                
+                <div th:if="${details.secondaryCheckInDate != ''}" class="col-auto aprd-custom">
+                    <div class="row capp-card-label">Secondary Hotel Check In Date</div>
+                    <div class="row capp-card-text" th:text="${details.secondaryCheckInDate}"></div>
+                </div>
+                
+                <div th:if="${details.secondaryCheckoutDate != ''}" class="col-auto aprd-custom">
+                    <div class="row capp-card-label">Secondary Hotel Check In Date</div>
+                    <div class="row capp-card-text" th:text="${details.secondaryCheckoutDate}"></div>
+                </div>
+                
+                <div th:if="${details.hotelDays != -1}" class="col-auto aprd-custom">
+                    <div class="row capp-card-label">Total Hotel Nights</div>
+                    <div class="row capp-card-text" th:text="${details.hotelDays}"></div>
                 </div>
 
                 <div class="col-auto aprd-custom">

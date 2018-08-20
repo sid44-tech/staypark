@@ -50,19 +50,45 @@ public class AirportHandler {
 
            "order by gr_reservation_date desc ";
     private static String GET_CUSTOMER_RESERVATION_DETAIL =
-            "select order_id, gr_d_air, gr_d_loc, gr_payment, reservation_status, gr_reservation_date, gr_d_time, gr_p_time, gr_b_fee, gr_s_fee, gr_s_tax, gr_g_total, " +
-            "gr_payment_type, s.gps_t_zone, gr_t_time, gr_h_time, loc_state, loc_city, gp_tracking_no, gr_add, gr_city, gr_state, gr_zip, loc_state, loc_city " +
-            "from dbstaypark.gp_reservation as res " +
-            "left join dbstaypark.gp_user_register as u on u.id = res.user_id " +
-            "left join dbstaypark.gp_state as s on s.gps_state = res.loc_state " +
-            "where gr_p_id != 0 and user_id != 0 and u.username = ? and res.order_id = ? ";
+    		"select order_id, gr_d_air, gr_d_loc, gr_payment, reservation_status, gr_reservation_date, gr_d_time, gr_p_time, gr_b_fee, gr_s_fee, gr_s_tax, gr_g_total, " +
+    		"gr_payment_type, s.gps_t_zone, gr_t_time, gr_h_time, loc_state, loc_city, gp_tracking_no, gr_add, gr_city, gr_state, gr_zip, loc_state, loc_city, 'P' as type, " +
+    		"null as primaryInDate, null as primaryOutDate, null as secondaryInDate, null as secondaryOutDate, -1 as hotelDays " +
+    		"from dbstaypark.gp_reservation as res " +
+    		"left join dbstaypark.gp_user_register as u on u.id = res.user_id " +
+    		"left join dbstaypark.gp_state as s on s.gps_state = res.loc_state " +
+    		"where gr_p_id != 0 and user_id != 0 and u.username = ? and res.order_id = ? " +
+
+    		"union " +
+
+    		"select bk_order_id, bk_loc_city, bk_inn_desc, bk_payment_status, bk_reservation_status, bk_rsvn_date, bk_car_drop_off_date, " +
+    		"bk_car_chkin_time, bk_base_rate, bk_drc_srv_tax, bk_drc_sl_tax, bk_total_cost, " +
+    		"'Credit Card' as gr_payment_type, s.gps_t_zone, bk_car_days, bk_car_hours, bk_loc_state, bk_loc_city, bk_tracking_no, bk_address, bk_city, bk_prsn_state, " +
+    		"bk_zip, bk_loc_state, bk_loc_city, 'RP' as type, " +
+    		"bk_chkin_date as primaryInDate, bk_chkout_date as primaryOutDate, bk_se_en_htl_chkin_date as secondaryInDate, bk_bk_se_en_htl_chkout_date as secondaryOutDate, bk_days as hotelDays " +
+    		"from dbstaypark.gp_hotel_parking_reservation as res " +
+    		"left join dbstaypark.gp_user_register as u on u.email = res.bk_email " +
+    		"left join dbstaypark.gp_state as s on s.gps_state = res.bk_loc_state " +
+    		"where u.username = ? and res.bk_order_id = ? ";
     private static String GET_CUSTOMER_RESERVATION_DETAIL_AFFILIATE =
-            "select order_id, gr_d_air, gr_d_loc, gr_payment, reservation_status, gr_reservation_date, gr_d_time, gr_p_time, gr_b_fee, gr_s_fee, gr_s_tax, gr_g_total, " +
-            "gr_payment_type, s.gps_t_zone, gr_t_time, gr_h_time, loc_state, loc_city, gp_tracking_no, gr_add, gr_city, gr_state, gr_zip, loc_state, loc_city " +
-            "from dbstaypark.gp_reservation as res " +
-            "left join dbstaypark.gp_user_register as u on u.id = res.user_id " +
-            "left join dbstaypark.gp_state as s on s.gps_state = res.loc_state " +
-            "where gr_p_id != 0 and res.order_id = ? ";
+    		"select order_id, gr_d_air, gr_d_loc, gr_payment, reservation_status, gr_reservation_date, gr_d_time, gr_p_time, gr_b_fee, gr_s_fee, gr_s_tax, gr_g_total, " +
+    		"gr_payment_type, s.gps_t_zone, gr_t_time, gr_h_time, loc_state, loc_city, gp_tracking_no, gr_add, gr_city, gr_state, gr_zip, loc_state, loc_city, 'P' as type, " +
+    		"null as primaryInDate, null as primaryOutDate, null as secondaryInDate, null as secondaryOutDate, -1 as hotelDays " +
+    		"from dbstaypark.gp_reservation as res " +
+    		"left join dbstaypark.gp_user_register as u on u.id = res.user_id " +
+    		"left join dbstaypark.gp_state as s on s.gps_state = res.loc_state " +
+    		"where res.order_id = ? " +
+
+    		"union " +
+
+    		"select bk_order_id, bk_loc_city, bk_inn_desc, bk_payment_status, bk_reservation_status, bk_rsvn_date, bk_car_drop_off_date, " +
+    		"bk_car_chkin_time, bk_base_rate, bk_drc_srv_tax, bk_drc_sl_tax, bk_total_cost, " +
+    		"'Credit Card' as gr_payment_type, s.gps_t_zone, bk_car_days, bk_car_hours, bk_loc_state, bk_loc_city, bk_tracking_no, bk_address, bk_city, bk_prsn_state, " +
+    		"bk_zip, bk_loc_state, bk_loc_city, 'RP' as type, " +
+    		"bk_chkin_date as primaryInDate, bk_chkout_date as primaryOutDate, bk_se_en_htl_chkin_date as secondaryInDate, bk_bk_se_en_htl_chkout_date as secondaryOutDate, bk_days as hotelDays " +
+    		"from dbstaypark.gp_hotel_parking_reservation as res " +
+    		"left join dbstaypark.gp_user_register as u on u.email = res.bk_email " +
+    		"left join dbstaypark.gp_state as s on s.gps_state = res.bk_loc_state " +
+    		"where res.bk_order_id = ? ";
     private static String GET_AFF_ID_BY_P_INFO_ID = 
     		"select gpi_aff_id " + 
     		"gpi_aff_id " + 
@@ -157,20 +183,30 @@ public class AirportHandler {
             if (affiliate) {
                 ps = conn.prepareStatement(GET_CUSTOMER_RESERVATION_DETAIL_AFFILIATE);
                 ps.setString(1, orderId);
+                ps.setString(2, orderId);
             } else {
                 ps = conn.prepareStatement(GET_CUSTOMER_RESERVATION_DETAIL);
                 ps.setString(1, username);
                 ps.setString(2, orderId);
+                ps.setString(3, username);
+                ps.setString(4, orderId);
             }
             rs = ps.executeQuery();
             if (rs.next()) {
+            	String bookingType = rs.getString("type");
                 rd.setDepartingAirport(AirportUtil.parseDepartingLocation(rs.getString("gr_d_air")));
                 rd.setDropLocation(AirportUtil.parseDropLocation(rs.getString("gr_d_loc")));
                 rd.setOrderNumber(rs.getString("order_id"));
                 rd.setReservationStatus(getReservationStatus(rs.getString("gr_payment"), rs.getString("reservation_status")));
                 rd.setBookingDate(DateUtil.formatDate(rs.getDate("gr_reservation_date")));
-                rd.setDropTime(rs.getString("gr_d_time") + " " + rs.getString("gps_t_zone"));
-                rd.setPickTime(rs.getString("gr_p_time") + " " + rs.getString("gps_t_zone"));
+               
+                if (bookingType.equals("RP")) {
+                    rd.setPickTime("");
+                    rd.setDropTime(rs.getString("gr_d_time"));
+                } else {
+                    rd.setPickTime(rs.getString("gr_p_time") + " " + rs.getString("gps_t_zone"));
+                    rd.setDropTime(rs.getString("gr_d_time") + " " + rs.getString("gps_t_zone"));
+                }
                 rd.setBaseRate(rs.getString("gr_b_fee"));
                 rd.setServiceFee(rs.getString("gr_s_fee"));
                 rd.setSalesTax(rs.getString("gr_s_tax"));
@@ -183,6 +219,16 @@ public class AirportHandler {
                 rd.setPaymentStatus(rs.getString("gr_payment"));
                 rd.setBillingAddress(builAddress(rs.getString("gr_add"), rs.getString("gr_city"), rs.getString("gr_state"), rs.getString("gr_zip")));
                 rd.setParkingTime(rs.getString("gr_t_time") + " day(s) ");
+                rd.setBookingType(bookingType);
+                rd.setPrimaryCheckInDate(DateUtil.formatDate(rs.getDate("primaryInDate")));
+                rd.setPrimaryCheckoutDate(DateUtil.formatDate(rs.getDate("primaryOutDate")));
+                if (rs.getString("secondaryInDate") == null) {
+                	rd.setSecondaryCheckInDate("");
+                } else {
+                	rd.setSecondaryCheckInDate(rs.getString("secondaryInDate"));
+                }
+                rd.setSecondaryCheckoutDate(DateUtil.formatDate(rs.getDate("secondaryOutDate")));
+                rd.setHotelDays(rs.getInt("hotelDays"));
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);

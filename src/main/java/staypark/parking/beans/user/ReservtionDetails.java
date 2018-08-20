@@ -25,4 +25,9 @@ public class ReservtionDetails {
     private String reservationStatus;
     private String orderNumber;
     private String bookingType;
+    private String primaryCheckInDate;
+    private String primaryCheckoutDate;
+    private String secondaryCheckInDate;
+    private String secondaryCheckoutDate;
+    private int hotelDays = -1;
 }
