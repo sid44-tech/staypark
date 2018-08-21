@@ -1,5 +1,6 @@
 package staypark.parking.handler;
 
+import staypark.parking.beans.AffiliateFinancials;
 import staypark.parking.beans.AffiliateRegister;
 import staypark.parking.beans.UserRegister;
 import staypark.parking.beans.reservation.AffiliateReservation;
@@ -405,6 +406,12 @@ public class AccountHandler {
         }
 
         return true;
+    }
+
+    public AffiliateFinancials getAffiliateFinancial(final String username, final String range, final String type) {
+        AffiliateFinancials financials = new AffiliateFinancials();
+
+        return financials;
     }
 
     private String getRangeWhereClause(final String type) {

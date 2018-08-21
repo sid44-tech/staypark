@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page.html}">
+
+<section layout:fragment="page-content">
+    <div class="form-row fr-total-section-padding">
+        <div class="col-md-auto res-field-c-margin"><span class="fr-title res-time-label">All time total:</span> <span class="green-normal-font res-time-label" th:text="${financials.allTimeTotal}"></span></div>
+    </div>
+    <div class="form-row fr-row-padding">
+        <div class="col-md-auto section-title res-field-c-margin"><span class="fr-label res-time-label">Report Period</span></div>
+        <div class="col-md-3 res-field-c-margin">
+            <select class="form-control" id="time" name="time">
+                <option value="TODAY" th:selected="${range} == 'TODAY'">Today</option>
+                <option value="YESTERDAY" th:selected="${range} == 'YESTERDAY'">Yesterday</option>
+                <option value="PREVIOUS_WEEK" th:selected="${range} == 'PREVIOUS_WEEK'">Previous Week</option>
+                <option value="PREVIOUS_MONTH" th:selected="${range} == 'PREVIOUS_MONTH'">Previous Month</option>
+                <option value="PREVIOUS_6_MONTHS" th:selected="${range} == 'PREVIOUS_6_MONTHS'">Previous 6 Months</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-row fr-row-padding">
+        <div class="col-md-auto section-title res-field-c-margin"><span class="fr-label res-time-label">Booking Type</span></div>
+        <div class="col-md-3 res-field-c-margin">
+            <select class="form-control" id="type" name="type">
+                <option value="ALL" th:selected="${type} == 'TODAY'">All</option>
+                <option value="PARKING" th:selected="${type} == 'YESTERDAY'">Parking Only</option>
+                <option value="ROOMPARK" th:selected="${type} == 'ROOMPARK'">Room and Park</option>
+                <option value="ROOM" th:selected="${type} == 'ROOM'">Room Only</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-row fr-button-row-padding">
+        <button type="button" class="btn btn-primary col-md-auto">Update Filters</button>
+    </div>
+    <div class="form-row">
+        <div class="col-md-auto res-field-c-margin"><span class="fr-title res-time-label">Total for filters:</span> <span class="green-normal-font res-time-label" th:text="${financials.filterTotal}"></span></div>
+    </div>
+    <div class="table-responsive">
+        <table class="table res-table-bg">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col-auto">Reservation Date</th>
+                <th scope="col">Order #</th>
+                <th scope="col">Hotel</th>
+                <th scope="col">Customer</th>
+                <th scope="col">Airport</th>
+                <th scope="col">Base Fee</th>
+                <th scope="col">Sales Tax</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!--<tr th:each="reservation : ${res}">-->
+                <!--<td th:text="${reservation.date}"></td>-->
+                <!--<td><a th:href="'reservations/' + ${reservation.order}" th:text="${reservation.order}"></a></td>-->
+                <!--<td th:text="${reservation.name}"></td>-->
+                <!--<td th:text="${reservation.email}"></td>-->
+                <!--<td th:text="${reservation.payment}"></td>-->
+                <!--<td th:text="${reservation.type}"></td>-->
+            <!--</tr>-->
+            </tbody>
+        </table>
+    </div>
+    <script>
+        function updateResults() {
+
+        }
+    </script>
+</section>
+</html>

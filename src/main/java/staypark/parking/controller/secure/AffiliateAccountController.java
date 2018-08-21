@@ -62,4 +62,28 @@ public class AffiliateAccountController {
 
         return "user/airport-parking-reservation-detail";
     }
+
+    @GetMapping("/affiliate/financial")
+    public String getFinancialReport(Model model, Authentication auth, @RequestParam(name="range", required=false) String range, @RequestParam(name="type", required=false) String type) {
+        Principal p = (Principal) auth.getPrincipal();
+        String username = p.getUsername();
+
+        //model.addAttribute("details", airportHandler.getCustomerReservationDetails(username, orderId, true));
+
+        if (range == null || range.trim().isEmpty()) {
+            model.addAttribute("range", "PREVIOUS_WEEK");
+        } else {
+            model.addAttribute("range", range);
+        }
+
+        if (type == null || type.trim().isEmpty()) {
+            model.addAttribute("type", "ALL");
+        } else {
+            model.addAttribute("type", type);
+        }
+
+        model.addAttribute("financials", accountHandler.getAffiliateFinancial(username, range, type));
+
+        return "affiliate/financial-report";
+    }
 }

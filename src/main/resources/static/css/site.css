@@ -1524,3 +1524,35 @@ body {
 .res-table-bg {
 	background-color: white;
 }
+
+
+/* -------------------------- FINANCIAL REPORT CSS -------------------------- */
+
+.fr-row-padding {
+	padding-bottom: 0px;
+}
+
+.fr-total-section-padding {
+	padding-bottom: 24px;
+}
+
+.fr-title {
+	font-family: 'Roboto', sans-serif;
+	font-size: 16px;
+	font-weight: bold;
+	color: #428bca;
+	display: inline-block;
+}
+
+.fr-label {
+	font-family: 'Roboto', sans-serif;
+	font-size: 16px;
+	font-weight: normal;
+	color: #000000;
+	display: inline-block;
+}
+
+.fr-button-row-padding {
+	padding-top: 16px;
+	padding-bottom: 16px;
+}
