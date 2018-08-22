@@ -23,18 +23,19 @@
         <div class="col-md-auto section-title res-field-c-margin"><span class="fr-label res-time-label">Booking Type</span></div>
         <div class="col-md-3 res-field-c-margin">
             <select class="form-control" id="type" name="type">
-                <option value="ALL" th:selected="${type} == 'TODAY'">All</option>
-                <option value="PARKING" th:selected="${type} == 'YESTERDAY'">Parking Only</option>
+                <option value="ALL" th:selected="${type} == 'ALL'">All</option>
+                <option value="PARKING" th:selected="${type} == 'PARKING'">Parking Only</option>
                 <option value="ROOMPARK" th:selected="${type} == 'ROOMPARK'">Room and Park</option>
                 <option value="ROOM" th:selected="${type} == 'ROOM'">Room Only</option>
             </select>
         </div>
     </div>
     <div class="form-row fr-button-row-padding">
-        <button type="button" class="btn btn-primary col-md-auto">Update Filters</button>
+        <button type="button" class="btn btn-primary col-md-auto" onclick="updateResults()">Update Filters</button>
     </div>
     <div class="form-row">
-        <div class="col-md-auto res-field-c-margin"><span class="fr-title res-time-label">Total for filters:</span> <span class="green-normal-font res-time-label" th:text="${financials.filterTotal}"></span></div>
+        <div class="col-md-3 res-field-c-margin"><span class="fr-title res-time-label">Total for filters:</span> <span class="green-normal-font res-time-label" th:text="${financials.filterTotal}"></span></div>
+        <a href="/affiliate/financial/report.csv" class="col-md-9 align-right">Download Full Report</a>
     </div>
     <div class="table-responsive">
         <table class="table res-table-bg">
@@ -42,28 +43,27 @@
             <tr>
                 <th scope="col-auto">Reservation Date</th>
                 <th scope="col">Order #</th>
-                <th scope="col">Hotel</th>
                 <th scope="col">Customer</th>
-                <th scope="col">Airport</th>
                 <th scope="col">Base Fee</th>
                 <th scope="col">Sales Tax</th>
+                <th scope="col">Type</th>
             </tr>
             </thead>
             <tbody>
-            <!--<tr th:each="reservation : ${res}">-->
-                <!--<td th:text="${reservation.date}"></td>-->
-                <!--<td><a th:href="'reservations/' + ${reservation.order}" th:text="${reservation.order}"></a></td>-->
-                <!--<td th:text="${reservation.name}"></td>-->
-                <!--<td th:text="${reservation.email}"></td>-->
-                <!--<td th:text="${reservation.payment}"></td>-->
-                <!--<td th:text="${reservation.type}"></td>-->
-            <!--</tr>-->
+            <tr th:each="record : ${financials.details}">
+                <td th:text="${record.reservationDate}"></td>
+                <td><a th:href="'reservations/' + ${record.orderNumber}" th:text="${record.orderNumber}"></a></td>
+                <td th:text="${record.customerName}"></td>
+                <td th:text="${record.baseFee}"></td>
+                <td th:text="${record.salesTax}"></td>
+                <td th:text="${record.type}"></td>
+            </tr>
             </tbody>
         </table>
     </div>
     <script>
         function updateResults() {
-
+            location.href = "/affiliate/financial?range=" + $('#time').val() + "&type=" + $('#type').val();
         }
     </script>
 </section>

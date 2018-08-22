@@ -1,5 +1,6 @@
 package staypark.parking.handler;
 
+import staypark.parking.beans.AffiliateFinancialRecord;
 import staypark.parking.beans.AffiliateFinancials;
 import staypark.parking.beans.AffiliateRegister;
 import staypark.parking.beans.UserRegister;
@@ -13,13 +14,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -132,6 +132,38 @@ public class AccountHandler {
                     "left join dbstaypark.gp_user_register as u on u.id = res.user_id " +
                     "left join dbstaypark.gp_state as s on s.gps_state = res.loc_state " +
                     "where gr_p_id != 0 and res.order_id = ? ";
+
+    private static String GET_FINANCIALS_BY_AFFILIATE =
+            "select * from (select gr_reservation_date as res_date, order_id as order_id, gr_fname as fname, gr_lname as lname, gr_b_fee as base_fee, gr_s_tax as sales_tax, 'P' as type " +
+            "from dbstaypark.gp_reservation " +
+            "where gr_aff_id = ? and gr_reservation_date [RANGE_REPLACE] " +
+            "union " +
+            "select bk_rsvn_date as res_date, bk_order_id as order_id, bk_first_name as fname, bk_last_name as lname, bk_base_rate as base_fee, bk_drc_sl_tax as sales_tax, bk_parking_type as type " +
+            "from dbstaypark.gp_hotel_parking_reservation " +
+            "where bk_aff_id = ? and bk_rsvn_date [RANGE_REPLACE] " +
+            ") as temp " +
+            "order by res_date desc ";
+
+    private static String GET_FINANCIALS_FILTER_TOTAL =
+            "select round(sum(gr_b_fee), 2) as base_fee_total, round(sum(gr_s_tax), 2) as sales_tax_total, 'P' as type " +
+            "from dbstaypark.gp_reservation " +
+            "where gr_aff_id = ? and gr_reservation_date [RANGE_REPLACE] " +
+            "union " +
+            "select round(sum(bk_base_rate), 2) as base_fee_total, round(sum(bk_drc_sl_tax), 2) as sales_tax_total, bk_parking_type as type " +
+            "from dbstaypark.gp_hotel_parking_reservation " +
+            "where bk_aff_id = ? and bk_rsvn_date [RANGE_REPLACE] " +
+            "group by bk_parking_type ";
+
+    private static String GET_FINANCIALS_ALL_TOTAL =
+            "select round(sum(gr_b_fee), 2) as base_fee_total, round(sum(gr_s_tax), 2) as sales_tax_total, 'P' as type " +
+            "from dbstaypark.gp_reservation " +
+            "where gr_aff_id = ? " +
+            "union " +
+            "select round(sum(bk_base_rate), 2) as base_fee_total, round(sum(bk_drc_sl_tax), 2) as sales_tax_total, bk_parking_type as type " +
+            "from dbstaypark.gp_hotel_parking_reservation " +
+            "where bk_aff_id = ? " +
+            "group by bk_parking_type ";
+
 
     public UserProfile getUserProfile(final String username) {
         UserProfile up = new UserProfile();
@@ -411,7 +443,191 @@ public class AccountHandler {
     public AffiliateFinancials getAffiliateFinancial(final String username, final String range, final String type) {
         AffiliateFinancials financials = new AffiliateFinancials();
 
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        int affId = getAffiliateIdFromUsername(username);
+        if (affId == -1) {
+            return financials;
+        }
+
+        String whereClauseRange = getRangeWhereClauseForFinancials(range);
+
+        Connection conn = DBUtil.getConnection();
+        try {
+            ps = conn.prepareStatement(GET_FINANCIALS_BY_AFFILIATE.replace("[RANGE_REPLACE]", whereClauseRange));
+            ps.setInt(1, affId);
+            ps.setInt(2, affId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                AffiliateFinancialRecord f = new AffiliateFinancialRecord();
+                f.setBaseFee(rs.getString("base_fee") + " USD");
+                f.setSalesTax(rs.getString("sales_tax") + " USD");
+                f.setCustomerName(rs.getString("fname") + " " + rs.getString("lname"));
+                f.setOrderNumber(rs.getString("order_id"));
+                f.setReservationDate(DateUtil.formatDate(rs.getDate("res_date")));
+                f.setType(getFinancialRecordType(rs.getString("type")));
+                if (checkIfValidFinancialType(type, f.getType())) {
+                    financials.addDetailRecord(f);
+                }
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            DBUtil.closeResources(null, ps, rs);
+        }
+
+        financials.setAllTimeTotal(getAllTimeTotal(affId, conn));
+        financials.setFilterTotal(getFilterTimeTotal(affId, range, conn));
+
+        DBUtil.closeResources(conn);
+
+
         return financials;
+    }
+
+    public byte[] getFinancialReportSpreadsheet(final String username) {
+        AffiliateFinancials financials = new AffiliateFinancials();
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection conn = null;
+
+        int affId = getAffiliateIdFromUsername(username);
+        if (affId == -1) {
+            return null;
+        }
+
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(GET_FINANCIALS_BY_AFFILIATE.replace("[RANGE_REPLACE]", " IS NOT NULL "));
+            ps.setInt(1, affId);
+            ps.setInt(2, affId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                AffiliateFinancialRecord f = new AffiliateFinancialRecord();
+                f.setBaseFee(rs.getString("base_fee") + " USD");
+                f.setSalesTax(rs.getString("sales_tax") + " USD");
+                f.setCustomerName(rs.getString("fname") + " " + rs.getString("lname"));
+                f.setOrderNumber(rs.getString("order_id"));
+                f.setReservationDate(DateUtil.formatDate(rs.getDate("res_date")));
+                f.setType(getFinancialRecordType(rs.getString("type")));
+                financials.addDetailRecord(f);
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            DBUtil.closeResources(conn, ps, rs);
+        }
+
+        StringBuffer sb = new StringBuffer("");
+        sb.append("Reservation Day");
+        sb.append(", ");
+        sb.append("Year");
+        sb.append(", ");
+        sb.append("Order Number");
+        sb.append(", ");
+        sb.append("Customer Name");
+        sb.append(", ");
+        sb.append("Base Fee");
+        sb.append(", ");
+        sb.append("Sales Tax");
+        sb.append(", ");
+        sb.append("Type");
+        sb.append("\n");
+        for (AffiliateFinancialRecord fr : financials.getDetails()) {
+            sb.append(fr.getReservationDate());
+            sb.append(", ");
+            sb.append(fr.getOrderNumber());
+            sb.append(", ");
+            sb.append(fr.getCustomerName());
+            sb.append(", ");
+            sb.append(fr.getBaseFee());
+            sb.append(", ");
+            sb.append(fr.getSalesTax());
+            sb.append(", ");
+            sb.append(fr.getType());
+            sb.append("\n");
+        }
+
+        return sb.toString().getBytes();
+    }
+
+    private String getAllTimeTotal(final int affId, final Connection conn) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            ps = conn.prepareStatement(GET_FINANCIALS_ALL_TOTAL);
+            ps.setInt(1, affId);
+            ps.setInt(2, affId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return String.format("%,.2f", rs.getBigDecimal("base_fee_total").setScale(2)) + " USD";
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            DBUtil.closeResources(null, ps, rs);
+        }
+
+        return "0.00 USD";
+    }
+
+    private String getFilterTimeTotal(final int affId, final String range, final Connection conn, FINAL TYPE) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        BigDecimal runningTotal = new BigDecimal(0);
+
+        try {
+            String sql = GET_FINANCIALS_FILTER_TOTAL.replace("[RANGE_REPLACE]", getRangeWhereClauseForFinancials(range));
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, affId);
+            ps.setInt(2, affId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                if (rs.getBigDecimal("base_fee_total") != null) {
+                    runningTotal = runningTotal.add(rs.getBigDecimal("base_fee_total"));
+                }
+            }
+            runningTotal = runningTotal.setScale(2);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            DBUtil.closeResources(null, ps, rs);
+        }
+
+        return String.format("%,.2f", runningTotal.setScale(2)) + " USD";
+    }
+
+    private String getFinancialRecordType(final String dbType) {
+        if (dbType == null) {
+            return "Parking";
+        } else if (dbType.equals("P")) {
+            return "Parking Only";
+        } else if (dbType.equals("start_trip") || dbType.equals("end_trip") || dbType.equals("start_and_end_trip"))  {
+            return "Room and Park";
+        } else if (dbType.equals("room_only")) {
+            return "Room only";
+        }
+
+        return "Parking";
+    }
+
+    private boolean checkIfValidFinancialType(final String filterType, final String recordType) {
+        if (filterType == null) {
+            return false;
+        } else if (filterType.equals("ALL")) {
+            return true;
+        } else if (filterType.equals("PARKING") && recordType.equals("Parking Only")) {
+            return true;
+        } else if (filterType.equals("ROOM") && recordType.equals("Room only")) {
+            return true;
+        } else if (filterType.equals("ROOMPARK") && recordType.equals("Room and Park")) {
+            return true;
+        }
+
+        return false;
     }
 
     private String getRangeWhereClause(final String type) {
@@ -432,6 +648,26 @@ public class AccountHandler {
         }
 
         return "where res_date > DATE_SUB(now(), INTERVAL 7 DAY)";
+    }
+
+    private String getRangeWhereClauseForFinancials(final String type) {
+        if (type == null || type.isEmpty()) {
+            return " > DATE_SUB(now(), INTERVAL 7 DAY)";
+        } else if (type.equals("TODAY")) {
+            return " = now()";
+        } else if (type.equals("YESTERDAY")) {
+            return " > DATE_SUB(now(), INTERVAL 1 DAY)";
+        } else if (type.equals("PREVIOUS_WEEK")) {
+            return " > DATE_SUB(now(), INTERVAL 7 DAY)";
+        } else if (type.equals("PREVIOUS_MONTH")) {
+            return " > DATE_SUB(now(), INTERVAL 1 MONTH)";
+        } else if (type.equals("PREVIOUS_6_MONTHS")) {
+            return " > DATE_SUB(now(), INTERVAL 6 MONTH)";
+        } else if (type.equals("SELECT")) {
+            return " >= ? and res_date <= ? ";
+        }
+
+        return " > DATE_SUB(now(), INTERVAL 7 DAY)";
     }
 
     private String getBookingTypeText(final String type) {

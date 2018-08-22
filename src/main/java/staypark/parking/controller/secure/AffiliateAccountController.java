@@ -4,14 +4,19 @@ import staypark.parking.beans.reservation.AffiliateReservation;
 import staypark.parking.beans.security.Principal;
 import staypark.parking.handler.AccountHandler;
 import staypark.parking.handler.AirportHandler;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 @Controller
@@ -68,21 +73,41 @@ public class AffiliateAccountController {
         Principal p = (Principal) auth.getPrincipal();
         String username = p.getUsername();
 
-        //model.addAttribute("details", airportHandler.getCustomerReservationDetails(username, orderId, true));
-
+        String rangeParm = range;
+        String typeParm = type;
         if (range == null || range.trim().isEmpty()) {
             model.addAttribute("range", "PREVIOUS_WEEK");
+            rangeParm = "PREVIOUS_WEEK";
         } else {
             model.addAttribute("range", range);
         }
 
         if (type == null || type.trim().isEmpty()) {
             model.addAttribute("type", "ALL");
+            typeParm = "ALL";
         } else {
             model.addAttribute("type", type);
         }
 
-        model.addAttribute("financials", accountHandler.getAffiliateFinancial(username, range, type));
+        model.addAttribute("financials", accountHandler.getAffiliateFinancial(username, rangeParm, typeParm));
+
+        return "affiliate/financial-report";
+    }
+
+    @GetMapping(value = "/affiliate/financial/report.csv", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public @ResponseBody byte[] getFinancialReportSpreadsheet(Authentication auth) throws IOException {
+        Principal p = (Principal) auth.getPrincipal();
+        String username = p.getUsername();
+
+        return accountHandler.getFinancialReportSpreadsheet(username);
+    }
+
+    @GetMapping("/affiliate/financial/{affId}")
+    public String getFinancialReportSpreadsheet(Model model, Authentication auth) {
+        Principal p = (Principal) auth.getPrincipal();
+        String username = p.getUsername();
+
+        model.addAttribute("financials", accountHandler.getFinancialReportSpreadsheet(username));
 
         return "affiliate/financial-report";
     }
