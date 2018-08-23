@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{page.html}">
+      layout:decorate="~{page-top-submenu.html}">
 
-<section layout:fragment="page-content">
+<section layout:fragment="side-bar">
+    <div th:replace="affiliatesubmenu :: affiliatesubmenu"></div>
+</section>
+
+<section layout:fragment="main-content">
     <div class="form-row fr-total-section-padding">
         <div class="col-md-auto res-field-c-margin"><span class="fr-title res-time-label">All time total:</span> <span class="green-normal-font res-time-label" th:text="${financials.allTimeTotal}"></span></div>
     </div>

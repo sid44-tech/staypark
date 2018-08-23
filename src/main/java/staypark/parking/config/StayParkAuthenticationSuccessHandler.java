@@ -37,25 +37,25 @@ public class StayParkAuthenticationSuccessHandler implements AuthenticationSucce
     }
 
     protected String determineTargetUrl(Authentication authentication) {
-        boolean isUser = true;
+        boolean isUser = false;
+        boolean isAffiliate = false;
         boolean isAdmin = false;
+        
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         for (GrantedAuthority grantedAuthority : authorities) {
-            if (grantedAuthority.getAuthority().equals("ROLE_USER")) {
-                isUser = true;
-                break;
-            } else if (grantedAuthority.getAuthority().equals("ROLE_ADMIN")) {
-                isAdmin = true;
-                break;
+            if (grantedAuthority.getAuthority().equals("USER")) {
+            	isUser = true;
+            } else if (grantedAuthority.getAuthority().equals("AFFL")) {
+            	isAffiliate = true;
             }
         }
 
         if (isUser) {
             return "/";
-        } else if (isAdmin) {
-            return "/";
+        } else if (isAffiliate) {
+            return "/affiliate/profile";
         } else {
-            throw new IllegalStateException();
+        	 return "/";
         }
     }
 

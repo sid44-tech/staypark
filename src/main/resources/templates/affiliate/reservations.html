@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{page.html}">
+      layout:decorate="~{page-top-submenu.html}">
 
-<section layout:fragment="page-content">
+<section layout:fragment="side-bar">
+    <div th:replace="affiliatesubmenu :: affiliatesubmenu"></div>
+</section>
+
+<section layout:fragment="main-content">
     <div class="form-row">
         <div class="col-md-auto section-title res-field-c-margin"><span class="section-title res-time-label">MY RESERVATIONS</span></div>
         <div class="col-md-3 res-field-c-margin">

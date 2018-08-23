@@ -1,23 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{page-left-nav.html}">
+      layout:decorate="~{page-top-submenu.html}">
 
 <section layout:fragment="side-bar">
-    <div class="prof-left-nav">
-        <div class="row">
-            <a href="/affiliate/profile"><span class="section-title">Profile</span></a>
-        </div>
-        <div class="row">
-            <a href="/#"><span class="section-title">Airport Parking Reservations</span></a>
-        </div>
-        <div class="row">
-            <a href="/#"><span class="section-title">Event Parking Reservations</span></a>
-        </div>
-        <div class="row">
-            <a href="/affiliate/password"><span class="section-title">Change Password</span></a>
-        </div>
-    </div>
+    <div th:replace="affiliatesubmenu :: affiliatesubmenu"></div>
 </section>
 
 <section layout:fragment="main-content">
@@ -26,51 +13,33 @@
             <div class="form-div-container-header">Profile</div>
             <div class="form-div-container-body">
                 <div class="form-group row">
-                    <label for="fname" class="col-sm-4 col-form-label">First Name *</label>
+                    <label for="fname" class="col-sm-4 col-form-label">Company Name *</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" id="fname" th:field="*{firstName}" placeholder="" required>
+                        <input type="text" class="form-control" id="companyName" name="companyName" th:field="*{companyName}" placeholder="" required>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="lname" class="col-sm-4 col-form-label">Last Name *</label>
+                    <label for="lname" class="col-sm-4 col-form-label">Contact Name *</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" id="lname" th:field="*{lastName}" placeholder="" maxlength="12" required>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="email" class="col-sm-4 col-form-label">Email *</label>
-                    <div class="col-sm-8">
-                        <input type="email" class="form-control" id="email" th:field="*{email}" placeholder="" required>
+                        <input type="text" class="form-control" id="contactName" name="contactName" th:field="*{contactName}" placeholder="" maxlength="12" required>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="phone" class="col-sm-4 col-form-label">Phone Number *</label>
                     <div class="col-sm-8">
-                        <input type="number" class="form-control" id="phone" th:field="*{phone}" placeholder="" required>
+                        <input type="text" class="form-control" id="phone" name="phone" th:field="*{phone}" placeholder="" required>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="address" class="col-sm-4 col-form-label">Address *</label>
+                    <label for="email" class="col-sm-4 col-form-label">Email *</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" id="address" th:field="*{address}" placeholder="" maxlength="12" required>
+                        <input type="email" class="form-control" id="email" name="email" th:field="*{email}" placeholder="" required>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="city" class="col-sm-4 col-form-label">City *</label>
+                    <label for="address" class="col-sm-4 col-form-label">Tell Us About Your Company *</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" id="city" th:field="*{city}" placeholder="" maxlength="12" required>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="state" class="col-sm-4 col-form-label">State *</label>
-                    <div class="col-sm-8">
-                        <input type="text" class="form-control" id="state" th:field="*{state}" placeholder="" maxlength="12" required>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="zip" class="col-sm-4 col-form-label">Zip *</label>
-                    <div class="col-sm-8">
-                        <input type="text" class="form-control" id="zip" th:field="*{zip}" placeholder="" maxlength="12" required>
+                    	<textarea class="form-control" id="companyInfo" name="companyInfo" th:field="*{companyInfo}" rows="6" required></textarea>
                     </div>
                 </div>
                 <div class="form-group row">

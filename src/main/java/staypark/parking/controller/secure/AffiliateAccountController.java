@@ -1,7 +1,10 @@
 package staypark.parking.controller.secure;
 
 import staypark.parking.beans.reservation.AffiliateReservation;
+import staypark.parking.beans.security.AffiliateProfile;
+import staypark.parking.beans.security.ChangePassword;
 import staypark.parking.beans.security.Principal;
+import staypark.parking.beans.security.UserProfile;
 import staypark.parking.handler.AccountHandler;
 import staypark.parking.handler.AirportHandler;
 import org.apache.commons.io.IOUtils;
@@ -11,7 +14,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -110,5 +115,53 @@ public class AffiliateAccountController {
         model.addAttribute("financials", accountHandler.getFinancialReportSpreadsheet(username));
 
         return "affiliate/financial-report";
+    }
+    
+    @GetMapping("/affiliate/profile")
+    public String getAffiliateProfile(Model model, Authentication auth) {
+        if (!auth.isAuthenticated()) {
+            return "login";
+        }
+        Principal p = (Principal) auth.getPrincipal();
+
+        model.addAttribute("profile", accountHandler.getAffiliateProfile(p.getUsername()));
+
+        return "affiliate/profile";
+    }
+
+    @PostMapping("/affiliate/profile")
+    public String updateAffiliateProfile(Model model, @ModelAttribute AffiliateProfile profile, Authentication auth) {
+        if (!auth.isAuthenticated()) {
+            return "login";
+        }
+
+        Principal p = (Principal) auth.getPrincipal();
+        model.addAttribute("profile", accountHandler.updateAffiliateProfile(p.getUsername(), profile));
+
+
+        return "affiliate/profile";
+    }
+    
+    @GetMapping("/affiliate/rooms")
+    public String getAffiliateRooms(Model model) {
+        return "affiliate/rooms";
+    }
+    
+    @GetMapping("/affiliate/password")
+    public String changeAffiliatePasswordGet(Model model) {
+        return "affiliate/change-password";
+    }
+
+    @PostMapping("/affiliate/password")
+    public String changeAffiliatePassword(Model model, Authentication auth, @ModelAttribute ChangePassword pw) {
+        Principal p = (Principal) auth.getPrincipal();
+        boolean success = accountHandler.changePassword(p.getUsername(), pw.getCurrentPassword(), pw.getNewPassword());
+        if (success) {
+            model.addAttribute("message", "success");
+        } else {
+            model.addAttribute("message", "error");
+        }
+
+        return "affiliate/change-password";
     }
 }

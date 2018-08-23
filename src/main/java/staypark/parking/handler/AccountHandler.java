@@ -5,6 +5,7 @@ import staypark.parking.beans.AffiliateFinancials;
 import staypark.parking.beans.AffiliateRegister;
 import staypark.parking.beans.UserRegister;
 import staypark.parking.beans.reservation.AffiliateReservation;
+import staypark.parking.beans.security.AffiliateProfile;
 import staypark.parking.beans.security.AuthProfile;
 import staypark.parking.beans.security.UserProfile;
 import staypark.parking.util.DBUtil;
@@ -82,6 +83,7 @@ public class AccountHandler {
             "(username, password, firstname, lastname, occupation, gender, email, ph_num, address, state_id, city_id, zip, status) " +
             "values (?, ?, ?, ?, '', '', ?, ?, ?, ?, ?, ?, 'A') ";
     private String GET_USER_PROFILE = "select * from dbstaypark.gp_user_register where username = ? ";
+    private String GET_AFFILIATE_PROFILE = "select * from dbstaypark.gp_affiliate_login where gal_email = ? ";
     private String UPDATE_USER_PROFILE =
             "update dbstaypark.gp_user_register set " +
             "address = ?, " +
@@ -93,6 +95,15 @@ public class AccountHandler {
             "state_id = ?, " +
             "zip = ? " +
             "where username = ? ";
+    
+    private String UPDATE_AFFILIATE_PROFILE =
+            "update dbstaypark.gp_affiliate_login set " +
+            "gal_com_name = ?, " +
+            "gal_con_name = ?, " +
+            "gal_email = ?, " +
+            "gal_phone = ?, " +
+            "gal_desc = ? " +
+            "where gal_email = ? ";
     private String UPDATE_PASSWORD_CUSTOMER = "update dbstaypark.gp_user_register set password = ? where username = ? ";
     private String UPDATE_PASSWORD_AFFILIATE = "update dbstaypark.gp_affiliate_login set gal_password = ? where gal_email = ? ";
 
@@ -195,6 +206,33 @@ public class AccountHandler {
 
         return up;
     }
+    
+    public AffiliateProfile getAffiliateProfile(final String username) {
+        AffiliateProfile up = new AffiliateProfile();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(GET_AFFILIATE_PROFILE);
+            ps.setString(1, username);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                up.setCompanyName(rs.getString("gal_com_name"));
+                up.setContactName(rs.getString("gal_con_name"));
+                up.setEmail(rs.getString("gal_email"));
+                up.setPhone(rs.getString("gal_phone"));
+                up.setCompanyInfo(rs.getString("gal_desc"));
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            DBUtil.closeResources(conn, ps, rs);
+        }
+
+        return up;
+    }
 
     public UserProfile updateUserProfile(final String username, final UserProfile up) {
         Connection conn = null;
@@ -212,6 +250,30 @@ public class AccountHandler {
             ps.setString(7, up.getState());
             ps.setString(8, up.getZip());
             ps.setString(9, username);
+
+            int rowsUpdated = ps.executeUpdate();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            DBUtil.closeResources(conn, ps, null);
+        }
+
+        return up;
+    }
+    
+    public AffiliateProfile updateAffiliateProfile(final String username, final AffiliateProfile up) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(UPDATE_AFFILIATE_PROFILE);
+            ps.setString(1, up.getCompanyName());
+            ps.setString(2, up.getContactName());
+            ps.setString(3, up.getEmail());
+            ps.setString(4, up.getPhone());
+            ps.setString(5, up.getCompanyInfo());
+            ps.setString(6, username);
 
             int rowsUpdated = ps.executeUpdate();
         } catch (Exception e) {
@@ -478,7 +540,7 @@ public class AccountHandler {
         }
 
         financials.setAllTimeTotal(getAllTimeTotal(affId, conn));
-        financials.setFilterTotal(getFilterTimeTotal(affId, range, conn));
+        financials.setFilterTotal(getFilterTimeTotal(affId, range, type, conn));
 
         DBUtil.closeResources(conn);
 
@@ -574,7 +636,7 @@ public class AccountHandler {
         return "0.00 USD";
     }
 
-    private String getFilterTimeTotal(final int affId, final String range, final Connection conn, FINAL TYPE) {
+    private String getFilterTimeTotal(final int affId, final String range, final String type, final Connection conn) {
         PreparedStatement ps = null;
         ResultSet rs = null;
         BigDecimal runningTotal = new BigDecimal(0);
@@ -587,7 +649,9 @@ public class AccountHandler {
             rs = ps.executeQuery();
             while (rs.next()) {
                 if (rs.getBigDecimal("base_fee_total") != null) {
-                    runningTotal = runningTotal.add(rs.getBigDecimal("base_fee_total"));
+                	if (checkIfValidFinancialType(type, getFinancialRecordType(rs.getString("type")))) {
+                		runningTotal = runningTotal.add(rs.getBigDecimal("base_fee_total"));
+                	}
                 }
             }
             runningTotal = runningTotal.setScale(2);

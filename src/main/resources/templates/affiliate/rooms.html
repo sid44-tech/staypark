@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page-top-submenu.html}">
+
+<section layout:fragment="side-bar">
+    <div th:replace="affiliatesubmenu :: affiliatesubmenu"></div>
+</section>
+
+<section layout:fragment="main-content">
+    <div class="form-row">
+        <div class="col-md-auto section-title res-field-c-margin"><span class="section-title res-time-label">ROOMS</span></div>
+    </div>
+    <br>
+    <div class="table-responsive">
+        <table class="table res-table-bg">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col-auto">Type</th>
+                <th scope="col">Cost</th>
+                <th scope="col">Status</th>
+                <th scope="col">Action</th>
+                <th scope="col">Inventory Calendar</th>
+                <th scope="col">Images</th>
+                <th scope="col">Delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- 
+                <tr th:each="reservation : ${res}">
+                    <td th:text="${reservation.date}"></td>
+                    <td><a th:href="'reservations/' + ${reservation.order}" th:text="${reservation.order}"></a></td>
+                    <td th:text="${reservation.name}"></td>
+                    <td th:text="${reservation.email}"></td>
+                    <td th:text="${reservation.payment}"></td>
+                    <td th:text="${reservation.type}"></td>
+                </tr>
+                 -->
+            </tbody>
+        </table>
+    </div>
+</section>
+</html>
