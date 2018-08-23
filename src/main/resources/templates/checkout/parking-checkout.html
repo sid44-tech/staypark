@@ -14,7 +14,7 @@
 				<span>
 				Complete this form and submit your payment to book your guaranteed reservation. After your payment goes through you will receive an email confirmation. You will need to print out the email you receive and take it with you to the parking facility.
 				<br><br>
-					For questions or to book over the phone reach us from our <a href="/contact-us">contact</a> page.
+					For questions or to speak with a customer service representative, visit our <a href="/contact-us">contact</a> page.
 				</span>
 				<br><br>
 				<span sec:authorize="isAnonymous()">
@@ -131,6 +131,7 @@
 					<div class="form-group col-md-4">
 						<label class="pb-label-label-font" for="phone">Phone *</label>
 						<input type="number" class="form-control" id="phone" name="phone" th:field="*{phone}" required/>
+						<small id="phoneHelp" class="form-text text-muted">Enter with no dashes or spaces</small>
 					</div>
 				</div>
 				<br><br>

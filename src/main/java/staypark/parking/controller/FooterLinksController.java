@@ -58,4 +58,11 @@ public class FooterLinksController {
         model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
         return "contact";
     }
+    
+    @GetMapping("/cancellation")
+    public String cancel(Model model) {
+        model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
+        model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
+        return "cancellation";
+    }
 }

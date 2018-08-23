@@ -370,7 +370,7 @@
                 var sec_indate = datefield3.datepicker("getDate");
                 var cardrop_date = cardrop.datepicker("getDate");
 
-                if (pri_indate > pri_outdate) {
+                if (pri_indate >= pri_outdate) {
                 	pri_indate.setDate(pri_indate.getDate() + 1);
                     datefield2.datepicker("setDate", pri_indate);
 
@@ -423,7 +423,7 @@
                 var sec_indate = datefield3.datepicker("getDate");
                 var sec_outdate = datefield4.datepicker("getDate");
 
-                if (sec_indate > sec_outdate) {
+                if (sec_indate >= sec_outdate) {
                 	sec_indate.setDate(sec_indate.getDate() + 1);
                     datefield4.datepicker("setDate", sec_indate);
                 }
