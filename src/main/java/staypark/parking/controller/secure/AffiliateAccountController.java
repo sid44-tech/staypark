@@ -143,7 +143,15 @@ public class AffiliateAccountController {
     }
     
     @GetMapping("/affiliate/rooms")
-    public String getAffiliateRooms(Model model) {
+    public String getAffiliateRooms(Model model, Authentication auth) {
+        if (!auth.isAuthenticated()) {
+            return "login";
+        }
+
+        Principal p = (Principal) auth.getPrincipal();
+
+        model.addAttribute("rooms", accountHandler.getAffiliateRoomInfo(p.getUsername()));
+
         return "affiliate/rooms";
     }
     

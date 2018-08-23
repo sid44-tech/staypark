@@ -54,6 +54,15 @@ body {
 	width:49%;
 }
 
+.area-title {
+	font-family: 'Roboto', sans-serif;
+	font-size: 16px;
+	font-weight: bold;
+	color: #428bca;
+	display: inline-block;
+	/*margin-bottom: 20px;*/
+}
+
 .section-title {
 	font-family: 'Roboto', sans-serif;
     font-size: 16px;
@@ -254,7 +263,7 @@ body {
 	font-family: 'Roboto', sans-serif;
     font-size: 14px;
     font-weight: bold;
-    color: #428bca;
+    color: #71a40a;
 }
 
 .clickable-text {
@@ -1555,4 +1564,8 @@ body {
 .fr-button-row-padding {
 	padding-top: 16px;
 	padding-bottom: 16px;
+}
+
+.fr-rooms-padding {
+	padding-top: 8px;
 }

@@ -43,9 +43,9 @@ public class StayParkAuthenticationSuccessHandler implements AuthenticationSucce
         
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         for (GrantedAuthority grantedAuthority : authorities) {
-            if (grantedAuthority.getAuthority().equals("USER")) {
+            if (grantedAuthority.getAuthority().equals("ROLE_USER")) {
             	isUser = true;
-            } else if (grantedAuthority.getAuthority().equals("AFFL")) {
+            } else if (grantedAuthority.getAuthority().equals("ROLE_AFFL")) {
             	isAffiliate = true;
             }
         }

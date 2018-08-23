@@ -1,9 +1,6 @@
 package staypark.parking.handler;
 
-import staypark.parking.beans.AffiliateFinancialRecord;
-import staypark.parking.beans.AffiliateFinancials;
-import staypark.parking.beans.AffiliateRegister;
-import staypark.parking.beans.UserRegister;
+import staypark.parking.beans.*;
 import staypark.parking.beans.reservation.AffiliateReservation;
 import staypark.parking.beans.security.AffiliateProfile;
 import staypark.parking.beans.security.AuthProfile;
@@ -60,16 +57,16 @@ public class AccountHandler {
     private String GET_USERNAME_AND_PASSWORD =
             "select * from " +
             "( " +
-            "select gp_username as username, gp_password as password, 'ADMN' as type, gp_username as fname " +
+            "select gp_username as username, gp_password as password, 'ROLE_ADMN' as type, gp_username as fname " +
             "from dbstaypark.gp_admin_login " +
             "union " +
-            "select gal_email as username, gal_password as password, 'AFFL' as type, gal_con_name as fname " +
+            "select gal_email as username, gal_password as password, 'ROLE_AFFL' as type, gal_con_name as fname " +
             "from dbstaypark.gp_affiliate_login " +
             "union " +
-            "select username, password, 'CALL' as type, name as fname " +
+            "select username, password, 'ROLE_CALL' as type, name as fname " +
             "from dbstaypark.gp_callcenter_user " +
             "union " +
-            "select username, password, 'USER' as type, firstname as fname " +
+            "select username, password, 'ROLL_USER' as type, firstname as fname " +
             "from dbstaypark.gp_user_register " +
             ") as all_users " +
             "where username = ? ";
@@ -175,6 +172,11 @@ public class AccountHandler {
             "where bk_aff_id = ? " +
             "group by bk_parking_type ";
 
+    private static String GET_AFFILIATE_ROOM_INFO =
+            "select room.rm_type, room.rm_cost, room.rm_status " +
+            "from dbstaypark.gp_affiliate_login as login " +
+            "left join dbstaypark.gp_room as room on room.rm_aff_id = login.gal_id " +
+            "where login.gal_email = ? ";
 
     public UserProfile getUserProfile(final String username) {
         UserProfile up = new UserProfile();
@@ -613,6 +615,33 @@ public class AccountHandler {
         }
 
         return sb.toString().getBytes();
+    }
+
+    public List<AffiliateRoom> getAffiliateRoomInfo(final String username) {
+        List<AffiliateRoom> rooms = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(GET_AFFILIATE_ROOM_INFO);
+            ps.setString(1, username);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                AffiliateRoom room = new AffiliateRoom();
+                room.setType(rs.getString("rm_type"));
+                room.setStatus(rs.getString("rm_status"));
+                room.setCost(rs.getBigDecimal("rm_cost").toString());
+                rooms.add(room);
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            DBUtil.closeResources(conn, ps, rs);
+        }
+
+        return rooms;
     }
 
     private String getAllTimeTotal(final int affId, final Connection conn) {
