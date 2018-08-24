@@ -46,7 +46,7 @@
                 <th scope="col">Type</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody class="res-table-bg">
                 <tr th:each="reservation : ${res}">
                     <td th:text="${reservation.date}"></td>
                     <td><a th:href="'reservations/' + ${reservation.order}" th:text="${reservation.order}"></a></td>

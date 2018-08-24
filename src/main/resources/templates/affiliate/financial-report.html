@@ -53,7 +53,7 @@
                 <th scope="col">Type</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody class="res-table-bg">
             <tr th:each="record : ${financials.details}">
                 <td th:text="${record.reservationDate}"></td>
                 <td><a th:href="'reservations/' + ${record.orderNumber}" th:text="${record.orderNumber}"></a></td>
