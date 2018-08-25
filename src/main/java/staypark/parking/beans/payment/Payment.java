@@ -12,5 +12,6 @@ public class Payment {
 	private String paymentType = "";
 	private String payerName = "";
 	private String cardType = "";
+	private boolean dbProcessError = false;
 
 }

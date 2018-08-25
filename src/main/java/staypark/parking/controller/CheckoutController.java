@@ -2,6 +2,7 @@ package staypark.parking.controller;
 
 import staypark.parking.beans.booking.ParkingCheckout;
 import staypark.parking.beans.booking.RoomParkInput;
+import staypark.parking.beans.payment.Payment;
 import staypark.parking.handler.CheckoutHandler;
 import staypark.parking.util.SecurityUtil;
 
@@ -109,7 +110,13 @@ public class CheckoutController {
     public String checkoutParkPost(Model model, @PathVariable("hotelId") int hotelId, @ModelAttribute ParkingCheckout checkout, Authentication auth) {
 	    checkout.setHotelId(String.valueOf(hotelId));
 
-        checkoutHandler.handleBookingSubmit(checkout, SecurityUtil.getAuthenticatedUsername(auth));
+        Payment payment = checkoutHandler.handleBookingSubmit(checkout, SecurityUtil.getAuthenticatedUsername(auth));
+
+        if (!payment.isSuccess()) {
+            model.addAttribute("checkout", checkout);
+            model.addAttribute("error", payment.getPaymentResponse());
+            return "checkout/parking-checkout";
+        }
 
         return "checkout/confirm-checkout";
     }

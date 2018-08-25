@@ -278,7 +278,7 @@ public class CheckoutHandler {
             DBUtil.closeResources(conn, ps, rs);
         }
 
-        if (input.getSearchType() != null && !input.getSearchType().equals("")) {
+        if (input.getSearchType() != null && !input.getSearchType().equals("") && !input.getSearchType().equals("P")) {
             HotelParkingRates rates = hotelHandler.getRoomAndParkBaseTotal(input);
             if (input.getSearchType().equals("R")) {
                 pc.setBaseRate(rates.getHotelBaseRate().toString());
@@ -334,15 +334,7 @@ public class CheckoutHandler {
         return pc;
     }
     
-    public void handleBookingSubmit(final ParkingCheckout checkout, final String username) {
-    	Payment payment = paymentHandler.processPayment("USD", checkout.getCardNumber(), checkout.getCvv(), checkout.getCardType(), 
-    			checkout.getOwnerName(), checkout.getExpirationMonth(), checkout.getExpirationYear());
-    	
-    	//TODO: Do something if payment fails.  Update current page to show there was a payment error?
-    	if (!payment.isSuccess()) {
-    		return;
-    	}
-    	
+    public Payment handleBookingSubmit(final ParkingCheckout checkout, final String username) {
     	RoomParkInput input = new RoomParkInput();
     	input.setHotelId(Integer.valueOf(checkout.getHotelId()));
     	input.setDropOffDate(checkout.getDropOffDate());
@@ -363,6 +355,18 @@ public class CheckoutHandler {
         input.setEndHotelDepartureDateMDY(checkout.getSecondaryHotelCheckOutDate());
 
         ParkingCheckout safeCheckout = getParkingCheckoutInfo(input);
+        BigDecimal chargeAmount = new BigDecimal(safeCheckout.getGrandTotal());
+        if (!safeCheckout.getTotalDueNow().equals("")) {
+            chargeAmount = new BigDecimal(safeCheckout.getTotalDueNow());
+        }
+
+        Payment payment = paymentHandler.processPayment("USD", checkout.getCardNumber(), checkout.getCvv(), checkout.getCardType(),
+                checkout.getOwnerName(), checkout.getExpirationMonth(), checkout.getExpirationYear(), chargeAmount, checkout.getFirstName(),
+                checkout.getLastName(), checkout.getAddress(), checkout.getState(), checkout.getZip());
+
+        if (!payment.isSuccess()) {
+            return payment;
+        }
 
         int min = 100000000;
         int max = 999999999;
@@ -372,7 +376,8 @@ public class CheckoutHandler {
         if (checkout.getCheckoutType() != null && !checkout.getCheckoutType().isEmpty() && !checkout.getCheckoutType().equals("P")) {
             boolean recordUpdated = insertHotelParkReservationRecord(checkout, safeCheckout, username, payment, orderId);
             if (!recordUpdated) {
-                return;
+                payment.setDbProcessError(true);
+                return payment;
             }
 
 //            boolean detailRecordsUpdated = insertHotelParkReservationDetailRecords(checkout, safeCheckout, orderId);
@@ -382,12 +387,14 @@ public class CheckoutHandler {
         } else {
             boolean recordUpdated = insertReservationRecord(checkout, safeCheckout, username, payment, orderId);
             if (!recordUpdated) {
-                return;
+                payment.setDbProcessError(true);
+                return payment;
             }
 
             boolean detailRecordsUpdated = insertReservationDetailRecords(checkout, safeCheckout, orderId);
             if (!detailRecordsUpdated) {
-                return;
+                payment.setDbProcessError(true);
+                return payment;
             }
 
             if (checkout.getExtensionOrderId() != null && !checkout.getExtensionOrderId().trim().isEmpty()) {
@@ -395,7 +402,9 @@ public class CheckoutHandler {
             }
         }
 
-        //sendBookingEmails(checkout, safeCheckout, username, payment, orderId, checkout.getExtensionOrderId());
+        sendBookingEmails(checkout, safeCheckout, username, payment, orderId, checkout.getExtensionOrderId());
+
+        return payment;
     }
     
     private BigDecimal calculateServiceFee(final BigDecimal baseServiceFee, final int totalDays) {

@@ -48,6 +48,11 @@
 		</dependency>
         <!-- end::actuator[] -->
         <dependency>
+            <groupId>net.authorize</groupId>
+            <artifactId>anet-java-sdk</artifactId>
+            <version>LATEST</version>
+        </dependency>
+        <dependency>
     		<groupId>mysql</groupId>
     		<artifactId>mysql-connector-java</artifactId>
     		<version>6.0.6</version>
