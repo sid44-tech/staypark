@@ -1,4 +1,4 @@
-package staypark.parking.controller;
+package staypark.parking.controller.nonsecure;
 
 import java.util.ArrayList;
 import java.util.List;

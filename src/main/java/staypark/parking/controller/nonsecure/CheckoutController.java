@@ -1,4 +1,4 @@
-package staypark.parking.controller;
+package staypark.parking.controller.nonsecure;
 
 import staypark.parking.beans.booking.ParkingCheckout;
 import staypark.parking.beans.booking.RoomParkInput;
