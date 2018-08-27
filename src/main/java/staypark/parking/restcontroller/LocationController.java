@@ -1,8 +1,8 @@
 package staypark.parking.restcontroller;
 
-import staypark.parking.beans.City;
-import staypark.parking.beans.Country;
-import staypark.parking.beans.State;
+import staypark.parking.beans.general.City;
+import staypark.parking.beans.general.Country;
+import staypark.parking.beans.general.State;
 import staypark.parking.util.AirportUtil;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

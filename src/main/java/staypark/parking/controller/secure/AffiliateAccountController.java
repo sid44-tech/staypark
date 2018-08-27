@@ -4,10 +4,8 @@ import staypark.parking.beans.reservation.AffiliateReservation;
 import staypark.parking.beans.security.AffiliateProfile;
 import staypark.parking.beans.security.ChangePassword;
 import staypark.parking.beans.security.Principal;
-import staypark.parking.beans.security.UserProfile;
 import staypark.parking.handler.AccountHandler;
 import staypark.parking.handler.AirportHandler;
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 @Controller
@@ -66,7 +63,6 @@ public class AffiliateAccountController {
     public String getAffiliateReservationOrderDetail(Model model, Authentication auth, @PathVariable(name = "orderId") String orderId) {
         Principal p = (Principal) auth.getPrincipal();
         String username = p.getUsername();
-        boolean validAccess = accountHandler.checkAffiliateCanAccessOrder(orderId, username);
 
         model.addAttribute("details", airportHandler.getCustomerReservationDetails(username, orderId, true));
 

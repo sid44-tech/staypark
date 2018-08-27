@@ -1,9 +1,8 @@
 package staypark.parking.controller.nonsecure;
 
-import staypark.parking.beans.AffiliateRegister;
-import staypark.parking.beans.ContactUs;
+import staypark.parking.beans.affiliate.AffiliateRegister;
+import staypark.parking.beans.general.ContactUs;
 import staypark.parking.handler.AccountHandler;
-import staypark.parking.handler.AirportHandler;
 import staypark.parking.util.AirportUtil;
 import staypark.parking.util.EmailUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +23,6 @@ import java.io.IOException;
 @Slf4j
 public class NavBarController {
 
-    @Autowired
-    private AirportHandler airportHandler;
     @Autowired
     private AccountHandler accountHandler;
 

@@ -2,7 +2,7 @@ package staypark.parking.comparator;
 
 import java.util.Comparator;
 
-import staypark.parking.beans.HotelInformation;
+import staypark.parking.beans.hotel.HotelInformation;
 
 public class HotelDistanceComparator implements Comparator<HotelInformation> {
 

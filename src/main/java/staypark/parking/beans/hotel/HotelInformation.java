@@ -1,9 +1,12 @@
-package staypark.parking.beans;
+package staypark.parking.beans.hotel;
 
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.List;
+
+import staypark.parking.beans.general.ImageLink;
+import staypark.parking.beans.reservation.Room;
 
 @Data
 public class HotelInformation {

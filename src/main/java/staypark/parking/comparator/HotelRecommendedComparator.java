@@ -1,8 +1,8 @@
 package staypark.parking.comparator;
 
-import staypark.parking.beans.HotelInformation;
-
 import java.util.Comparator;
+
+import staypark.parking.beans.hotel.HotelInformation;
 
 public class HotelRecommendedComparator implements Comparator<HotelInformation> {
 

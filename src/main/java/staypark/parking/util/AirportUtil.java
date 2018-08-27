@@ -6,12 +6,20 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import staypark.parking.beans.*;
+import staypark.parking.beans.general.City;
+import staypark.parking.beans.general.Country;
+import staypark.parking.beans.general.State;
+import staypark.parking.beans.reservation.SpecialParkingDate;
+import staypark.parking.beans.reservation.SpecialParkingDay;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.parameters.P;
 
 @Slf4j
 public class AirportUtil {

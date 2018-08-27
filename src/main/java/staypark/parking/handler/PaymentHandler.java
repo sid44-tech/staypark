@@ -4,7 +4,6 @@ import staypark.parking.beans.payment.PaymentResponse;
 import org.springframework.stereotype.Service;
 
 import staypark.parking.beans.payment.Payment;
-import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 
@@ -14,7 +13,6 @@ import net.authorize.api.controller.base.ApiOperationBase;
 import net.authorize.api.controller.CreateTransactionController;
 
 @Service
-@Slf4j
 public class PaymentHandler {
 
 	//Live Authorize.net API Information

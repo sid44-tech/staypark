@@ -1,4 +1,4 @@
-package staypark.parking.beans;
+package staypark.parking.beans.affiliate;
 
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;

@@ -1,7 +1,7 @@
 package staypark.parking.controller.nonsecure;
 
-import staypark.parking.beans.UserRegister;
 import staypark.parking.beans.security.AuthProfile;
+import staypark.parking.beans.user.UserRegister;
 import staypark.parking.handler.AccountHandler;
 import staypark.parking.util.AirportUtil;
 import org.springframework.beans.factory.annotation.Autowired;

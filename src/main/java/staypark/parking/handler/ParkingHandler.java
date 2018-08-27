@@ -5,26 +5,22 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import staypark.parking.beans.reservation.ChangeReservation;
+import staypark.parking.beans.reservation.SpecialParkingDate;
+import staypark.parking.beans.reservation.SpecialParkingDay;
 import staypark.parking.comparator.HotelRecommendedComparator;
 import staypark.parking.util.AirportUtil;
 import staypark.parking.util.EmailUtil;
 import org.springframework.stereotype.Service;
 
-import staypark.parking.beans.HotelInformation;
-import staypark.parking.beans.ImageLink;
-import staypark.parking.beans.SpecialParkingDate;
-import staypark.parking.beans.SpecialParkingDay;
+import staypark.parking.beans.general.ImageLink;
+import staypark.parking.beans.hotel.HotelInformation;
 import staypark.parking.comparator.HotelDistanceComparator;
 import staypark.parking.comparator.HotelPriceComparator;
 import staypark.parking.util.DBUtil;
@@ -41,22 +37,6 @@ public class ParkingHandler {
 			"left join dbstaypark.gp_city as c on d.gdl_city_id= c.gpc_id " +
 			"left join dbstaypark.gp_state as s on d.gdl_state_id=s.gps_id " +
 			"where d.gdl_scode=? and p.gpi_status='Active' ";
-
-	private static String GET_RESERVATION_COUNT_FOR_RANGE_HOTEL =
-			"select d.rd_st_date, count(d.rd_st_date) as count " +
-			"from dbstaypark.gp_reservation_dtls as d " +
-			"WHERE d.rd_htl_id = ? and d.rd_st_date >= ? AND d.rd_st_date <= ? " +
-			"group by d.rd_st_date ";
-
-	private static String GET_SPECIAL_DATE_PARKING_RANGE_INFO =
-			"select sp_date, sp_cost, sp_prk_no " +
-			"from dbstaypark.gp_sp_reservation " +
-			"WHERE sp_htl_id = ? and sp_date >= ? and sp_date <= ? ";
-
-	private static String GET_SPECIAL_DAY_PARKING_INFO =
-			"select * " +
-			"from dbstaypark.gp_sp_dy_reservation " +
-			"WHERE dy_htl_id = ? ";
 
 	private static String GET_PARKING_IMAGES_FOR_HOTEL =
 			"select * " +
@@ -141,8 +121,12 @@ public class ParkingHandler {
 				hotel.setCurrencyType(AirportUtil.getCurrencyFromId(rs.getInt("gdl_country")));
 				hotel.setParkingCost(new BigDecimal(0.00));
 				hotel.setParkingCostDescription("Based on some number of days");
-				hotel.setSoldout(false);
 				hotel.setNumberParkingSpaces(rs.getInt("gpi_pno"));
+				if (hotel.getNumberParkingSpaces() <= 0) {
+					hotel.setSoldout(true);
+				} else {
+					hotel.setSoldout(false);
+				}
 				hotel.setParkingPaymentType(rs.getString("payment_type"));
 				hotel.setParkingStandardDailyFee(rs.getBigDecimal("gpi_feepday"));
 				hotel.setRecommendedSort(rs.getInt("gpi_sequence"));
@@ -167,10 +151,12 @@ public class ParkingHandler {
 
 		for (int i = 0; i < totalDays; i++) {
 			currentDate = DateUtil.addDaysToDate(currentDate, i);
-			int dayId = DateUtil.getNumericalDayOfWeek(currentDate);
 			int bookedCount = 0;
 			if (bookedCountMap.get(currentDate) != null) {
 				bookedCount = bookedCountMap.get(currentDate);
+				if (hotel.getNumberParkingSpaces() <= bookedCount) {
+					hotel.setSoldout(true);
+				}
 			}
 
 			//Calculate cost for day if day is a special date

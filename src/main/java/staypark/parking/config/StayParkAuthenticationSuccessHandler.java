@@ -39,7 +39,6 @@ public class StayParkAuthenticationSuccessHandler implements AuthenticationSucce
     protected String determineTargetUrl(Authentication authentication) {
         boolean isUser = false;
         boolean isAffiliate = false;
-        boolean isAdmin = false;
         
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         for (GrantedAuthority grantedAuthority : authorities) {

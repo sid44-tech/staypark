@@ -1,14 +1,14 @@
 package staypark.parking.handler;
 
-import staypark.parking.beans.Room;
-import staypark.parking.beans.SpecialParkingDate;
-import staypark.parking.beans.SpecialParkingDay;
 import staypark.parking.beans.booking.AppliedCoupon;
 import staypark.parking.beans.booking.Coupon;
 import staypark.parking.beans.booking.ParkingCheckout;
 import staypark.parking.beans.booking.RoomParkInput;
 import staypark.parking.beans.hotel.HotelParkingRates;
 import staypark.parking.beans.payment.Payment;
+import staypark.parking.beans.reservation.Room;
+import staypark.parking.beans.reservation.SpecialParkingDate;
+import staypark.parking.beans.reservation.SpecialParkingDay;
 import staypark.parking.beans.security.UserProfile;
 import staypark.parking.util.AirportUtil;
 import staypark.parking.util.DBUtil;
@@ -17,7 +17,6 @@ import staypark.parking.util.EmailUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -25,9 +24,12 @@ import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLType;
 import java.sql.Types;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 @Service
 @Slf4j
@@ -579,7 +581,6 @@ public class CheckoutHandler {
              ps.setString(46, "A");
              ps.setString(47, orderId);
              ps.setString(48, "");
-             //TODO: Set discount in payment calc
              ps.setString(49, safeCheckout.getDiscount());
              ps.setString(50, safeCheckout.getTotalDueNow());
              ps.setString(51, safeCheckout.getTotalDueAtLot());
@@ -607,13 +608,6 @@ public class CheckoutHandler {
         ResultSet rs = null;
         int updated = -1;
         int affId = airportHandler.getAffiliateIdByParkingId(Integer.valueOf(checkout.getHotelId()));
-
-        UserProfile up = null;
-        int userId = 0;
-        if (username != null) {
-            up = accountHandler.getUserProfile(username);
-            userId = up.getUserId();
-        }
         
         Room room = hotelHandler.getRoomInfo(Integer.valueOf(checkout.getRoomId()));
         int days = 0;
@@ -776,7 +770,6 @@ public class CheckoutHandler {
             Date currentDate = startDate;
             for (int i = 0; i < totalDays; i++) {
                 currentDate = DateUtil.addDaysToDate(currentDate, i);
-                int dayId = DateUtil.getNumericalDayOfWeek(currentDate);
 
                 BigDecimal currentDayCost;
                 //Calculate cost for day if day is a special date
@@ -831,22 +824,21 @@ public class CheckoutHandler {
             EmailUtil.sendEmail(checkout.getEmail(), subject, body);
             EmailUtil.sendEmail(EmailUtil.SUPPORT_EMAIL, subject, body);
 
-            //TODO: Uncomment this section to send emails to affiliates
-//            if (safeCheckout.getFaxType().equals("parking_only") || safeCheckout.getFaxType().equals("both")) {
-//                EmailUtil.sendEmail(safeCheckout.getFaxNumber() + "@fax.tc", subject, body);
-//                if (safeCheckout.getConfirmationType().equals("both")) {
-//                    if (!safeCheckout.getAffiliateEmail().trim().equals("")) {
-//                        EmailUtil.sendEmail(safeCheckout.getAffiliateEmail(), subject, body);
-//                    }
-//                }
-//            } else {
-//                if (!safeCheckout.getAffiliateEmail().trim().equals("")) {
-//                    EmailUtil.sendEmail(safeCheckout.getAffiliateEmail(), subject, body);
-//                }
-//                if (!safeCheckout.getAffiliateSecondaryEmail().trim().equals("")) {
-//                    EmailUtil.sendEmail(safeCheckout.getAffiliateSecondaryEmail(), subject, body);
-//                }
-//            }
+            if (safeCheckout.getFaxType().equals("parking_only") || safeCheckout.getFaxType().equals("both")) {
+                EmailUtil.sendEmail(safeCheckout.getFaxNumber() + "@fax.tc", subject, body);
+                if (safeCheckout.getConfirmationType().equals("both")) {
+                    if (!safeCheckout.getAffiliateEmail().trim().equals("")) {
+                        EmailUtil.sendEmail(safeCheckout.getAffiliateEmail(), subject, body);
+                    }
+                }
+            } else {
+                if (!safeCheckout.getAffiliateEmail().trim().equals("")) {
+                    EmailUtil.sendEmail(safeCheckout.getAffiliateEmail(), subject, body);
+                }
+                if (!safeCheckout.getAffiliateSecondaryEmail().trim().equals("")) {
+                    EmailUtil.sendEmail(safeCheckout.getAffiliateSecondaryEmail(), subject, body);
+                }
+            }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }

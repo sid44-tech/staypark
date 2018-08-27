@@ -1,4 +1,4 @@
-package staypark.parking.beans;
+package staypark.parking.beans.user;
 
 import lombok.Data;
 

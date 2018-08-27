@@ -8,9 +8,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 public class DateUtil {
 	private static SimpleDateFormat DATE_FORMAT_WITH_DAY = new SimpleDateFormat("EEEE MMMM dd, yyyy", Locale.US);
 	private static SimpleDateFormat DATE_FORMAT_YEAR_LAST = new SimpleDateFormat("MM-dd-yyyy", Locale.US);

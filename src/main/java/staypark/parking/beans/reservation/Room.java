@@ -1,8 +1,10 @@
-package staypark.parking.beans;
+package staypark.parking.beans.reservation;
 
 import lombok.Data;
 
 import java.math.BigDecimal;
+
+import staypark.parking.beans.general.ImageLink;
 
 @Data
 public class Room {

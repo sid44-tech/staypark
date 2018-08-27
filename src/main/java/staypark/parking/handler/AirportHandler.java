@@ -1,9 +1,9 @@
 package staypark.parking.handler;
 
-import staypark.parking.beans.AirportBean;
-import staypark.parking.beans.AirportDetailBean;
-import staypark.parking.beans.BrowseAirports;
-import staypark.parking.beans.StateAirportBean;
+import staypark.parking.beans.general.StateAirportBean;
+import staypark.parking.beans.reservation.AirportBean;
+import staypark.parking.beans.reservation.AirportDetailBean;
+import staypark.parking.beans.reservation.BrowseAirports;
 import staypark.parking.beans.user.AirportReservations;
 import staypark.parking.beans.user.ReservtionDetails;
 import staypark.parking.util.AirportUtil;

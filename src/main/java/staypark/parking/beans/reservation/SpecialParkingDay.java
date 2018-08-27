@@ -1,4 +1,4 @@
-package staypark.parking.beans;
+package staypark.parking.beans.reservation;
 
 import java.math.BigDecimal;
 

@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import staypark.parking.beans.TestimonialBean;
+import staypark.parking.beans.general.TestimonialBean;
 import staypark.parking.util.DBUtil;
 import lombok.extern.slf4j.Slf4j;
 

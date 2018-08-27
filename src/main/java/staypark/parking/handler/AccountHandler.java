@@ -1,10 +1,15 @@
 package staypark.parking.handler;
 
 import staypark.parking.beans.*;
+import staypark.parking.beans.affiliate.AffiliateFinancialRecord;
+import staypark.parking.beans.affiliate.AffiliateFinancials;
+import staypark.parking.beans.affiliate.AffiliateRegister;
+import staypark.parking.beans.affiliate.AffiliateRoom;
 import staypark.parking.beans.reservation.AffiliateReservation;
 import staypark.parking.beans.security.AffiliateProfile;
 import staypark.parking.beans.security.AuthProfile;
 import staypark.parking.beans.security.UserProfile;
+import staypark.parking.beans.user.UserRegister;
 import staypark.parking.util.DBUtil;
 import staypark.parking.util.DateUtil;
 import staypark.parking.util.EmailUtil;
@@ -12,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -133,14 +137,6 @@ public class AccountHandler {
                     "left join dbstaypark.gp_affiliate_login aff on aff.gal_id = res.bk_aff_id " +
                     "where bk_order_id = ? ";
 
-    private static String GET_CUSTOMER_RESERVATION_DETAIL_ORDER_ONLY =
-            "select order_id, gr_d_air, gr_d_loc, gr_payment, reservation_status, gr_reservation_date, gr_d_time, gr_p_time, gr_b_fee, gr_s_fee, gr_s_tax, gr_g_total, " +
-                    "gr_payment_type, s.gps_t_zone, gr_t_time, gr_h_time, loc_state, loc_city, gp_tracking_no, gr_add, gr_city, gr_state, gr_zip, loc_state, loc_city " +
-                    "from dbstaypark.gp_reservation as res " +
-                    "left join dbstaypark.gp_user_register as u on u.id = res.user_id " +
-                    "left join dbstaypark.gp_state as s on s.gps_state = res.loc_state " +
-                    "where gr_p_id != 0 and res.order_id = ? ";
-
     private static String GET_FINANCIALS_BY_AFFILIATE =
             "select * from (select gr_reservation_date as res_date, order_id as order_id, gr_fname as fname, gr_lname as lname, gr_b_fee as base_fee, gr_s_tax as sales_tax, 'P' as type " +
             "from dbstaypark.gp_reservation " +
@@ -253,7 +249,7 @@ public class AccountHandler {
             ps.setString(8, up.getZip());
             ps.setString(9, username);
 
-            int rowsUpdated = ps.executeUpdate();
+            ps.executeUpdate();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         } finally {
@@ -277,7 +273,7 @@ public class AccountHandler {
             ps.setString(5, up.getCompanyInfo());
             ps.setString(6, username);
 
-            int rowsUpdated = ps.executeUpdate();
+            ps.executeUpdate();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         } finally {

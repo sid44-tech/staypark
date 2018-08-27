@@ -2,7 +2,13 @@ package staypark.parking.handler;
 
 import staypark.parking.beans.*;
 import staypark.parking.beans.booking.RoomParkInput;
+import staypark.parking.beans.general.ImageLink;
+import staypark.parking.beans.hotel.HotelInformation;
 import staypark.parking.beans.hotel.HotelParkingRates;
+import staypark.parking.beans.reservation.Room;
+import staypark.parking.beans.reservation.RoomParkSearch;
+import staypark.parking.beans.reservation.RoomParkSearchOptions;
+import staypark.parking.beans.reservation.RoomParkSearchResults;
 import staypark.parking.util.AirportUtil;
 import staypark.parking.util.DBUtil;
 import staypark.parking.util.DateUtil;
@@ -14,11 +20,9 @@ import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 @Service
 @Slf4j
@@ -38,11 +42,7 @@ public class HotelHandler {
             "select * from dbstaypark.gp_parking_image " +
             "where gppi_p_id = ? " +
             "order by gppi_id desc ";
-    private static String GET_ROOM_IMAGES =
-            "select rm_timage, rm_limage " +
-                    "from gp_room_image " +
-                    "WHERE rm_id = ? ";
-
+    
     //parm is drc_htl_id from above query'
     private static String GET_ROOMS_AVAILABLE =
             "select * " +
@@ -58,14 +58,7 @@ public class HotelHandler {
             "left join dbstaypark.gp_room_image as image on image.rm_id = room.rm_id " +
             "where room.rm_htl_id = ? and room.rm_status = 'Active' and room.rm_id = ? " +
             "order by room.rm_cost, room.rm_id ";
-
-    private static String GET_ROOM_COUNT_TOTAL_USED = "select count(bk_dtls_id) as tot " +
-            "from gp_hotel_parking_reservation_details " +
-            "WHERE bk_dtls_room_id = ? and bk_dtls_start_date = ? ";
-    private static String GET_ROOM_SPECIAL = "select sp_rm_htl_id, sp_rm_num_room " +
-            "from gp_special_date_for_room " +
-            "WHERE sp_rm_date = ? and sp_rm_room_id = ? ";
-
+    
     private static String GET_HOTEL_PARKING_RATES =
             "select drc_base_rate, drc_1_7_cost, drc_8_14_cost, drc_upto_15_cost " +
             "from dbstaypark.gp_htl_day_range_cost " +
@@ -580,14 +573,5 @@ public class HotelHandler {
         }
 
         return cost;
-    }
-
-    private boolean isRoomAvailableForNumberOfPeople(final double adults, final double children,
-                                                          final double rooms, final double roomMaxPersons) {
-        if (((adults + children)/rooms) > roomMaxPersons) {
-            return false;
-        }
-
-        return true;
     }
 }

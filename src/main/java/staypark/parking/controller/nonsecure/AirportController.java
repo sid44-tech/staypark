@@ -1,6 +1,6 @@
 package staypark.parking.controller.nonsecure;
 
-import staypark.parking.beans.RoomParkSearch;
+import staypark.parking.beans.reservation.RoomParkSearch;
 import staypark.parking.handler.AirportHandler;
 import staypark.parking.handler.HotelHandler;
 
