@@ -1,6 +1,5 @@
 package staypark.parking.handler;
 
-import staypark.parking.beans.*;
 import staypark.parking.beans.booking.RoomParkInput;
 import staypark.parking.beans.general.ImageLink;
 import staypark.parking.beans.hotel.HotelInformation;
@@ -165,7 +164,7 @@ public class HotelHandler {
                 bean.setCarUpToSevenRate(rs.getBigDecimal("drc_1_7_cost"));
                 bean.setCarEightToFourteenRate(rs.getBigDecimal("drc_8_14_cost"));
                 bean.setCarOverFifteenRate(rs.getBigDecimal("drc_upto_15_cost"));
-                bean.setLogoImage("/images/hotel-logo/" + rs.getString( "drc_gpi_logo"));
+                bean.setLogoImage("/images/hotel-logo/" + rs.getString( "gpi_logo"));
                 bean.setAirportDistance(rs.getDouble("gpi_distence"));
                 bean.setShuttleFrequency(rs.getString("gpi_shuttel"));
                 bean.setLatitude(rs.getBigDecimal("gpi_latitude"));
