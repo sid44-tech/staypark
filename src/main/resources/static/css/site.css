@@ -16,6 +16,10 @@ body {
 	float: left;
 }
 
+.align-left {
+	text-align: left;
+}
+
 .align-right {
 	text-align: right;
 }
@@ -355,16 +359,12 @@ body {
 }
 
 .support-width {
-	width: 85px;
+	width: 145px;
 }
 
 @media (min-width: 600px) {
 	.logo-width {
 		width: 275px;
-	}
-	
-	.support-width {
-		width: 145px;
 	}
 }
 
@@ -1112,7 +1112,7 @@ body {
 	left: 0px;
 	right: 0px;
 	height: 200px;
-	background-color: rgba(0, 0, 0, 0.4);
+	background-color: rgba(0, 0, 0, 0.05);
 	border-top-radius: 5px;
 }
 
@@ -1257,7 +1257,7 @@ body {
 	left: 0px;
 	right: 0px;
 	height: 200px;
-	background-color: rgba(0, 0, 0, .1);
+	background-color: rgba(0, 0, 0, .05);
 	border-top-radius: 5px;
 }
 

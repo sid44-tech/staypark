@@ -25,6 +25,11 @@ public class ParkingController {
 		model.addAttribute("hotels", parkingHandler.getParkingSearchResults(airport, dropOffDate, pickUpDate, dropOffTime, pickUpTime, sort));
 		model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
 		model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
+		model.addAttribute("selectedAirport", AirportUtil.getDepartureLocation(airport));
+		model.addAttribute("pickUpDate", pickUpDate.replace("-", "/"));
+		model.addAttribute("dropOffDate", dropOffDate.replace("-", "/"));
+		model.addAttribute("pickUpTime", pickUpTime);
+		model.addAttribute("dropOffTime", dropOffTime);
 		model.addAttribute("sort", sort);
         
         return "parking";

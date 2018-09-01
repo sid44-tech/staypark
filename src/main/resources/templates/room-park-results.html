@@ -8,8 +8,6 @@
 		<div class="card ad-card-custom">
 			<img class="card-img-top p-results-card-img-top" th:src="${hotel.logoImage}" alt="Card image cap">
 			<div class="rp-results-header-image-cover"></div>
-			<div class="card-img-overlay p-results-card-img-text d-flex flex-column justify-content-end" th:text="${hotel.hotelTitle}">
-			</div>
 
 			<div class="card-body">
 				<div class="row rp-results-map-row-custom">
@@ -22,6 +20,8 @@
 				</div>
 				<div class="row">
 					<div class="col">
+						<span class="p-results-card-label" th:text="${hotel.hotelTitle}"></span>
+						<br><br>
 						<span class="p-results-card-label">Shuttle Frequency: <span class="p-results-card-text" th:text="${hotel.shuttleFrequency}"></span></span>
 						<br><br>
 						<div class="row">

@@ -65,7 +65,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js" crossorigin="anonymous"></script>
 <script src="/js/common.js"></script>
 
-<script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
     (function() {
         'use strict';
         window.addEventListener('load', function() {
@@ -107,14 +108,39 @@
             clearBtn: true,
             startDate: new Date()
         })
-        pickup_date_input.val(tomorrowString());
-        pickup_date_input.datepicker("setDate", tomorrow());
+        var pickDate = /*[[${pickUpDate}]]*/;
+        if (pickDate && pickDate != '') {
+            pickup_date_input.val(pickDate);
+        } else {
+            pickup_date_input.val(tomorrowString());
+            pickup_date_input.datepicker("setDate", tomorrow());
+        }
+
+        var dropDate = /*[[${dropOffDate}]]*/;
+        if (dropDate && dropDate != '') {
+            dropoff_date_input.val(dropDate);
+        } else {
+            dropoff_date_input.val(todayString());
+            dropoff_date_input.datepicker("setDate", new Date());
+        }
 
         addListenersForDateField(dropoff_date_input, pickup_date_input);
 
         var index = convertCurrentTimeToSelectIndex();
-        document.getElementById('pick_up_time').selectedIndex = index;
-        document.getElementById('drop_off_time').selectedIndex = index;
+
+        var pickUpTime = /*[[${pickUpTime}]]*/;
+        if (pickUpTime && pickUpTime != '') {
+            document.getElementById('pick_up_time').value = pickUpTime;
+        } else {
+            document.getElementById('pick_up_time').selectedIndex = index;
+        }
+
+        var dropOffTime = /*[[${dropOffTime}]]*/;
+        if (dropOffTime && dropOffTime != '') {
+            document.getElementById('drop_off_time').value = dropOffTime;
+        } else {
+            document.getElementById('drop_off_time').selectedIndex = index;
+        }
     })
 
     function addListenersForDateField(dropOffDate, pickUpDate) {
@@ -216,6 +242,7 @@
         }
         return false;
     }
+    /*]]>*/
 </script>
 
 </body>

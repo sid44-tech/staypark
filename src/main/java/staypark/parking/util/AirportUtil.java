@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import staypark.parking.beans.*;
 import staypark.parking.beans.general.City;
 import staypark.parking.beans.general.Country;
 import staypark.parking.beans.general.State;
@@ -81,6 +80,24 @@ public class AirportUtil {
 		}
 
 		return "";
+	}
+
+	public static String getDepartureLocation(final String airportCode) {
+		List<String> aps = getDepartureLocations(1);
+		for (String ap : aps) {
+			if (ap.contains(airportCode)) {
+				return ap;
+			}
+		}
+
+		aps = getDepartureLocations(2);
+		for (String ap : aps) {
+			if (ap.contains(airportCode)) {
+				return ap;
+			}
+		}
+
+		return "- Select a city -";
 	}
 
 	public static List<String> getDepartureLocations(final int countryCode) {
