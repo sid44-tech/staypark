@@ -182,6 +182,12 @@ function addListenersForDateField(dropOffDate, pickUpDate) {
     });
 }
 
+function updatePickUpTime(selectoption) {
+    var selectedIndex = selectoption.value
+    var pickUpTime = document.getElementById("pick_up_time");
+    pickUpTime.value = selectedIndex;
+}
+
 function handleUSDepartSelected() {
 	$("#usDepartDiv").css("display", "block");
 	$("#canadaDepartDiv").css("display", "none");
