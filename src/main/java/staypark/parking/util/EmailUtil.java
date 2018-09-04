@@ -15,7 +15,7 @@ public class EmailUtil {
 //    public static final String INFO_EMAIL = "";
 //    public static final String AFFILIATE_EMAIL = "";
 //    public static final String SUPPORT_EMAIL = "";
-    public static final String INFO_EMAIL = "info@staypark.com";
+    public static final String INFO_EMAIL = "support@staypark.com";
     public static final String AFFILIATE_EMAIL = "support@staypark.com";
     public static final String SUPPORT_EMAIL = "support@staypark.com";
     static final String FROM = "support@staypark.com";
