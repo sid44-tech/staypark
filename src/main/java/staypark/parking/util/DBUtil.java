@@ -5,22 +5,31 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import com.mysql.cj.core.conf.PropertyDefinitions;
 import com.mysql.cj.jdbc.MysqlDataSource;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class DBUtil {
+	//TEST
+//	private final static String USER_NAME = "";
+//	private final static String PASSWORD = "";
+//	private final static String DATABASE_URL = "";
+
+	//LIVE
 	private final static String USER_NAME = "";
 	private final static String PASSWORD = "";
 	private final static String DATABASE_URL = "";
 	
 	public static Connection getConnection() {
-		Connection conn = null;;
+		Connection conn = null;
 		MysqlDataSource dataSource = new MysqlDataSource();
 		dataSource.setUser(USER_NAME);
 		dataSource.setPassword(PASSWORD);
 		dataSource.setServerName(DATABASE_URL);
+		dataSource.getModifiableProperty(PropertyDefinitions.PNAME_serverTimezone).setValue("US/Central");
+
 		try {
 			conn = dataSource.getConnection();
 		} catch (SQLException e) {
