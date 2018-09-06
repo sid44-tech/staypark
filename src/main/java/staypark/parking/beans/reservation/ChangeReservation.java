@@ -26,6 +26,13 @@ public class ChangeReservation {
     private String hotelId;
     private String originalPickUpDate;
     private String originalPickUpTime;
-
-
+    private String address;
+    private String baseFee;
+    private String serviceFee;
+    private String acFee;
+    private String salesTax;
+    private String grandTotal;
+    private String discount;
+    private String paymentDueNow;
+    private String paymentDueAtLot;
 }

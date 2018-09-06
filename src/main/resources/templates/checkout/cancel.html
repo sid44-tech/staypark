@@ -34,7 +34,7 @@
                 <div id="info" class="gone">
                     <div class="form-row change-margin-top change-section-title">Reservation Information</div>
                     <div class="row pb-label-row">
-                        <div class="col-sm-4 label-row-margin">
+                        <div class="col-sm-2 label-row-margin">
                             <div class="row">
                                 <div class="col pb-label-label-font">Name</div>
                             </div>
@@ -42,7 +42,7 @@
                                 <div id="firstName" class="col pb-text-font" th:text="${res.name}"></div>
                             </div>
                         </div>
-                        <div class="col-sm-4 label-row-margin">
+                        <div class="col-sm-3 label-row-margin">
                             <div class="row">
                                 <div class="col pb-label-label-font">Departing Airport</div>
                             </div>
@@ -50,12 +50,20 @@
                                 <div id="departAirport" class="col pb-text-font" th:text="${res.departingAirport}"></div>
                             </div>
                         </div>
-                        <div class="col-sm-4 label-row-margin">
+                        <div class="col-sm-2 label-row-margin">
                             <div class="row">
                                 <div class="col pb-label-label-font">Location</div>
                             </div>
                             <div class="row">
                                 <div id="departLocation" class="col pb-text-font" th:text="${res.dropOffLocation}"></div>
+                            </div>
+                        </div>
+                        <div class="col-sm-5 label-row-margin">
+                            <div class="row">
+                                <div class="col pb-label-label-font">Address</div>
+                            </div>
+                            <div class="row">
+                                <div class="col pb-text-font" th:text="${res.address}"></div>
                             </div>
                         </div>
                     </div>
@@ -74,6 +82,72 @@
                             </div>
                             <div class="row">
                                 <div id="pickUpTime" class="col pb-text-font" th:text="${res.pickUpTime}"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row pb-label-row">
+                        <div th:if="${res.baseFee != ''}" class="col-sm-2 label-row-margin">
+                            <div class="row">
+                                <div class="col pb-label-label-font">Base Fee</div>
+                            </div>
+                            <div class="row">
+                                <div class="col pb-text-font" th:text="${res.baseFee}"></div>
+                            </div>
+                        </div>
+                        <div th:if="${res.serviceFee != ''}" class="col-sm-2 label-row-margin">
+                            <div class="row">
+                                <div class="col pb-label-label-font">Service Fee</div>
+                            </div>
+                            <div class="row">
+                                <div class="col pb-text-font" th:text="${res.serviceFee}"></div>
+                            </div>
+                        </div>
+                        <div th:if="${res.acFee != ''}" class="col-sm-2 label-row-margin">
+                            <div class="row">
+                                <div class="col pb-label-label-font">AC Fee</div>
+                            </div>
+                            <div class="row">
+                                <div class="col pb-text-font" th:text="${res.acFee}"></div>
+                            </div>
+                        </div>
+                        <div th:if="${res.salesTax != ''}" class="col-sm-2 label-row-margin">
+                            <div class="row">
+                                <div class="col pb-label-label-font">Sales Tax</div>
+                            </div>
+                            <div class="row">
+                                <div class="col pb-text-font" th:text="${res.salesTax}"></div>
+                            </div>
+                        </div>
+                        <div th:if="${res.discount != ''}" class="col-sm-2 label-row-margin">
+                            <div class="row">
+                                <div class="col pb-label-label-font">Discount</div>
+                            </div>
+                            <div class="row">
+                                <div class="col pb-text-font" th:text="${res.discount}"></div>
+                            </div>
+                        </div>
+                        <div th:if="${res.grandTotal != ''}" class="col-sm-2 label-row-margin">
+                            <div class="row">
+                                <div class="col pb-label-label-font">Grand Hotel</div>
+                            </div>
+                            <div class="row">
+                                <div class="col pb-text-font" th:text="${res.grandTotal}"></div>
+                            </div>
+                        </div>
+                        <div th:if="${res.paymentDueNow != ''}" class="col-sm-2 label-row-margin">
+                            <div class="row">
+                                <div class="col pb-label-label-font">Payment Due Now</div>
+                            </div>
+                            <div class="row">
+                                <div class="col pb-text-font" th:text="${res.paymentDueNow}"></div>
+                            </div>
+                        </div>
+                        <div th:if="${res.paymentDueAtLot != ''}" class="col-sm-2 label-row-margin">
+                            <div class="row">
+                                <div class="col pb-label-label-font">Payment Due At Lot</div>
+                            </div>
+                            <div class="row">
+                                <div class="col pb-text-font" th:text="${res.paymentDueAtLot}"></div>
                             </div>
                         </div>
                     </div>

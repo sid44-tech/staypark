@@ -27,6 +27,8 @@ import staypark.parking.util.DBUtil;
 import staypark.parking.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.validation.constraints.Email;
+
 @Service
 @Slf4j
 public class ParkingHandler {
@@ -46,7 +48,9 @@ public class ParkingHandler {
 			"where gpi_id=? and drc_status = 'Active' ";
 
 	private static String CHECK_ORDER_ID =
-			"select * from dbstaypark.gp_reservation where order_id = ? and reservation_status = 'A'";
+			"select * from dbstaypark.gp_reservation as res " +
+			"left join dbstaypark.gp_parking_info as park on res.gr_p_id = park.gpi_id " +
+			"where res.order_id = ? and res.reservation_status = 'A' ";
 
 	private static String CANCEL_ORDER =
 			"update dbstaypark.gp_reservation set reservation_status = 'C' where order_id = ? or extn_order_id = ?";
@@ -236,6 +240,15 @@ public class ParkingHandler {
 						res.setHotelId(rs.getString("gr_p_id"));
 						res.setOriginalPickUpDate(DateUtil.parseDateFromDateTimeString(rs.getString("pick_time")));
 						res.setOriginalPickUpTime(DateUtil.parseTimeFromDateTimeString(rs.getString("gr_p_time")));
+						res.setAddress(rs.getString("gpi_add"));
+						res.setBaseFee(getAmountString(rs.getString("gr_b_fee")));
+						res.setServiceFee(getAmountString(rs.getString("gr_s_fee")));
+						res.setAcFee(getAmountString(rs.getString("gr_ac_fee")));
+						res.setSalesTax(getAmountString(rs.getString("gr_s_tax")));
+						res.setGrandTotal(getAmountString(rs.getString("gr_g_total")));
+						res.setDiscount(getAmountString(rs.getString("gr_discount")));
+						res.setPaymentDueAtLot(getAmountString(rs.getString("gr_due_payment")));
+						res.setPaymentDueNow(getAmountString(rs.getString("gr_due_payment")));
 					}
 					Date dropDate = rs.getDate("drop_time");
 					if (dropDate.compareTo(new Date()) <= 0) {
@@ -253,6 +266,15 @@ public class ParkingHandler {
 					res.setHotelId(rs.getString("gr_p_id"));
 					res.setOriginalPickUpDate(DateUtil.parseDateFromDateTimeString(rs.getString("pick_time")));
 					res.setOriginalPickUpTime(DateUtil.parseTimeFromDateTimeString(rs.getString("gr_p_time")));
+					res.setAddress(rs.getString("gpi_add"));
+					res.setBaseFee(getAmountString(rs.getString("gr_b_fee")));
+					res.setServiceFee(getAmountString(rs.getString("gr_s_fee")));
+					res.setAcFee(getAmountString(rs.getString("gr_ac_fee")));
+					res.setSalesTax(getAmountString(rs.getString("gr_s_tax")));
+					res.setGrandTotal(getAmountString(rs.getString("gr_g_total")));
+					res.setDiscount(getAmountString(rs.getString("gr_discount")));
+					res.setPaymentDueAtLot(getAmountString(rs.getString("gr_due_payment")));
+					res.setPaymentDueNow(getAmountString(rs.getString("gr_due_payment")));
 
 					Date pickUpDate = rs.getDate("pick_time");
 					Date newMinPickUpDate = DateUtil.addDaysToDate(pickUpDate, 1);
@@ -335,11 +357,46 @@ public class ParkingHandler {
 		body = body.replace("[LOCATION]", res.getDropOffLocation());
 		body = body.replace("[DROP_OFF_TIME]", res.getDropOffTime());
 		body = body.replace("[PICK_UP_TIME]", res.getPickUpTime());
+		body = body.replace("[ADDRESS]", res.getAddress());
+		body = body.replace("[BASE_FEE]", res.getBaseFee());
+		body = body.replace("[SERVICE_FEE]", res.getServiceFee());
+		body = body.replace("[SALES_TAX]", res.getSalesTax());
+		body = body.replace("[GRAND_TOTAL]", res.getGrandTotal());
+		if (!res.getAcFee().equals("")) {
+			body = body.replace("[CANCEL_BOOKING_ACFEE]", EmailUtil.CANCEL_BOOKING_ACFEE).replace("[AC_FEE]", res.getAcFee());
+		} else {
+			body = body.replace("[CANCEL_BOOKING_ACFEE]", "");
+		}
+		if (!res.getDiscount().equals("")) {
+			body = body.replace("[CANCEL_BOOKING_DISCOUNT]", EmailUtil.CANCEL_BOOKING_DISCOUNT).replace("[DISCOUNT]", res.getDiscount());
+		} else {
+			body = body.replace("[CANCEL_BOOKING_DISCOUNT]", "");
+		}
+		if (!res.getPaymentDueAtLot().equals("")) {
+			body = body.replace("[CANCEL_BOOKING_SPLIT_PAY]", EmailUtil.CANCEL_BOOKING_SPLIT_PAY).replace("[PAYMENT_DUE_NOW]", res.getPaymentDueNow().replace("[PAYMENT_DUE_AT_LOT]", res.getPaymentDueNow()));
+		} else {
+			body = body.replace("[CANCEL_BOOKING_SPLIT_PAY]", "");
+		}
+
 		try {
 			EmailUtil.sendEmail(res.getEmail(), "RESERVATION CANCELED", body);
 			EmailUtil.sendEmail(EmailUtil.SUPPORT_EMAIL, "RESERVATION CANCELED", body);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
+	}
+
+	private String getAmountString(final String amount) {
+		if (amount == null || amount.trim().isEmpty()) {
+			return "";
+		}
+		try {
+			double amountd = Double.valueOf(amount);
+			if (amountd == 0) {
+				return "";
+			}
+		} catch (Exception e) {}
+
+		return amount + " USD";
 	}
 }

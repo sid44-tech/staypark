@@ -129,13 +129,13 @@ public class EmailUtil {
             "Dear [NAME], thank you for registering with <a href='staypark.com'>staypark.com</a>. You can login here with your email address or username <a href='https://www.staypark.com/login'>https://www.staypark.com/login</a>.";
     
     public static String CONFIRM_BOOKING_EMAIL = 
-            "<table width='100%' style='border:#000000 solid' cellspacing='0' cellpadding='0'>" +
+            "<table width='100%' style='border:#DCDCDC solid; padding: 16px 8px 16px 8px' cellspacing='0' cellpadding='0'>" +
             "<tr>" +
             "<td><img src='http://www.staypark.com/images/logo.png' width='165' height='61' /></td>" +
             "<td></td>" +
             "</tr>" +
             "<tr>" +
-            "<td  align='center' colspan='2' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'> [CONFIRMATION]</td>" +
+            "<td  align='center' colspan='2' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'> [CONFIRMATION]</td>" +
             "</tr>" +
             "<tr>" +
             "<td  align='center' colspan='2' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'> </td>" +
@@ -343,40 +343,84 @@ public class EmailUtil {
             "NO ADDITIONAL FEES WILL BE COLLECTED UNLESS SPECIFIED OTHERWISE.</strong>";
 
     public static String CANCEL_BOOKING_EMAIL =
-            "<table width='100%' style='border:#000000 solid' cellspacing='0' cellpadding='0'>" +
-                    "<tr>" +
-                    "<td><img src='http://www.staypark.com/images/logo.png' width='165' height='61' /></td>" +
-                    "<td></td>" +
-                    "</tr>" +
-                    "<tr>" +
-                    "<td  align='center' colspan='2' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'> Cancellation for Reservation Number [ORDER_ID]</td>" +
-                    "</tr>" +
-                    "<tr>" +
-                    "<td  align='center' colspan='2' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'> </td>" +
-                    "</tr>" +
-                    "<tr>" +
-                    "<td valign='top' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Customer Name:</td>" +
-                    "<td valign='top'>[NAME]</td><td></td>" +
-                    "</tr>" +
-                    "<tr>" +
-                    "<td valign='top' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Departing Airport:</td>" +
-                    "<td valign='top' >[AIRPORT]</td><td></td>" +
-                    "</tr>" +
-                    "<tr>" +
-                    "<td valign='top' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Location:</td>" +
-                    "<td valign='top'>[LOCATION]</td><td></td>" +
-                    "</tr>" +
-                    "<tr>" +
-                    "<td valign='top'style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Drop Off Time:</td>" +
-                    "<td valign='top'>[DROP_OFF_TIME]</td><td></td>" +
-                    "</tr>" +
-                    "<tr>" +
-                    "<td valign='top'style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Pick Up Time:</td>" +
-                    "<td valign='top'>[PICK_UP_TIME]</td><td></td>" +
-                    "</tr>" +
-                    "</table>" +
-                    "<br />" +
-                    "<font color='red'>Warm Regards</font><br />" +
-                    "<a href='www.staypark.com'>www.staypark.com</a><br />" +
-                    "<br />";
+            "<table width='100%' style='border:#DCDCDC solid; padding: 16px 8px 16px 8px' cellspacing='0' cellpadding='0'>" +
+            "<tr>" +
+            "<td><img src='http://www.staypark.com/images/logo.png' width='165' height='61' /></td>" +
+            "<td></td>" +
+            "</tr>" +
+            "<tr>" +
+            "<td  align='center' colspan='2' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'> Cancellation for Reservation Number [ORDER_ID]</td>" +
+            "</tr>" +
+            "<tr>" +
+            "<td  align='center' colspan='2' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'> </td>" +
+            "</tr>" +
+            "<tr>" +
+            "<td valign='top' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Customer Name:</td>" +
+            "<td valign='top'>[NAME]</td><td></td>" +
+            "</tr>" +
+            "<tr>" +
+            "<td valign='top' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Departing Airport:</td>" +
+            "<td valign='top' >[AIRPORT]</td><td></td>" +
+            "</tr>" +
+            "<tr>" +
+            "<td valign='top' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Location:</td>" +
+            "<td valign='top'>[LOCATION]</td><td></td>" +
+            "</tr>" +
+            "<tr>" +
+            "<td valign='top'style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Address:</td>" +
+            "<td valign='top'>[ADDRESS]</td><td></td>" +
+            "</tr>" +
+            "<tr>" +
+            "<td valign='top'style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Drop Off Time:</td>" +
+            "<td valign='top'>[DROP_OFF_TIME]</td><td></td>" +
+            "</tr>" +
+            "<tr>" +
+            "<td valign='top'style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Pick Up Time:</td>" +
+            "<td valign='top'>[PICK_UP_TIME]</td><td></td>" +
+            "</tr>" +
+            "<tr>" +
+            "<td valign='top'style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Base Fee:</td>" +
+            "<td valign='top'>[BASE_FEE]</td><td></td>" +
+            "</tr>" +
+            "<tr>" +
+            "<td valign='top'style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Service Fee:</td>" +
+            "<td valign='top'>[SERVICE_FEE]</td><td></td>" +
+            "</tr>" +
+            "[CANCEL_BOOKING_ACFEE] " +
+            "<tr>" +
+            "<td valign='top'style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Sales Tax:</td>" +
+            "<td valign='top'>[SALES_TAX]</td><td></td>" +
+            "</tr>" +
+            "[CANCEL_BOOKING_DISCOUNT] " +
+            "<tr>" +
+            "<td valign='top'style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Grand Total:</td>" +
+            "<td valign='top'>[GRAND_TOTAL]</td><td></td>" +
+            "</tr>" +
+            "[CANCEL_BOOKING_SPLIT_PAY] " +
+            "</table>" +
+            "<br />" +
+            "<font color='red'>Warm Regards</font><br />" +
+            "<a href='www.staypark.com'>www.staypark.com</a><br />" +
+            "<br />";
+
+    public static String CANCEL_BOOKING_ACFEE =
+            "<tr>" +
+            "<td valign='top'style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>AC Fee:</td>" +
+            "<td valign='top'>[AC_FEE]</td><td></td>" +
+            "</tr>";
+    public static String CANCEL_BOOKING_DISCOUNT =
+            "<tr>" +
+            "<td valign='top'style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Discount:</td>" +
+            "<td valign='top'>[DISCOUNT]</td><td></td>" +
+            "</tr>";
+
+    public static String CANCEL_BOOKING_SPLIT_PAY=
+            "<tr>" +
+            "<td valign='top'style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Payment Due Now:</td>" +
+            "<td valign='top'>[PAYMENT_DUE_NOW]</td><td></td>" +
+            "</tr>" +
+            "<tr>" +
+            "<td valign='top'style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Payment Due At Lot:</td>" +
+            "<td valign='top'>[PAYMENT_DUE_AT_LOT]</td><td></td>" +
+            "</tr>";
 }
