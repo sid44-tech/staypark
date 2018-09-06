@@ -141,8 +141,8 @@ public class EmailUtil {
             "<td  align='center' colspan='2' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'> </td>" +
             "</tr>" +
             "<tr>" +
-            "<td style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'>Customer Name:</td>" +
-            "<td>[FIRST_NAME] [LAST_NAME]</td><td></td>" +
+            "<td valign='top' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Customer Name:</td>" +
+            "<td valign='top' style='padding-bottom:24px'>[FIRST_NAME] [LAST_NAME]</td><td></td>" +
             "</tr>" +
             "" +
             "<tr>" +
@@ -150,16 +150,16 @@ public class EmailUtil {
             "  <td></td>" +
             "  </tr>" +
             "<tr>" +
-            "<td width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'>Facility Name:</td>" +
-            "<td>[INN_NAME]</td>" +
+            "<td valign='top' width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Facility Name:</td>" +
+            "<td valign='top' style='padding-bottom:24px'>[INN_NAME]</td>" +
             "</tr>" +
             "<tr>" +
             "<td style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:normal'></td>" +
-            "<td>[STATE]</td>" +
+            "<td  valign='top' style='padding-bottom:24px'>[STATE]</td>" +
             "</tr>" +
             "<tr>" +
-            "  <td style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'>Facility Address:</td>" +
-            "  <td>[INN_ADDRESS]</td>" +
+            "  <td valign='top' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Facility Address:</td>" +
+            "  <td valign='top' style='padding-bottom:24px'>[INN_ADDRESS]</td>" +
             "  </tr>" +
             "  <tr>" +
             "    <td style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:normal'></td>" +
@@ -167,8 +167,8 @@ public class EmailUtil {
             "  </tr>" +
             "  " +
             "<tr>" +
-            "  <td style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'>Facility Phone:</td>" +
-            "  <td>[INN_PHONE]</td>" +
+            "  <td valign='top' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Facility Phone:</td>" +
+            "  <td valign='top' style='padding-bottom:24px'>[INN_PHONE]</td>" +
             "  </tr>" +
             "" +
             "<tr>" +
@@ -177,8 +177,8 @@ public class EmailUtil {
             "  </tr>" +
             "  " +
             "  <tr>" +
-            "<td width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'>Shuttle Frequency:</td>" +
-            "<td>[SHUTTLE_INFO]</td>" +
+            "<td valign='top' width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Shuttle Frequency:</td>" +
+            "<td valign='top' style='padding-bottom:24px'>[SHUTTLE_INFO]</td>" +
             "</tr>" +
             "<tr>" +
             "  <td style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:normal'></td>" +
@@ -186,40 +186,40 @@ public class EmailUtil {
             "  </tr>" +
             "<tr>" +
             "<tr>" +
-            "<td style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'>Drop Off Date/Time:</td>" +
-            "<td>[DROP_TIME]</td>" +
+            "<td valign='top' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Drop Off Date/Time:</td>" +
+            "<td valign='top' style='padding-bottom:24px'>[DROP_TIME]</td>" +
             "</tr>" +
             "<tr>" +
             "  <td style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:normal'></td>" +
             "  <td></td>" +
             "  </tr>" +
             "<tr>" +
-            "<td style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'>Pick Up Date/Time:</td>" +
-            "<td>[PICK_UP_TIME]</td>" +
+            "<td valign='top' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Pick Up Date/Time:</td>" +
+            "<td valign='top' style='padding-bottom:24px'>[PICK_UP_TIME]</td>" +
             "</tr>" +
             "<tr>" +
             "  <td style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:normal'></td>" +
             "  <td></td>" +
             "  </tr>" +
             "<tr>" +
-            "<td width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'>Reservation Number:</td>" +
-            "<td>[ORDER_ID]</td>" +
+            "<td valign='top' width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Reservation Number:</td>" +
+            "<td valign='top' style='padding-bottom:24px'>[ORDER_ID]</td>" +
             "</tr>" +
             "<tr>" +
             "  <td style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:normal'></td>" +
             "  <td></td>" +
             "  </tr>" +
             "<tr>" +
-            "<td width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'>Passengers:</td>" +
-            "<td>[NUMBER_PASSENGERS]</td>" +
+            "<td valign='top' width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Passengers:</td>" +
+            "<td valign='top' style='padding-bottom:24px'>[NUMBER_PASSENGERS]</td>" +
             "</tr>" +
             "<tr>" +
             "  <td style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:normal'></td>" +
             "  <td></td>" +
             "  </tr>" +
             "<tr>" +
-            "<td width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'>Base Rate:</td>" +
-            "<td>[BASE_RATE]</td>" +
+            "<td valign='top' width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Base Rate:</td>" +
+            "<td valign='top' style='padding-bottom:24px'>[BASE_RATE]</td>" +
             "</tr>" +
             "" +
             "" +
@@ -228,8 +228,8 @@ public class EmailUtil {
             "  <td></td>" +
             "  </tr>" +
             "<tr>" +
-            "<td width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'>Service Fee:</td>" +
-            "<td>[SERVICE_FEE]</td>" +
+            "<td valign='top' width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Service Fee:</td>" +
+            "<td valign='top' style='padding-bottom:24px'>[SERVICE_FEE]</td>" +
             "</tr>" +
             "" +
             "<tr>" +
@@ -238,8 +238,8 @@ public class EmailUtil {
             "  </tr>" +
             "[CONFIRM_ACCESS_FEE]" +
             "<tr>" +
-            "<td width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'>Sales Tax:</td>" +
-            "<td>[SALES_TAX]</td>" +
+            "<td  valign='top'width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Sales Tax:</td>" +
+            "<td valign='top'>[SALES_TAX]</td>" +
             "</tr>" +
             "[CONFIRM_COUPON_DISCOUNT]" +
             "<tr>" +
@@ -247,8 +247,8 @@ public class EmailUtil {
             "<td></td>" +
             "</tr>" +
             "<tr>" +
-            "<td width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'>Grand Total:</td>" +
-            "<td>[GRAND_TOTAL]</td>" +
+            "<td valign='top' width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Grand Total:</td>" +
+            "<td valign='top'>[GRAND_TOTAL]</td>" +
             "</tr>" +
             "<tr>" +
             "  <td style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:normal'></td>" +
@@ -256,24 +256,24 @@ public class EmailUtil {
             "  </tr>" +
             "[SPLIT_PAYMENT]" +
             "<tr>" +
-            "<td width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'>Make:</td>" +
-            "<td>[CAR_MAKE]</td>" +
+            "<td valign='top' width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Make:</td>" +
+            "<td valign='top'>[CAR_MAKE]</td>" +
             "</tr>" +
             "<tr>" +
             "  <td style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:normal'></td>" +
             "  <td></td>" +
             "  </tr>" +
             "<tr>" +
-            "<td width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'>Model:</td>" +
-            "<td>[CAR_MODEL]</td>" +
+            "<td  valign='top'width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Model:</td>" +
+            "<td valign='top'>[CAR_MODEL]</td>" +
             "</tr>" +
             "<tr>" +
             "  <td style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:normal'></td>" +
             "  <td></td>" +
             "  </tr>" +
             "<tr>" +
-            "<td width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'>License:</td>" +
-            "<td>[CAR_LICENSE_PLATE]</td>" +
+            "<td valign='top' width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>License:</td>" +
+            "<td valign='top'>[CAR_LICENSE_PLATE]</td>" +
             "</tr>" +
             "<tr>" +
             "<td></td>" +
@@ -298,7 +298,7 @@ public class EmailUtil {
 
         public static String CONFIRM_ACCESS_FEE =
             "<tr>" +
-            "<td width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'>Access Fee:</td>" +
+            "<td width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Access Fee:</td>" +
             "<td>[AC_FEE]</td>" +
             "</tr>" +
             "<td style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:normal'></td>" +
@@ -310,13 +310,13 @@ public class EmailUtil {
             "<td></td>" +
             "</tr>" +
             "<tr>" +
-            "<td width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'>Discount:</td>" +
+            "<td width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Discount:</td>" +
             "<td>[DISCOUNT_AMOUNT]</td>" +
             "</tr>";
 
         public static String SPLIT_PAYMENT =
             "<tr>" +
-            "<td width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'>Total Due Now:</td>" +
+            "<td width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Total Due Now:</td>" +
             "<td>[TOTAL_DUE_NOW]</td>" +
             "</tr>" +
             "<tr>" +
@@ -324,7 +324,7 @@ public class EmailUtil {
             "  <td></td>" +
             "  </tr>" +
             " <tr>" +
-            "<td width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'>Total Due At Lot:</td>" +
+            "<td width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Total Due At Lot:</td>" +
             "<td>[TOTAL_DUE_AT_LOT]</td>" +
             "</tr>" +
             "<tr>" +
@@ -349,30 +349,30 @@ public class EmailUtil {
                     "<td></td>" +
                     "</tr>" +
                     "<tr>" +
-                    "<td  align='center' colspan='2' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'> Cancellation for Reservation Number [ORDER_ID]</td>" +
+                    "<td  align='center' colspan='2' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'> Cancellation for Reservation Number [ORDER_ID]</td>" +
                     "</tr>" +
                     "<tr>" +
                     "<td  align='center' colspan='2' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'> </td>" +
                     "</tr>" +
                     "<tr>" +
-                    "<td style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'>Customer Name:</td>" +
-                    "<td>[NAME]</td><td></td>" +
+                    "<td valign='top' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Customer Name:</td>" +
+                    "<td valign='top'>[NAME]</td><td></td>" +
                     "</tr>" +
                     "<tr>" +
-                    "<td style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'>Departing Airport:</td>" +
-                    "<td>[AIRPORT]</td><td></td>" +
+                    "<td valign='top' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Departing Airport:</td>" +
+                    "<td valign='top' >[AIRPORT]</td><td></td>" +
                     "</tr>" +
                     "<tr>" +
-                    "<td style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'>Location:</td>" +
-                    "<td>[LOCATION]</td><td></td>" +
+                    "<td valign='top' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Location:</td>" +
+                    "<td valign='top'>[LOCATION]</td><td></td>" +
                     "</tr>" +
                     "<tr>" +
-                    "<td style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'>Drop Off Time:</td>" +
-                    "<td>[DROP_OFF_TIME]</td><td></td>" +
+                    "<td valign='top'style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Drop Off Time:</td>" +
+                    "<td valign='top'>[DROP_OFF_TIME]</td><td></td>" +
                     "</tr>" +
                     "<tr>" +
-                    "<td style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold'>Pick Up Time:</td>" +
-                    "<td>[PICK_UP_TIME]</td><td></td>" +
+                    "<td valign='top'style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Pick Up Time:</td>" +
+                    "<td valign='top'>[PICK_UP_TIME]</td><td></td>" +
                     "</tr>" +
                     "</table>" +
                     "<br />" +
