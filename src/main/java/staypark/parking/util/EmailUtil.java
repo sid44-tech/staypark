@@ -298,20 +298,20 @@ public class EmailUtil {
 
         public static String CONFIRM_ACCESS_FEE =
             "<tr>" +
-            "<td width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Access Fee:</td>" +
-            "<td>[AC_FEE]</td>" +
+            "<td valign='top' width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Access Fee:</td>" +
+            "<td valign='top'>[AC_FEE]</td>" +
             "</tr>" +
             "<td style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:normal'></td>" +
             "<td></td>" +
             "</tr>";
         public static String CONFIRM_COUPON_DISCOUNT =
             "<tr>" +
-            "<td style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:normal'></td>" +
-            "<td></td>" +
+            "<td valign='top' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:normal'></td>" +
+            "<td valign='top'></td>" +
             "</tr>" +
             "<tr>" +
-            "<td width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Discount:</td>" +
-            "<td>[DISCOUNT_AMOUNT]</td>" +
+            "<td valign='top' width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Discount:</td>" +
+            "<td valign='top'>[DISCOUNT_AMOUNT]</td>" +
             "</tr>";
 
         public static String SPLIT_PAYMENT =
@@ -320,12 +320,12 @@ public class EmailUtil {
             "<td>[TOTAL_DUE_NOW]</td>" +
             "</tr>" +
             "<tr>" +
-            "  <td style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:normal'></td>" +
-            "  <td></td>" +
+            "  <td valign='top' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:normal'></td>" +
+            "  <td valign='top'></td>" +
             "  </tr>" +
             " <tr>" +
-            "<td width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Total Due At Lot:</td>" +
-            "<td>[TOTAL_DUE_AT_LOT]</td>" +
+            "<td valign='top' width='40%' style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Total Due At Lot:</td>" +
+            "<td valign='top'>[TOTAL_DUE_AT_LOT]</td>" +
             "</tr>" +
             "<tr>" +
             "  <td style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:normal'></td>" +
@@ -405,7 +405,7 @@ public class EmailUtil {
 
     public static String CANCEL_BOOKING_ACFEE =
             "<tr>" +
-            "<td valign='top'style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>AC Fee:</td>" +
+            "<td valign='top'style='font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; padding-bottom:24px'>Access Fee:</td>" +
             "<td valign='top'>[AC_FEE]</td><td></td>" +
             "</tr>";
     public static String CANCEL_BOOKING_DISCOUNT =
