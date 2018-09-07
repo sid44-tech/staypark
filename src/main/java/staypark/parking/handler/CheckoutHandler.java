@@ -547,8 +547,8 @@ public class CheckoutHandler {
              ps.setString(7, "");
              ps.setString(8, safeCheckout.getCheckinTime());
              ps.setString(9, safeCheckout.getCheckoutTime());
-             ps.setDate(10, DateUtil.utilDateToSqlDate(DateUtil.stringMDYToDate(checkout.getDropOffDate())));
-             ps.setDate(11, DateUtil.utilDateToSqlDate(DateUtil.stringMDYToDate(checkout.getPickUpDate())));
+             ps.setDate(10, DateUtil.longDateToDate(safeCheckout.getCheckinTime()));
+             ps.setDate(11, DateUtil.longDateToDate(safeCheckout.getCheckoutTime()));
              ps.setInt(12, safeCheckout.getParkingDays());
              ps.setInt(13, 0);
              ps.setString(14, safeCheckout.getBaseRate());
@@ -707,8 +707,8 @@ public class CheckoutHandler {
             ps.setString(22, room.getAirport());
             ps.setInt(23, room.getStateId());
             ps.setInt(24, room.getRoomId());
-            ps.setDate(25, DateUtil.utilDateToSqlDate(DateUtil.stringMDYToDate(safeCheckout.getDropOffDate())));
-            ps.setDate(26, DateUtil.utilDateToSqlDate(DateUtil.stringMDYToDate(safeCheckout.getPickUpDate())));
+            ps.setDate(25, DateUtil.longDateToDate(safeCheckout.getCheckinTime()));
+            ps.setDate(26, DateUtil.longDateToDate(safeCheckout.getCheckoutTime()));
             ps.setString(27, "0");
             ps.setString(28, String.valueOf(safeCheckout.getParkingDays()));
             ps.setString(29, "0");

@@ -1,5 +1,7 @@
 package staypark.parking.util;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -8,6 +10,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 public class DateUtil {
 	private static SimpleDateFormat DATE_FORMAT_WITH_DAY = new SimpleDateFormat("EEEE MMMM dd, yyyy", Locale.US);
 	private static SimpleDateFormat DATE_FORMAT_YEAR_LAST = new SimpleDateFormat("MM-dd-yyyy", Locale.US);
@@ -51,6 +54,17 @@ public class DateUtil {
 			return date;
 		} catch(Exception e) {}
 		
+		return null;
+	}
+
+	public static java.sql.Date longDateToDate(final String longDate) {
+		try {
+			Date date = new SimpleDateFormat("EEEE MMMM dd, yyyy").parse(longDate);
+			return new java.sql.Date(date.getTime());
+		} catch (ParseException e) {
+			log.error(e.getMessage(), e);
+		}
+
 		return null;
 	}
 	
