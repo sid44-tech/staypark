@@ -14,6 +14,8 @@ import java.util.concurrent.TimeUnit;
 public class DateUtil {
 	private static SimpleDateFormat DATE_FORMAT_WITH_DAY = new SimpleDateFormat("EEEE MMMM dd, yyyy", Locale.US);
 	private static SimpleDateFormat DATE_FORMAT_YEAR_LAST = new SimpleDateFormat("MM-dd-yyyy", Locale.US);
+	private static SimpleDateFormat DATE_FORMAT_DB = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+
 
 	public final static String[] PARKING_TIMES = {
 			"12:00 AM", "12:15 AM", "12:30 AM", "12:45 AM", 
@@ -60,8 +62,14 @@ public class DateUtil {
 	public static java.sql.Date longDateToDate(final String longDate) {
 		try {
 			Date date = new SimpleDateFormat("EEEE MMMM dd, yyyy").parse(longDate);
-			return new java.sql.Date(date.getTime());
-		} catch (ParseException e) {
+
+			Calendar c = Calendar.getInstance();
+			c.setTime(DATE_FORMAT_WITH_DAY.parse(longDate));
+			c.add(Calendar.DATE, 1);  // number of days to add
+			String newD = DATE_FORMAT_DB.format(c.getTime());  // dt is now the new date
+
+			return java.sql.Date.valueOf(newD);
+		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
 
