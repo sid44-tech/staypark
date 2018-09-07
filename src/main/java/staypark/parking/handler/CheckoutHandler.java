@@ -523,6 +523,11 @@ public class CheckoutHandler {
          	userId = up.getUserId();
          }
 
+         String discountAmount = "";
+         if (safeCheckout.getCouponCode() != null && !safeCheckout.getCouponCode().isEmpty()) {
+            discountAmount = getDiscountFromCode(safeCheckout.getCouponCode());
+         }
+
 //      1-gr_p_id, 2-gr_event_id, 3-gr_aff_id, 4-user_id, 5-gr_d_air, 6-gr_d_loc, 7-gr_shuttel, 8-gr_d_time, 9-gr_p_time, 10-drop_time,
 //      11-pick_time, 12-gr_t_time, 13-gr_h_time, 14-gr_b_fee, 15-gr_s_fee, 16-gr_ac_fee, 17-gr_s_tax, 18-gr_g_total, 19-gr_p_no, 20-loc_state,
 //      21-loc_city, 22-gr_fname, 23-gr_lname, 24-gr_make, 25-gr_model, 26-gr_license, 27-gr_hear, 28-gr_add, 29-gr_city,
@@ -581,7 +586,7 @@ public class CheckoutHandler {
              ps.setString(46, "A");
              ps.setString(47, orderId);
              ps.setString(48, "");
-             ps.setString(49, safeCheckout.getDiscount());
+             ps.setString(49, discountAmount);
              ps.setString(50, safeCheckout.getTotalDueNow());
              ps.setString(51, safeCheckout.getTotalDueAtLot());
              ps.setBoolean(52, false);
@@ -599,6 +604,31 @@ public class CheckoutHandler {
         	 return true;
          }
          return false;
+    }
+
+    private String getDiscountFromCode(final String couponCode) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        int updated = -1;
+
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(GET_COUPON_INFO);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                if (rs.getString("cpn_coad") != null && rs.getString("cpn_coad").equals(couponCode)) {
+                    return rs.getString("discount");
+                }
+            }
+
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            DBUtil.closeResources(conn, ps, rs);
+        }
+
+        return "";
     }
 
     private boolean insertHotelParkReservationRecord(final ParkingCheckout checkout, final ParkingCheckout safeCheckout, final String username, final Payment payment,
@@ -633,6 +663,11 @@ public class CheckoutHandler {
             endHotelDepartDate = DateUtil.unknownDateStringFormatToDate(checkout.getSecondaryHotelCheckOutDate());
             days = DateUtil.getDaysDifference(hotelArrivalDate, hotelDepartDate);
             days += DateUtil.getDaysDifference(endHotelArrivalDate, endHotelDepartDate);
+        }
+
+        String discountAmount = "";
+        if (safeCheckout.getCouponCode() != null && !safeCheckout.getCouponCode().isEmpty()) {
+            discountAmount = getDiscountFromCode(safeCheckout.getCouponCode());
         }
 
 //        1-bk_order_id, 2-bk_htl_id, 3-bk_aff_id, 4-bk_loc_state, 5-bk_loc_city, 6-bk_rsvn_date, 7-bk_chkin_date, 8-bk_chkout_date, 9-bk_days, 10-bk_room,
@@ -693,11 +728,7 @@ public class CheckoutHandler {
             	ps.setNull(34, Types.NULL);
             }
 
-            if (safeCheckout.getCouponAmount() == null) {
-                ps.setString(35, "");
-            } else {
-                ps.setString(35, safeCheckout.getCouponAmount());
-            }
+            ps.setString(35, discountAmount);
             ps.setString(36, checkout.getFirstName());
             ps.setString(37, checkout.getLastName());
             ps.setString(38, checkout.getCarMake());
