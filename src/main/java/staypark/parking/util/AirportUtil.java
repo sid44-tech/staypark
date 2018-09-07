@@ -321,8 +321,8 @@ public class AirportUtil {
 	public static String parseDropLocation(final String dropLocation) {
 		String location = dropLocation;
 
-		if (location != null && location.indexOf("-") != -1) {
-			location = location.split("-")[0].trim();
+		if (location != null && location.indexOf(" - ") != -1) {
+			location = location.split(" - ")[0].trim();
 		}
 
 		return location;
