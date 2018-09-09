@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class SpecialParkingDate {
 	private int hotelId;
-	private Date date;
+	private String date;
 	private BigDecimal cost;
 	private int numberSpaces;
 }

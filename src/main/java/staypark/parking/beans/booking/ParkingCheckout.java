@@ -77,4 +77,6 @@ public class ParkingCheckout {
     private String children;
     private String roomType;
     private String roomPersonCapacity;
+    private String longAirportLocationText;
+    private String longDropLocationText;
 }

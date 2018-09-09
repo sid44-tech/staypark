@@ -334,14 +334,14 @@ public class AirportUtil {
 		Date currentDate = startDate;
 
 		Map<Date, Integer> bookedCountMap = getReservationForRangeCountbyHotel(hotelId, startDate, endDate, conn);
-		Map<Date, SpecialParkingDate> spdateMap = checkSpecialParkingForDateRange(hotelId, startDate, endDate, conn);
+		Map<String, SpecialParkingDate> spdateMap = checkSpecialParkingForDateRange(hotelId, startDate, endDate, conn);
 		Map<Integer, SpecialParkingDay> spdayMap = checkSpecialParkingForDay(hotelId, conn);
 
 		for (int i = 0; i < totalDays; i++) {
 			currentDate = DateUtil.addDaysToDate(currentDate, i);
 
 			//Calculate cost for day if day is a special date
-			if (spdateMap.get(currentDate) != null) {
+			if (spdateMap.get(currentDate.toString()) != null) {
 				totalCost = totalCost.add(spdateMap.get(currentDate).getCost());
 				//Calculate cost for day if day is a special day (mon, tues, etc)
 			} else if (spdayMap.get(currentDate) != null) {
@@ -390,8 +390,8 @@ public class AirportUtil {
 	 * @param startDate Date
 	 * @return SpecialParkingDate - null if not special rates for given hotel and date
 	 */
-	public static Map<Date, SpecialParkingDate> checkSpecialParkingForDateRange(final int hotelId, final Date startDate, final Date endDate, final Connection conn) {
-		Map<Date, SpecialParkingDate> map = new HashMap<>();
+	public static Map<String, SpecialParkingDate> checkSpecialParkingForDateRange(final int hotelId, final Date startDate, final Date endDate, final Connection conn) {
+		Map<String, SpecialParkingDate> map = new HashMap<>();
 		if (startDate == null || endDate == null) {
 			return map;
 		}
@@ -407,10 +407,10 @@ public class AirportUtil {
 			if (rs.next()) {
 				SpecialParkingDate spday = new SpecialParkingDate();
 				spday.setHotelId(hotelId);
-				spday.setDate(rs.getDate("sp_date"));
+				spday.setDate(rs.getString("sp_date"));
 				spday.setNumberSpaces(rs.getInt("sp_prk_no"));
 				spday.setCost(rs.getBigDecimal("sp_cost"));
-				map.put(rs.getDate("sp_date"), spday);
+				map.put(rs.getString("sp_date"), spday);
 			}
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);

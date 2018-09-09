@@ -158,9 +158,14 @@
             var dDate = dropOffDate.datepicker("getDate");
             var pDate = pickUpDate.datepicker("getDate");
 
-            if (dDate >= pDate) {
-                dDate.setDate(pDate.getDate() - 1);
-                dropOffDate.datepicker("setDate", dDate);
+            if (dDate > pDate) {
+                var curDate = new Date();
+                curDate.setHours(0,0,0,0);
+                pDate.setHours(0,0,0,0);
+                if (pDate.getTime() != curDate.getTime()) {
+                    dDate.setDate(pDate.getDate() - 1);
+                    dropOffDate.datepicker("setDate", dDate);
+                }
             }
         });
     }

@@ -109,6 +109,13 @@ public class DateUtil {
 		return "";
 	}
 
+	public static String formatDBDate(final Date date) {
+		if (date != null) {
+			return DATE_FORMAT_DB.format(date);
+		}
+		return "";
+	}
+
 	public static String formatDateWithYearAtEnd(final Date date) {
 		if (date != null) {
 			return DATE_FORMAT_YEAR_LAST.format(date);

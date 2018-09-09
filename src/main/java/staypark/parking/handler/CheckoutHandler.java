@@ -201,8 +201,14 @@ public class CheckoutHandler {
                 splitPayment = rs.getInt("drc_split_payment");
                 hotelSalesTax = rs.getString("drc_sl_tax");
                 hotelBaseSalesTax = rs.getString("drc_bse_sl_tax");
-                pc.setDepartAirport(rs.getString("gdl_location"));
-                pc.setDepartLocation(AirportUtil.parseDropLocation(rs.getString("drc_gpi_inn_name")));
+
+                String airpotLocation = buildAirportLocationString(rs.getString("gpc_city"), rs.getString("gps_state"), rs.getString("gdl_location"), rs.getString("gdl_scode"));
+                pc.setDepartAirport(airpotLocation);
+                pc.setLongAirportLocationText(airpotLocation);
+
+                pc.setDepartLocation(rs.getString("gpi_inn_name"));
+                pc.setLongDropLocationText(rs.getString("gpi_inn_name"));
+
                 pc.setShuttleFrequency(rs.getString("gpi_shuttel"));
                 pc.setInnAddress(rs.getString("gpi_add"));
                 pc.setInnPhone(rs.getString("gpi_phone"));
@@ -334,6 +340,10 @@ public class CheckoutHandler {
         }
 
         return pc;
+    }
+
+    private String buildAirportLocationString(final String city, final String state, final String airportName, final String airportCode) {
+        return city + " , " + state + " - " + airportName + "  (" + airportCode + ")";
     }
     
     public Payment handleBookingSubmit(final ParkingCheckout checkout, final String username) {
@@ -542,8 +552,8 @@ public class CheckoutHandler {
              ps.setInt(2, 0);
              ps.setInt(3,  affId);
              ps.setInt(4, userId);
-             ps.setString(5, safeCheckout.getDepartAirport());
-             ps.setString(6, safeCheckout.getDepartLocation());
+             ps.setString(5, safeCheckout.getLongAirportLocationText());
+             ps.setString(6, safeCheckout.getLongDropLocationText());
              ps.setString(7, "");
              ps.setString(8, safeCheckout.getCheckinTime());
              ps.setString(9, safeCheckout.getCheckoutTime());
@@ -792,7 +802,7 @@ public class CheckoutHandler {
         int totalDays = AirportUtil.getNumberOfParkingDays(startDate, endDate, safeCheckout.getDropOffTime(), safeCheckout.getPickUpTime());
         int hotelId = Integer.valueOf(safeCheckout.getHotelId());
 
-        Map<Date, SpecialParkingDate> spdateMap;
+        Map<String, SpecialParkingDate> spdateMap;
         Map<Integer, SpecialParkingDay> spdayMap;
         try (Connection conn = DBUtil.getConnection()) {
             spdateMap = AirportUtil.checkSpecialParkingForDateRange(hotelId, startDate, endDate, conn);
