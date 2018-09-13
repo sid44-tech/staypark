@@ -166,7 +166,7 @@ function addListenersForDateField(dropOffDate, pickUpDate) {
         var pDate = pickUpDate.datepicker("getDate");
 
         if (dDate >= pDate) {
-        	pDate.setDate(dDate);
+            pDate.setDate(dDate);
             pickUpDate.val(dateToStringMDY(dDate));
             pickUpDate.datepicker("setDate", dDate);
         }
@@ -181,8 +181,9 @@ function addListenersForDateField(dropOffDate, pickUpDate) {
             curDate.setHours(0,0,0,0);
             pDate.setHours(0,0,0,0);
             if (pDate.getTime() != curDate.getTime()) {
-                dDate.setDate(pDate.getDate() - 1);
-                dropOffDate.datepicker("setDate", dDate);
+                dDate.setDate(dDate);
+                dropOffDate.val(dateToStringMDY(pDate));
+                dropOffDate.datepicker("setDate", pDate);
             }
         }
     });
