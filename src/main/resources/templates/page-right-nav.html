@@ -149,8 +149,9 @@
             var pDate = pickUpDate.datepicker("getDate");
 
             if (dDate >= pDate) {
-                pDate.setDate(dDate.getDate() + 1);2
-                pickUpDate.datepicker("setDate", pDate);
+            	pDate.setDate(dDate);
+                pickUpDate.val(dateToStringMDY(dDate));
+                pickUpDate.datepicker("setDate", dDate);
             }
         });
 

@@ -166,8 +166,9 @@ function addListenersForDateField(dropOffDate, pickUpDate) {
         var pDate = pickUpDate.datepicker("getDate");
 
         if (dDate >= pDate) {
-            pDate.setDate(dDate);
+        	pDate.setDate(dDate);
             pickUpDate.val(dateToStringMDY(dDate));
+            pickUpDate.datepicker("setDate", dDate);
         }
     });
 
