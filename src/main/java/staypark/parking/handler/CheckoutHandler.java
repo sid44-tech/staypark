@@ -272,7 +272,7 @@ public class CheckoutHandler {
 
                 boolean isSplitPayment = isSplitPayment(rs.getString("gpi_split_payment_status"));
                 if (isSplitPayment) {
-                    BigDecimal payNow = calculatePayNow(rs.getInt("gpi_split_payment"), baseTotalCost, serviceFee, new BigDecimal(0));
+                    BigDecimal payNow = calculatePayNow(rs.getInt("gpi_split_payment"), baseTotalCost, serviceFee, new BigDecimal(pc.getCouponAmount()));
                     BigDecimal payAtLot = calculatePayAtLot(grandTotal, payNow);
 
                     pc.setTotalDueNow(payNow.toString());
@@ -330,7 +330,7 @@ public class CheckoutHandler {
 
             boolean isSplitPayment = isSplitPayment(splitPaymentStatus);
             if (isSplitPayment) {
-                BigDecimal payNow = calculatePayNow(splitPayment, rates.getTotalBaseRate(), baseServiceFee.add(hotelServiceFee), new BigDecimal(0));
+                BigDecimal payNow = calculatePayNow(splitPayment, rates.getTotalBaseRate(), baseServiceFee.add(hotelServiceFee), new BigDecimal(pc.getCouponAmount()));
                 BigDecimal payAtLot = calculatePayAtLot(gtotal, payNow);
 
                 pc.setTotalDueNow(payNow.toString());
