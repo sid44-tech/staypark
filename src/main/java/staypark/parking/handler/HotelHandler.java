@@ -397,7 +397,7 @@ public class HotelHandler {
                 room.setExtraChildCost(rs.getBigDecimal("rm_child_extra_cost"));
                 room.setHotelDescription(rs.getString("gpi_inn_name"));
                 room.setLocation(rs.getString("gpc_city") + ", " + rs.getString("gps_state"));
-                room.setAirport("gdl_location");
+                room.setAirport(rs.getString("gpc_city") + ", " + rs.getString("gps_state") + " - " + rs.getString("gdl_location"));
             }
         } catch (Exception e) {
             DBUtil.closeResources(conn, ps, rs);
