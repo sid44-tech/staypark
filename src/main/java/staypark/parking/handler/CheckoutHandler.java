@@ -272,7 +272,11 @@ public class CheckoutHandler {
 
                 boolean isSplitPayment = isSplitPayment(rs.getString("gpi_split_payment_status"));
                 if (isSplitPayment) {
-                    BigDecimal payNow = calculatePayNow(rs.getInt("gpi_split_payment"), baseTotalCost, serviceFee, new BigDecimal(pc.getCouponAmount()));
+                    BigDecimal couponAmount = new BigDecimal(0);
+                    if (pc.getCouponAmount() != null && !pc.getCouponAmount().isEmpty()) {
+                        couponAmount = new BigDecimal(pc.getCouponAmount());
+                    }
+                    BigDecimal payNow = calculatePayNow(rs.getInt("gpi_split_payment"), baseTotalCost, serviceFee, couponAmount);
                     BigDecimal payAtLot = calculatePayAtLot(grandTotal, payNow);
 
                     pc.setTotalDueNow(payNow.toString());
@@ -330,7 +334,11 @@ public class CheckoutHandler {
 
             boolean isSplitPayment = isSplitPayment(splitPaymentStatus);
             if (isSplitPayment) {
-                BigDecimal payNow = calculatePayNow(splitPayment, rates.getTotalBaseRate(), baseServiceFee.add(hotelServiceFee), new BigDecimal(pc.getCouponAmount()));
+                BigDecimal couponAmount = new BigDecimal(0);
+                if (pc.getCouponAmount() != null && !pc.getCouponAmount().isEmpty()) {
+                    couponAmount = new BigDecimal(pc.getCouponAmount());
+                }
+                BigDecimal payNow = calculatePayNow(splitPayment, rates.getTotalBaseRate(), baseServiceFee.add(hotelServiceFee), couponAmount);
                 BigDecimal payAtLot = calculatePayAtLot(gtotal, payNow);
 
                 pc.setTotalDueNow(payNow.toString());
@@ -385,6 +393,15 @@ public class CheckoutHandler {
         Random r = new Random();
         String orderId = String.valueOf(r.nextInt((max - min) + 1) + min);
 
+        String checkoutType = "P";
+        if (checkout.getCheckoutType() != null && !checkout.getCheckoutType().isEmpty() && !checkout.getCheckoutType().equals("P")) {
+            if (checkout.getCheckoutType().equals("R")) {
+                checkoutType = "R";
+            } else {
+                checkoutType = "RP";
+            }
+        }
+
         if (checkout.getCheckoutType() != null && !checkout.getCheckoutType().isEmpty() && !checkout.getCheckoutType().equals("P")) {
             boolean recordUpdated = insertHotelParkReservationRecord(checkout, safeCheckout, username, payment, orderId);
             if (!recordUpdated) {
@@ -414,7 +431,7 @@ public class CheckoutHandler {
             }
         }
 
-        sendBookingEmails(checkout, safeCheckout, username, payment, orderId, checkout.getExtensionOrderId());
+        sendBookingEmails(checkout, safeCheckout, username, payment, orderId, checkout.getExtensionOrderId(), checkoutType);
 
         return payment;
     }
@@ -854,8 +871,14 @@ public class CheckoutHandler {
     }
 
     private void sendBookingEmails(final ParkingCheckout checkout, final ParkingCheckout safeCheckout, final String username, final Payment payment,
-                                   final String orderId, final String extensionOrderId) {
-        String subject = "Confirmation for Reservation : " + orderId;
+                                   final String orderId, final String extensionOrderId, final String parkingOnly) {
+        String subjectPrefix = "";
+        if (parkingOnly.equals("RP")) {
+            subjectPrefix = "ROOM + PARK - ";
+        } else if (parkingOnly.equals("R")) {
+            subjectPrefix = "HOTEL ROOM - ";
+        }
+        String subject = subjectPrefix + "Confirmation for Reservation : " + orderId;
         if (extensionOrderId != null && !extensionOrderId.trim().isEmpty()) {
             subject = "Confirmation for Reservation : " + orderId + " (EXTENDED)";
         }
