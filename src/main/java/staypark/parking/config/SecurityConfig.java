@@ -22,7 +22,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/about", "/airport-parking", "/room-park", "/cancellation", "/room-park-results", "/affiliates",
+                .antMatchers("/", "/favicon.ico", "/about", "/airport-parking", "/room-park", "/cancellation", "/room-park-results", "/affiliates",
                 		"/heartbeat", "/deep-heartbeat", "/faq", "/contact-us", "/sitemap", "/privacy", "/tac", "/browse-airports", "/parking/**",
                         "/airport/**", "/hotel-parking/**", "/checkout", "/forgot", "/signup", "/images/**", "/js/**", "/css/**").permitAll()
                 .anyRequest().authenticated()
