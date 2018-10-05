@@ -460,8 +460,8 @@ public class AirportUtil {
 			return 1;
 		}
 
-		LocalTime startTime = LocalTime.parse(startTimeStr, DateTimeFormatter.ofPattern("KK:mm a"));
-		LocalTime endTime = LocalTime.parse(endTimeStr, DateTimeFormatter.ofPattern("KK:mm a"));
+		LocalTime startTime = LocalTime.parse(startTimeStr, DateTimeFormatter.ofPattern("hh:mm a"));
+		LocalTime endTime = LocalTime.parse(endTimeStr, DateTimeFormatter.ofPattern("hh:mm a"));
 
 		if (endTime.isAfter(startTime)) {
 			days++;
