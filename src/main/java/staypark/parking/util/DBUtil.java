@@ -16,11 +16,16 @@ public class DBUtil {
 //	private final static String USER_NAME = "";
 //	private final static String PASSWORD = "";
 //	private final static String DATABASE_URL = "";
-
-	//LIVE
+	
+	//NEW LIVE
 	private final static String USER_NAME = "";
 	private final static String PASSWORD = "";
 	private final static String DATABASE_URL = "";
+
+	//OLD LIVE
+//	private final static String USER_NAME = "";
+//	private final static String PASSWORD = "";
+//	private final static String DATABASE_URL = "";
 	
 	public static Connection getConnection() {
 		Connection conn = null;
