@@ -5,6 +5,7 @@ import staypark.parking.beans.user.UserRegister;
 import staypark.parking.handler.AccountHandler;
 import staypark.parking.util.AirportUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -13,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,12 +26,12 @@ public class CustomerAccessController {
     private AccountHandler accountHandler;
 
 	@GetMapping("/login")
-    public String login(Model model) {
+    public String login(Model model, @RequestHeader HttpHeaders headers) {
 	    return "login";
     }
 
     @GetMapping("/logout")
-    public String logout(Model model, HttpServletRequest request, HttpServletResponse response) {
+    public String logout(Model model, HttpServletRequest request, HttpServletResponse response, @RequestHeader HttpHeaders headers) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null){
             new SecurityContextLogoutHandler().logout(request, response, auth);
@@ -38,14 +40,14 @@ public class CustomerAccessController {
     }
 
     @PostMapping("/login")
-    public String loginCheck(Model model, @ModelAttribute UserRegister user) {
+    public String loginCheck(Model model, @ModelAttribute UserRegister user, @RequestHeader HttpHeaders headers) {
         AuthProfile profile = accountHandler.validateCredentials(user.getUsername(), user.getPassword());
         model.addAttribute("validates", profile.isAuthenticated());
         return "login";
     }
 	
 	@GetMapping("/signup")
-    public String signup(Model model) {
+    public String signup(Model model, @RequestHeader HttpHeaders headers) {
         model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
         model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
         model.addAttribute("user", new UserRegister());
@@ -54,7 +56,7 @@ public class CustomerAccessController {
     }
 
     @PostMapping("/signup")
-    public String signupRegistered(Model model, @ModelAttribute UserRegister user) {
+    public String signupRegistered(Model model, @ModelAttribute UserRegister user, @RequestHeader HttpHeaders headers) {
         model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
         model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
         model.addAttribute("user", new UserRegister());
@@ -64,7 +66,7 @@ public class CustomerAccessController {
     }
 
     @GetMapping("/forgot")
-    public String forgot(Model model) {
+    public String forgot(Model model, @RequestHeader HttpHeaders headers) {
 
         return "forgot";
     }

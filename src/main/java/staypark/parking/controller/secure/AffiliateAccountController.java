@@ -7,16 +7,12 @@ import staypark.parking.beans.security.Principal;
 import staypark.parking.handler.AccountHandler;
 import staypark.parking.handler.AirportHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -32,7 +28,8 @@ public class AffiliateAccountController {
 
     @GetMapping("/affiliate/reservations")
     public String getAffiliateReservations(Model model, Authentication auth, @RequestParam(name="range", required=false) String range,
-                                           @RequestParam(name="startDate", required=false) String startDate, @RequestParam(name="endDate", required=false) String endDate) {
+                                           @RequestParam(name="startDate", required=false) String startDate, @RequestParam(name="endDate", required=false) String endDate,
+                                           @RequestHeader HttpHeaders headers) {
         Principal p = (Principal) auth.getPrincipal();
         String username = p.getUsername();
         if (username == null || username.trim().isEmpty()) {
@@ -60,7 +57,7 @@ public class AffiliateAccountController {
     }
 
     @GetMapping("/affiliate/reservations/{orderId}")
-    public String getAffiliateReservationOrderDetail(Model model, Authentication auth, @PathVariable(name = "orderId") String orderId) {
+    public String getAffiliateReservationOrderDetail(Model model, Authentication auth, @PathVariable(name = "orderId") String orderId, @RequestHeader HttpHeaders headers) {
         Principal p = (Principal) auth.getPrincipal();
         String username = p.getUsername();
 
@@ -70,7 +67,8 @@ public class AffiliateAccountController {
     }
 
     @GetMapping("/affiliate/financial")
-    public String getFinancialReport(Model model, Authentication auth, @RequestParam(name="range", required=false) String range, @RequestParam(name="type", required=false) String type) {
+    public String getFinancialReport(Model model, Authentication auth, @RequestParam(name="range", required=false) String range, @RequestParam(name="type", required=false) String type,
+                                     @RequestHeader HttpHeaders headers) {
         Principal p = (Principal) auth.getPrincipal();
         String username = p.getUsername();
 
@@ -96,7 +94,7 @@ public class AffiliateAccountController {
     }
 
     @GetMapping(value = "/affiliate/financial/report.csv", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    public @ResponseBody byte[] getFinancialReportSpreadsheet(Authentication auth) throws IOException {
+    public @ResponseBody byte[] getFinancialReportSpreadsheet(Authentication auth, @RequestHeader HttpHeaders headers) throws IOException {
         Principal p = (Principal) auth.getPrincipal();
         String username = p.getUsername();
 
@@ -104,7 +102,7 @@ public class AffiliateAccountController {
     }
 
     @GetMapping("/affiliate/financial/{affId}")
-    public String getFinancialReportSpreadsheet(Model model, Authentication auth) {
+    public String getFinancialReportSpreadsheet(Model model, Authentication auth, @RequestHeader HttpHeaders headers) {
         Principal p = (Principal) auth.getPrincipal();
         String username = p.getUsername();
 
@@ -114,7 +112,7 @@ public class AffiliateAccountController {
     }
     
     @GetMapping("/affiliate/profile")
-    public String getAffiliateProfile(Model model, Authentication auth) {
+    public String getAffiliateProfile(Model model, Authentication auth, @RequestHeader HttpHeaders headers) {
         if (!auth.isAuthenticated()) {
             return "login";
         }
@@ -126,7 +124,7 @@ public class AffiliateAccountController {
     }
 
     @PostMapping("/affiliate/profile")
-    public String updateAffiliateProfile(Model model, @ModelAttribute AffiliateProfile profile, Authentication auth) {
+    public String updateAffiliateProfile(Model model, @ModelAttribute AffiliateProfile profile, Authentication auth, @RequestHeader HttpHeaders headers) {
         if (!auth.isAuthenticated()) {
             return "login";
         }
@@ -139,7 +137,7 @@ public class AffiliateAccountController {
     }
     
     @GetMapping("/affiliate/rooms")
-    public String getAffiliateRooms(Model model, Authentication auth) {
+    public String getAffiliateRooms(Model model, Authentication auth, @RequestHeader HttpHeaders headers) {
         if (!auth.isAuthenticated()) {
             return "login";
         }
@@ -152,12 +150,12 @@ public class AffiliateAccountController {
     }
     
     @GetMapping("/affiliate/password")
-    public String changeAffiliatePasswordGet(Model model) {
+    public String changeAffiliatePasswordGet(Model model, @RequestHeader HttpHeaders headers) {
         return "affiliate/change-password";
     }
 
     @PostMapping("/affiliate/password")
-    public String changeAffiliatePassword(Model model, Authentication auth, @ModelAttribute ChangePassword pw) {
+    public String changeAffiliatePassword(Model model, Authentication auth, @ModelAttribute ChangePassword pw, @RequestHeader HttpHeaders headers) {
         Principal p = (Principal) auth.getPrincipal();
         boolean success = accountHandler.changePassword(p.getUsername(), pw.getCurrentPassword(), pw.getNewPassword());
         if (success) {

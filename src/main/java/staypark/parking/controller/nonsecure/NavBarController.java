@@ -7,12 +7,10 @@ import staypark.parking.util.AirportUtil;
 import staypark.parking.util.EmailUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
@@ -27,35 +25,35 @@ public class NavBarController {
     private AccountHandler accountHandler;
 
 	@GetMapping("/about")
-    public String about(Model model) {
+    public String about(Model model, @RequestHeader HttpHeaders headers) {
         model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
         model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
 	    return "about";
     }
 	
 	@GetMapping("/airport-parking")
-    public String airportParking(Model model) {
+    public String airportParking(Model model, @RequestHeader HttpHeaders headers) {
         model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
         model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
 	    return "airport-parking";
     }
 	
 	@GetMapping("/room-park")
-    public String roomPark(Model model) {
+    public String roomPark(Model model, @RequestHeader HttpHeaders headers) {
         model.addAttribute("usDepart", AirportUtil.getRoomAndParkLocations(1));
         model.addAttribute("canadaDepart", AirportUtil.getRoomAndParkLocations(2));
 	    return "room-park";
     }
 	
 	@GetMapping("/faq")
-    public String faq(Model model) {
+    public String faq(Model model, @RequestHeader HttpHeaders headers) {
         model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
         model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
 	    return "faq";
     }
 
 	@GetMapping("/contact-us")
-    public String contactUs(Model model) {
+    public String contactUs(Model model, @RequestHeader HttpHeaders headers) {
         model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
         model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
         model.addAttribute("status", "");
@@ -65,7 +63,7 @@ public class NavBarController {
     }
 
     @PostMapping("/contact-us")
-    public String contactUsPost(Model model, @ModelAttribute ContactUs contactUsMessage) {
+    public String contactUsPost(Model model, @ModelAttribute ContactUs contactUsMessage, @RequestHeader HttpHeaders headers) {
         model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
         model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
 	    model.addAttribute("status", "bu-sent");
@@ -91,7 +89,7 @@ public class NavBarController {
     }
 
     @GetMapping("/affiliates")
-    public String affiliates(Model model) {
+    public String affiliates(Model model, @RequestHeader HttpHeaders headers) {
         model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
         model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
         model.addAttribute("countries", AirportUtil.getCountries());
@@ -103,7 +101,7 @@ public class NavBarController {
     }
 
     @PostMapping("/affiliates")
-    public String affiliateRegister(Model model, @RequestPart(value = "hotelLogo", required = false) MultipartFile hotelLogo, @ModelAttribute AffiliateRegister affiliate) {
+    public String affiliateRegister(Model model, @RequestPart(value = "hotelLogo", required = false) MultipartFile hotelLogo, @ModelAttribute AffiliateRegister affiliate, @RequestHeader HttpHeaders headers) {
         model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
         model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
         model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));

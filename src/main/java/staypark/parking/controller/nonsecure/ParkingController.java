@@ -3,6 +3,7 @@ package staypark.parking.controller.nonsecure;
 import staypark.parking.beans.reservation.ChangeReservation;
 import staypark.parking.util.AirportUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public class ParkingController {
 	@GetMapping("/parking/{airport}")
     public String parkingSearchRequest(@PathVariable("airport") String airport, @RequestParam(name="dropOffDate") String dropOffDate, 
     		@RequestParam(name="dropOffTime") String dropOffTime, @RequestParam(name="pickUpDate") String pickUpDate,
-    		@RequestParam(name="pickUpTime") String pickUpTime, @RequestParam(name="sort", required = false) String sort, Model model) {
+    		@RequestParam(name="pickUpTime") String pickUpTime, @RequestParam(name="sort", required = false) String sort, Model model, @RequestHeader HttpHeaders headers) {
 		if (sort == null) {
 			sort = "REC";
 		}
@@ -36,7 +37,7 @@ public class ParkingController {
     }
 	
 	@GetMapping("/parking/change")
-    public String parkingChangeGet(Model model) {
+    public String parkingChangeGet(Model model, @RequestHeader HttpHeaders headers) {
 		model.addAttribute("res", new ChangeReservation());
 
 		return "change";
@@ -44,7 +45,7 @@ public class ParkingController {
 
 	@GetMapping("/parking/cancel")
 	public String parkingCancelGet(Model model, @RequestParam(name="cancelReservationNumber", required=false) String cancelReservationNumber,
-								   @RequestParam(name="lastDigits", required=false) String lastDigits) {
+								   @RequestParam(name="lastDigits", required=false) String lastDigits, @RequestHeader HttpHeaders headers) {
 		if (cancelReservationNumber != null && !cancelReservationNumber.isEmpty() && lastDigits != null && !lastDigits.isEmpty()) {
 			ChangeReservation newRes = parkingHandler.checkValidConfirmatioNumber(cancelReservationNumber, lastDigits, "C");
 			newRes.setLastDigits(lastDigits);
@@ -72,7 +73,7 @@ public class ParkingController {
 	}
 
 	@PostMapping("/parking/cancel")
-	public String parkingCancelPost(Model model, @ModelAttribute ChangeReservation inres) {
+	public String parkingCancelPost(Model model, @ModelAttribute ChangeReservation inres, @RequestHeader HttpHeaders headers) {
 		ChangeReservation newRes = parkingHandler.checkValidConfirmatioNumber(inres.getCancelReservationNumber(), inres.getLastDigits(), "C");
 		boolean validOrder = newRes.isValidNumber();
 		newRes.setValidNumber(validOrder);
@@ -92,7 +93,7 @@ public class ParkingController {
 	}
 
 	@GetMapping("/parking/extend")
-	public String parkingExtendGet(Model model, @RequestParam(name="extendReservationNumber", required=false) String extendReservationNumber) {
+	public String parkingExtendGet(Model model, @RequestParam(name="extendReservationNumber", required=false) String extendReservationNumber, @RequestHeader HttpHeaders headers) {
 		if (extendReservationNumber != null && !extendReservationNumber.isEmpty()) {
 			ChangeReservation newRes = parkingHandler.checkValidConfirmatioNumber(extendReservationNumber, null, "E");
 			newRes.setExtendReservationNumber(extendReservationNumber);
@@ -119,7 +120,7 @@ public class ParkingController {
 	}
 
 	@PostMapping("/parking/extend")
-	public String parkingExtendPost(Model model, @ModelAttribute ChangeReservation inres) {
+	public String parkingExtendPost(Model model, @ModelAttribute ChangeReservation inres, @RequestHeader HttpHeaders headers) {
 		ChangeReservation newRes = parkingHandler.checkValidConfirmatioNumber(inres.getExtendReservationNumber(), null, "E");
 		boolean validOrder = newRes.isValidNumber();
 		newRes.setValidNumber(validOrder);

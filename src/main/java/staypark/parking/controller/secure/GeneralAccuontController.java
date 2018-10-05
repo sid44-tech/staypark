@@ -3,10 +3,12 @@ package staypark.parking.controller.secure;
 import staypark.parking.beans.security.Principal;
 import staypark.parking.handler.AccountHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 @Controller
 public class GeneralAccuontController {
@@ -15,7 +17,7 @@ public class GeneralAccuontController {
     private AccountHandler accountHandler;
 
     @GetMapping("/profile")
-    public String getProfile(Model model, Authentication auth) {
+    public String getProfile(Model model, Authentication auth, @RequestHeader HttpHeaders headers) {
         if (!auth.isAuthenticated()) {
             return "login";
         }

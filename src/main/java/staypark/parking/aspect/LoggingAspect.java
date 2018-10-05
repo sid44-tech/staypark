@@ -6,6 +6,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 
 @Aspect
@@ -19,7 +20,8 @@ public class LoggingAspect {
             final Object result = joinPoint.proceed();
             long timeTaken = System.currentTimeMillis() - startTime;
 
-            log.info(buildControllerLogOutput(joinPoint.getSignature().toShortString(), timeTaken));
+            String headers = getHeaders(joinPoint.getArgs());
+            log.info(buildControllerLogOutput(joinPoint.getSignature().toShortString(), headers, timeTaken));
 
             return result;
     }
@@ -31,21 +33,22 @@ public class LoggingAspect {
         long timeTaken = System.currentTimeMillis() - startTime;
 
         String username = getUsername(joinPoint.getArgs());
+        String headers = getHeaders(joinPoint.getArgs());
         if (username != null) {
-            log.info(buildSecureControllerLogOutput(joinPoint.getSignature().toShortString(), username, timeTaken));
+            log.info(buildSecureControllerLogOutput(joinPoint.getSignature().toShortString(), username, headers, timeTaken));
         } else {
-            log.info(buildControllerLogOutput(joinPoint.getSignature().toShortString(), timeTaken));
+            log.info(buildControllerLogOutput(joinPoint.getSignature().toShortString(), headers, timeTaken));
         }
 
         return result;
     }
 
-    private String buildControllerLogOutput(final String endpointName, final long time) {
-        return "endpoint=\"" + endpointName + "\", time-ms=\"" + time + "\"";
+    private String buildControllerLogOutput(final String endpointName, final String headers, final long time) {
+        return "endpoint=\"" + endpointName + "\", time-ms=\"" + time + "\", " + headers;
     }
 
-    private String buildSecureControllerLogOutput(final String endpointName, final String username, final long time) {
-        return "endpoint=\"" + endpointName + "\", time-ms=\"" + time + "\""+ ", username=\"" + username + "\"";
+    private String buildSecureControllerLogOutput(final String endpointName, final String username, final String headers, final long time) {
+        return "endpoint=\"" + endpointName + "\", time-ms=\"" + time + "\""+ ", username=\"" + username + "\", " + headers;
     }
 
     private String getUsername(final Object[] objs) {
@@ -62,5 +65,19 @@ public class LoggingAspect {
         }
 
         return null;
+    }
+
+    private String getHeaders(final Object[] objs) {
+        if (objs == null) {
+            return "";
+        }
+
+        for (int i = 0; i < objs.length; i++) {
+            if (objs[i] instanceof HttpHeaders) {
+                return objs[i].toString();
+            }
+        }
+
+        return "";
     }
 }

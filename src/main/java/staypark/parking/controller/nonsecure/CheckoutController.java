@@ -7,6 +7,7 @@ import staypark.parking.handler.CheckoutHandler;
 import staypark.parking.util.SecurityUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 
 import org.springframework.stereotype.Controller;
@@ -42,7 +43,7 @@ public class CheckoutController {
                                @RequestParam(name="carDropOffTime", required = false) String carDropOffTime,
                                @RequestParam(name="carPickUpDateMDY", required = false) String carPickUpDateMDY,
                                @RequestParam(name="carPickUpTime", required = false) String carPickUpTime,
-                               Authentication auth) {
+                               Authentication auth, @RequestHeader HttpHeaders headers) {
 
 		String username = SecurityUtil.getAuthenticatedUsername(auth);
 		
@@ -106,7 +107,7 @@ public class CheckoutController {
     }
 
     @PostMapping("/parking/checkout/{hotelId}")
-    public String checkoutParkPost(Model model, @PathVariable("hotelId") int hotelId, @ModelAttribute ParkingCheckout checkout, Authentication auth) {
+    public String checkoutParkPost(Model model, @PathVariable("hotelId") int hotelId, @ModelAttribute ParkingCheckout checkout, Authentication auth, @RequestHeader HttpHeaders headers) {
 	    checkout.setHotelId(String.valueOf(hotelId));
 
         Payment payment = checkoutHandler.handleBookingSubmit(checkout, SecurityUtil.getAuthenticatedUsername(auth));
@@ -121,7 +122,7 @@ public class CheckoutController {
     }
 
     @PostMapping("/hotel-parking/checkout/{hotelId}")
-    public String checkoutHotelParkInformation(Model model, @PathVariable("hotelId") int hotelId, @ModelAttribute ParkingCheckout checkout, Authentication auth) {
+    public String checkoutHotelParkInformation(Model model, @PathVariable("hotelId") int hotelId, @ModelAttribute ParkingCheckout checkout, Authentication auth, @RequestHeader HttpHeaders headers) {
 //        checkout.setHotelId(String.valueOf(hotelId));
 //
 //        checkoutHandler.handleBookingSubmit(checkout, SecurityUtil.getAuthenticatedUsername(auth));
@@ -130,13 +131,13 @@ public class CheckoutController {
     }
 
     @GetMapping("/parking/checkout")
-    public String checkoutParkPost(Model model) {
+    public String checkoutParkPost(Model model, @RequestHeader HttpHeaders headers) {
 
         return "checkout/confirm-checkout";
     }
 
     @GetMapping("/roompark/checkout")
-    public String checkoutRoomPark(Model model) {
+    public String checkoutRoomPark(Model model, @RequestHeader HttpHeaders headers) {
 
 	    return "checkout/parking-checkout";
     }

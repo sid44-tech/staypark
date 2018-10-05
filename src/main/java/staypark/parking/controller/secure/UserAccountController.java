@@ -7,13 +7,11 @@ import staypark.parking.beans.user.AirportReservations;
 import staypark.parking.handler.AccountHandler;
 import staypark.parking.handler.AirportHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,7 +25,7 @@ public class UserAccountController {
     private AirportHandler airportHandler;
 
     @GetMapping("/user/reservations")
-    public String getUserReservations(Model model, Authentication auth) {
+    public String getUserReservations(Model model, Authentication auth, @RequestHeader HttpHeaders headers) {
         Principal p = (Principal) auth.getPrincipal();
         String username = p.getUsername();
 
@@ -44,7 +42,7 @@ public class UserAccountController {
     }
 
     @GetMapping("/user/reservations/{orderId}")
-    public String getUserReservationsDetails(Model model, @PathVariable("orderId") String orderId, Authentication auth) {
+    public String getUserReservationsDetails(Model model, @PathVariable("orderId") String orderId, Authentication auth, @RequestHeader HttpHeaders headers) {
         Principal p = (Principal) auth.getPrincipal();
         String username = p.getUsername();
 
@@ -63,12 +61,12 @@ public class UserAccountController {
     }
 
     @GetMapping("/user/password")
-    public String changeUserPasswordGet(Model model) {
+    public String changeUserPasswordGet(Model model, @RequestHeader HttpHeaders headers) {
         return "user/change-password";
     }
 
     @PostMapping("/user/password")
-    public String changeUserPassword(Model model, Authentication auth, @ModelAttribute ChangePassword pw) {
+    public String changeUserPassword(Model model, Authentication auth, @ModelAttribute ChangePassword pw, @RequestHeader HttpHeaders headers) {
         Principal p = (Principal) auth.getPrincipal();
         boolean success = accountHandler.changePassword(p.getUsername(), pw.getCurrentPassword(), pw.getNewPassword());
         if (success) {
@@ -81,7 +79,7 @@ public class UserAccountController {
     }
 
     @PostMapping("/user/profile")
-    public String updateUserProfile(Model model, @ModelAttribute UserProfile profile, Authentication auth) {
+    public String updateUserProfile(Model model, @ModelAttribute UserProfile profile, Authentication auth, @RequestHeader HttpHeaders headers) {
         if (!auth.isAuthenticated()) {
             return "login";
         }
