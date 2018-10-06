@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 
+import java.util.List;
+
 @Aspect
 @Configuration
 @Slf4j
@@ -74,10 +76,22 @@ public class LoggingAspect {
 
         for (int i = 0; i < objs.length; i++) {
             if (objs[i] instanceof HttpHeaders) {
-                return objs[i].toString();
+                String userAgent = getHeader(((HttpHeaders) objs[i]).get("user-agent"));
+                String host = getHeader(((HttpHeaders) objs[i]).get("host"));
+                String xForwardedFor = getHeader(((HttpHeaders) objs[i]).get("x-forwarded-for"));
+
+                return "userAgent=\"" + userAgent + "\", host=\"" + host + "\", x-forwarded-for=\"" + xForwardedFor + "\"";
             }
         }
 
         return "";
+    }
+
+    private String getHeader(final List<String> list) {
+        if (list != null && list.size() > 0) {
+            return list.get(0);
+        } else {
+            return "";
+        }
     }
 }
