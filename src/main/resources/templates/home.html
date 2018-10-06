@@ -4,6 +4,10 @@
     <title>StayPark</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="theme-color" content="#71A40A"/>
+	<meta name="description" content="Discounted airport parking up to 75% off. StayPark provides cheap airport parking locations nationwide. Our locations include SFO, DIA, Logan, LAX, Phoenix, Las Vegas, Fort Myers, Atlanta, Fort Lauderdale, Ohare, New Orleans, Saint Louis, Miami, DFW, Seattle, Newark, Tampa, Charlotte, Houston, MCO, Austin, and many more.">
+	<meta name="keywords" content="international airport parking, airport parking coupon, long term parking">
+	<link rel="manifest" href="/manifest.json">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="/css/site.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.standalone.min.css"/>
@@ -12,23 +16,24 @@
 	<div>
 		<div th:replace="header :: header"></div>
 		<div th:replace="navbar :: navbar"></div>
+		<main>
 	    <div class="homepage-carousel-content">
 			<div id="homepage_image_carousel" class="carousel slide" data-ride="carousel" data-interval="8000">
 			  <div class="carousel-inner">
 			    <div class="carousel-item active">
-			      <img class="d-block w-100 carousel-item-image" src="/images/home_slider_1.jpg">
+			      <img class="d-block w-100 carousel-item-image" src="/images/home_slider_1.jpg" alt="Image">
 			    </div>
 			    <div class="carousel-item">
-			      <img class="d-block w-100 carousel-item-image" src="/images/home_slider_2.jpg">
+			      <img class="d-block w-100 carousel-item-image" src="/images/home_slider_2.jpg" alt="Image">
 			    </div>
 			    <div class="carousel-item">
-			      <img class="d-block w-100 carousel-item-image" src="/images/home_slider_3.jpg">
+			      <img class="d-block w-100 carousel-item-image" src="/images/home_slider_3.jpg" alt="Image">
 			    </div>
 			    <div class="carousel-item">
-			      <img class="d-block w-100 carousel-item-image" src="/images/home_slider_4.jpg">
+			      <img class="d-block w-100 carousel-item-image" src="/images/home_slider_4.jpg" alt="Image">
 			    </div>
 			    <div class="carousel-item">
-			      <img class="d-block w-100 carousel-item-image" src="/images/home_slider_5.jpg">
+			      <img class="d-block w-100 carousel-item-image" src="/images/home_slider_5.jpg" alt="Image">
 			    </div>
 			  </div>
 			</div>
@@ -44,7 +49,7 @@
 				    </div>
 				    <div class="col-sm-4">
 				    	<div class="section-title">How StayPark Works</div>
-				    	<iframe width="100%" height="200px" frameborder="0" src="//www.youtube.com/embed/RWc3dqhugFA" allowfullscreen=""></iframe>
+				    	<iframe width="100%" height="200px" frameborder="0" src="//www.youtube.com/embed/RWc3dqhugFA" allowfullscreen="" title="StayPark Video"></iframe>
 				    </div>
 				</div>
 			</div>
@@ -63,7 +68,7 @@
 							    	</div>
 							  	</div>
 							    <div class="col flex0 testimonial_image_small testimonial-small-image-size">
-							    	<img class="testimonial_image_small testimonial-small-image-size" src="/images/testimonial_icon.png"></img>
+							    	<img class="testimonial_image_small testimonial-small-image-size" src="/images/testimonial_icon.png" alt="Testimonials"></img>
 							    </div>
 						    </div>
 					    </div>
@@ -85,6 +90,7 @@
 				</div>
 			</div>
 		</div>
+		</main>
 	    <div th:replace="footer :: footer"></div>
 		<div id="parking_selection_modal" class="modal fade" role="dialog">
 		  <div class="modal-dialog">

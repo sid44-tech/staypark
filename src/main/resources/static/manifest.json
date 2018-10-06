@@ -1,0 +1,19 @@
+{
+  "short_name": "StayPark",
+  "name": "StayPark",
+  "background_color": "#E2E1E0",
+  "display": "browser",
+  "theme_color": "#71A40A",
+  "icons": [
+    {
+      "src": "/images/app-icons/android-icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/images/app-icons/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
