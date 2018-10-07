@@ -401,6 +401,10 @@ public class AccountHandler {
     }
 
     public String createCustomerAccount(UserRegister user) {
+        if (checkUsernameExists(user.getUsername()) || checkEmailExists(user.getEmail())) {
+            return "false";
+        }
+
         String success = createCustomerDBRecord(user);
         if (success.equals("true")) {
             String body = EmailUtil.CUSTOMER_CONFIRM_BODY;
