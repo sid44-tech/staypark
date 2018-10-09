@@ -25,11 +25,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/favicon.ico", "/robots.txt", "/manifest.json", "/about", "/airport-parking", "/room-park", "/cancellation", "/room-park-results", "/affiliates",
                 		"/heartbeat", "/deep-heartbeat", "/faq", "/contact-us", "/sitemap", "/privacy", "/tac", "/browse-airports", "/parking/**", "/account/username/**", "/account/email/**",
                         "/countries", "/countries/**", "/states/**",
-                        "/airport/**", "/hotel-parking/**", "/checkout", "/forgot", "/signup", "/images/**", "/js/**", "/css/**").permitAll()
+                        "/airport/**", "/hotel-parking/**", "/checkout", "/forgot", "/signup", "/login", "/images/**", "/js/**", "/css/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/login")
+                .loginPage("/")
                 .loginProcessingUrl("/login")
                 .successHandler(new StayParkAuthenticationSuccessHandler())
                 .permitAll()

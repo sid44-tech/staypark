@@ -1,11 +1,13 @@
 package staypark.parking.handler;
 
 import staypark.parking.beans.payment.PaymentResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import staypark.parking.beans.payment.Payment;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 import net.authorize.Environment;
 import net.authorize.api.contract.v1.*;
@@ -13,6 +15,7 @@ import net.authorize.api.controller.base.ApiOperationBase;
 import net.authorize.api.controller.CreateTransactionController;
 
 @Service
+@Slf4j
 public class PaymentHandler {
 
 	//Live Authorize.net API Information
@@ -49,6 +52,13 @@ public class PaymentHandler {
 
 	public PaymentResponse doPayment(final String cardNuber, final String cvv, final String expirationMonth, final String expirationYear, final BigDecimal amount,
 									 final String firstName, final String lastName, final String address, final String state, final String zip) {
+
+		String tempId = UUID.randomUUID().toString();
+		String refLog = "payRef=\"" + tempId + "\", ";
+		String endpointLog = "endpoint=\"PaymentHandler.doPayment(..)\", ";
+		String nameLog = "name=\"" + firstName + " " + lastName + "\", ";
+		String amountLog = "amount=\"" + amount.toString() + "\"";
+		log.info(refLog + endpointLog + nameLog + amountLog);
 		PaymentResponse pr = new PaymentResponse();
 
 		//Common code to set for all requests
@@ -91,6 +101,11 @@ public class PaymentHandler {
 		CreateTransactionResponse response = controller.getApiResponse();
 
 		if (response!=null) {
+			String resultLog = "resultCode=\"" + response.getMessages().getResultCode() + "\", ";
+			String responseLog = "responseCode=\"" + response.getTransactionResponse().getResponseCode() + "\", ";
+			String responseTextLog = "responseText=\"" + getErrorFromResponse(response.getTransactionResponse()) + "\"";
+
+			log.info(refLog + resultLog + responseLog + responseTextLog);
 			if (response.getMessages().getResultCode() == MessageTypeEnum.OK) {
 				TransactionResponse result = response.getTransactionResponse();
 				if (result.getResponseCode().equals("1")) {
@@ -106,6 +121,8 @@ public class PaymentHandler {
 				pr.setSuccess(false);
 				pr.setResponseText(getErrorFromResponse(response.getTransactionResponse()));
 			}
+		} else {
+			log.info(refLog + "error=\"Payment is null\"");
 		}
 
 		return pr;

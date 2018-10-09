@@ -445,10 +445,12 @@ public class AccountHandler {
         else if (checkPasswordBlowfish(password, profile.getPassword())) {
             profile.setAuthenticated(true);
             return profile;
+        } else {
+            profile.setAuthenticated(false);
+            return profile;
         }
         //TODO: One day one-way bcrypt should be done.  Out of scope for now.
 
-        return null;
     }
 
     public  List<AffiliateReservation> getAffiliateReservations(final String username, final String range, final String startDate, final String endDate) {
@@ -773,7 +775,7 @@ public class AccountHandler {
         }
     }
 
-    private String createCustomerDBRecord(UserRegister user){
+    private String createCustomerDBRecord(UserRegister user) {
         String success = "false";
 
         if (user == null) {
@@ -876,7 +878,7 @@ public class AccountHandler {
             DBUtil.closeResources(conn, ps, rs);
         }
 
-        return null;
+        return profile;
     }
 
     private boolean checkPasswordBlowfish(final String realPassword, final String hashedPassword) {

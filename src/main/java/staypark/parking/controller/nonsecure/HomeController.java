@@ -22,7 +22,12 @@ public class HomeController {
 	private HomeHandler homeHandler;
     
 	@GetMapping("/")
-    public String greeting(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model, @RequestHeader HttpHeaders headers) {
+    public String greeting(@RequestParam(name="name", required=false, defaultValue="World") String name,
+                           @RequestParam(name="error", required=false) String error, Model model, @RequestHeader HttpHeaders headers) {
+	    if (error != null) {
+	        return "login";
+        }
+
         model.addAttribute("name", name);
         List<TestimonialBean> list = homeHandler.getTestimonials();
         if (list.size() > 0) {
