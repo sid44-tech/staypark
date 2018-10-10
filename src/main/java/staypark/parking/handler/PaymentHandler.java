@@ -103,9 +103,7 @@ public class PaymentHandler {
 		if (response!=null) {
 			String resultLog = "resultCode=\"" + response.getMessages().getResultCode() + "\", ";
 			String responseLog = "responseCode=\"" + response.getTransactionResponse().getResponseCode() + "\", ";
-			String responseTextLog = "responseText=\"" + getErrorFromResponse(response.getTransactionResponse()) + "\"";
 
-			log.info(refLog + resultLog + responseLog + responseTextLog);
 			if (response.getMessages().getResultCode() == MessageTypeEnum.OK) {
 				TransactionResponse result = response.getTransactionResponse();
 				if (result.getResponseCode().equals("1")) {
@@ -113,13 +111,19 @@ public class PaymentHandler {
 					pr.setResponseText("Payment Successful");
 					pr.setTrackingNumber(result.getTransId());
 					pr.setTransactionKey(result.getResponseCode());
+					String responseTextLog = "responseText=\"Payment Successful\"";
+					log.info(refLog + resultLog + responseLog + responseTextLog);
 				} else {
 					pr.setSuccess(false);
 					pr.setResponseText(getErrorFromResponse(result));
+					String responseTextLog = "responseText=\"" + getErrorFromResponse(result) + "\"";
+					log.info(refLog + resultLog + responseLog + responseTextLog);
 				}
 			} else {
 				pr.setSuccess(false);
 				pr.setResponseText(getErrorFromResponse(response.getTransactionResponse()));
+				String responseTextLog = "responseText=\"" + getErrorFromResponse(response.getTransactionResponse()) + "\"";
+				log.info(refLog + resultLog + responseLog + responseTextLog);
 			}
 		} else {
 			log.info(refLog + "error=\"Payment is null\"");
