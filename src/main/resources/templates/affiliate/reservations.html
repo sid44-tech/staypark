@@ -70,7 +70,7 @@
                     autoclose: true,
                     disableTouchKeyboard: true,
                     clearBtn: true,
-                    startDate: new Date()
+                    endDate: new Date()
                 })
                 startDate.val(todayString());
                 startDate.datepicker("setDate", new Date());
@@ -88,6 +88,13 @@
                 endDate.datepicker("setDate", tomorrow());
 
                 addListenersForDateField(startDate, endDate);
+
+                if ($("#timeWindow").val() == 'SELECT') {
+                    $("#startDateDiv").show();
+                    $("#endDateDiv").show();
+                    $("#goDiv").show();
+                }
+
             }, false);
         })();
 
@@ -126,6 +133,12 @@
         function updateDateSelection() {
             var d1 = $('#startDate').val();
             var d2 = $('#endDate').val();
+
+            if (d1 == '' || d2 == '') {
+                alert('Start and End dates are not set');
+                return;
+            }
+
             var sDate = $('input[name="startDate"]').datepicker("getDate");
             var eDate = $('input[name="endDate"]').datepicker("getDate");
             var dd = daysDifference(sDate, eDate) + 1;

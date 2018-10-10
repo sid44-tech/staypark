@@ -631,11 +631,13 @@ public class AccountHandler {
             ps.setString(1, username);
             rs = ps.executeQuery();
             while (rs.next()) {
-                AffiliateRoom room = new AffiliateRoom();
-                room.setType(rs.getString("rm_type"));
-                room.setStatus(rs.getString("rm_status"));
-                room.setCost(rs.getBigDecimal("rm_cost").toString());
-                rooms.add(room);
+                if (rs.getString("rm_type") != null) {
+                    AffiliateRoom room = new AffiliateRoom();
+                    room.setType(rs.getString("rm_type"));
+                    room.setStatus(rs.getString("rm_status"));
+                    room.setCost(rs.getBigDecimal("rm_cost").toString());
+                    rooms.add(room);
+                }
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
