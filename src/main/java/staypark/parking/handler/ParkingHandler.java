@@ -167,13 +167,13 @@ public class ParkingHandler {
 			String strCurDate = DateUtil.formatDBDate(currentDate);
 			if (spdateMap.get(strCurDate) != null) {
 				totalCost = totalCost.add(spdateMap.get(strCurDate).getCost());
-				if (spdateMap.get(strCurDate).getNumberSpaces() < bookedCount) {
+				if (spdateMap.get(strCurDate).getNumberSpaces() <= bookedCount) {
 					hotel.setSoldout(true);
 				}
 			//Calculate cost for day if day is a special day (mon, tues, etc)
 			} else if (spdayMap.get(currentDate) != null) {
 				totalCost = totalCost.add(spdayMap.get(currentDate).getCost());
-				if (spdayMap.get(currentDate).getNumberSpaces() < bookedCount) {
+				if (spdayMap.get(currentDate).getNumberSpaces() <= bookedCount) {
 					hotel.setSoldout(true);
 				}
 			//Calculate cost for day if it doesn't have any special circumstances

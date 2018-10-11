@@ -51,13 +51,15 @@ public class AirportUtil {
 
 	private static String GET_SPECIAL_DATE_PARKING_RANGE_INFO =
 			"select sp_date, sp_cost, sp_prk_no " +
-					"from dbstaypark.gp_sp_reservation " +
-					"WHERE sp_htl_id = ? and sp_date >= ? and sp_date <= ? ";
+			"from dbstaypark.gp_sp_reservation " +
+			"join dbstaypark.gp_parking_info on gpi_aff_id = sp_htl_id " + 
+			"WHERE gpi_id = ? and sp_date >= ? and sp_date <= ? ";
 
 	private static String GET_SPECIAL_DAY_PARKING_INFO =
 			"select * " +
-					"from dbstaypark.gp_sp_dy_reservation " +
-					"WHERE dy_htl_id = ? ";
+			"from dbstaypark.gp_sp_dy_reservation " +
+			"join dbstaypark.gp_parking_info on gpi_aff_id = dy_htl_id " +
+			"WHERE gpi_id = ? ";
 
 	private static String GET_RESERVATION_COUNT_FOR_RANGE_HOTEL =
 			"select d.rd_st_date, count(d.rd_st_date) as count " +
@@ -404,7 +406,7 @@ public class AirportUtil {
 			ps.setDate(2, new java.sql.Date(startDate.getTime()));
 			ps.setDate(3, new java.sql.Date(endDate.getTime()));
 			rs = ps.executeQuery();
-			if (rs.next()) {
+			while (rs.next()) {
 				SpecialParkingDate spday = new SpecialParkingDate();
 				spday.setHotelId(hotelId);
 				spday.setDate(rs.getString("sp_date"));
