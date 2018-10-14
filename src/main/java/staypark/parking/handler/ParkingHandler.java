@@ -152,6 +152,7 @@ public class ParkingHandler {
 		Map<Date, Integer> bookedCountMap = AirportUtil.getReservationForRangeCountbyHotel(hotel.getHotelId(), startDate, endDate, conn);
 		Map<String, SpecialParkingDate> spdateMap = AirportUtil.checkSpecialParkingForDateRange(hotel.getHotelId(), startDate, endDate, conn);
 		Map<Integer, SpecialParkingDay> spdayMap = AirportUtil.checkSpecialParkingForDay(hotel.getHotelId(), conn);
+		int minimumDays = AirportUtil.getMinimumParkingDays(hotel.getHotelId(), conn);
 
 		for (int i = 0; i < totalDays; i++) {
 			currentDate = DateUtil.addDaysToDate(currentDate, i);
@@ -186,6 +187,12 @@ public class ParkingHandler {
 		}
 
 		hotel.setTotalCost(totalCost.setScale(2));
+
+		if (minimumDays != -1 && totalDays < minimumDays) {
+			hotel.setSoldout(true);
+			hotel.setMinimumDaysMessage("Minimum " + minimumDays + " days booking required");
+			hotel.setMinimumDaysEnabled(true);
+		}
 
 		return hotel;
 	}

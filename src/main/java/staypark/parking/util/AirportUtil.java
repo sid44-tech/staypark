@@ -65,6 +65,9 @@ public class AirportUtil {
 					"WHERE d.rd_htl_id = ? and d.rd_st_date >= ? AND d.rd_st_date <= ? " +
 					"group by d.rd_st_date ";
 
+	private static String GET_MIN_DAYS_FOR_HOTEL =
+			"select gpi_prk_min, gpi_prk_min_val from dbstaypark.gp_parking_info WHERE gpi_id = ? ";
+
 	/**
 	 * This method returns bla bla bla
 	 * @param in String This is the airport text
@@ -445,6 +448,29 @@ public class AirportUtil {
 		}
 
 		return map;
+	}
+
+	public static int getMinimumParkingDays(final int hotelId, final Connection conn) {
+		int minDays = -1;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			ps = conn.prepareStatement(GET_MIN_DAYS_FOR_HOTEL);
+			ps.setInt(1,  hotelId);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				if (rs.getBoolean("gpi_prk_min") == true) {
+					return rs.getInt("gpi_prk_min_val");
+				}
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		} finally {
+			DBUtil.closeResources(null, ps, rs);
+		}
+
+		return minDays;
 	}
 
 	public static int getNumberOfParkingDays(final Date startDate, final Date endDate,

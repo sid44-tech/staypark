@@ -36,4 +36,7 @@ public class HotelInformation {
     private BigDecimal parkingStandardDailyFee;
     private BigDecimal totalCost;
     private int recommendedSort;
+
+    private boolean minimumDaysEnabled = false;
+    private String minimumDaysMessage = "";
 }

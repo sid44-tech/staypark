@@ -1261,6 +1261,19 @@ body {
 	border-top-radius: 5px;
 }
 
+.p-results-min-days-container {
+	width: 100%;
+	text-align: right;
+	margin-top: 16px;
+}
+
+.p-results-min-days {
+	font-family: 'Roboto', sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+	color: #D50000;
+}
+
 
 /* -------------------------- AFFILIATE REG CSS -------------------------- */
 
