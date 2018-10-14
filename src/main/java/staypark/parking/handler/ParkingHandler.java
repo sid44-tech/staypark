@@ -53,7 +53,7 @@ public class ParkingHandler {
 			"where res.order_id = ? and res.reservation_status = 'A' ";
 
 	private static String CANCEL_ORDER =
-			"update dbstaypark.gp_reservation set reservation_status = 'C' where order_id = ? or extn_order_id = ?";
+			"update dbstaypark.gp_reservation set reservation_status = 'C', gr_cancel_date = now() where order_id = ? or extn_order_id = ?";
 
 	public List<HotelInformation> getParkingSearchResults(final String airportCode, final String startDateStr, final String endDateStr,
 			final String startTimeStr, final String endTimeStr, final String sort) {
