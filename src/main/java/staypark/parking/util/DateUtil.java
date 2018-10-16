@@ -16,6 +16,7 @@ public class DateUtil {
 	private static SimpleDateFormat DATE_FORMAT_YEAR_LAST = new SimpleDateFormat("MM-dd-yyyy", Locale.US);
 	private static SimpleDateFormat DATE_FORMAT_DB = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
+	private static SimpleDateFormat LONG_DATE_TIME = new SimpleDateFormat("EEEE MMMM dd, yyyy hh:mm a", Locale.US);
 
 	public final static String[] PARKING_TIMES = {
 			"12:00 AM", "12:15 AM", "12:30 AM", "12:45 AM", 
@@ -176,5 +177,19 @@ public class DateUtil {
 		String date = arr[1] + "-"+ arr[2] + "-" + arr[0];
 
 		return date;
+	}
+
+	public static Date longStringtoDate(final String str) {
+		if (str == null) {
+			return null;
+		}
+
+		try {
+			return LONG_DATE_TIME.parse(str);
+		} catch (ParseException e) {
+			log.error(e.getMessage(), e);
+		}
+
+		return null;
 	}
 }

@@ -5,11 +5,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.util.*;
 
 import staypark.parking.beans.reservation.ChangeReservation;
 import staypark.parking.beans.reservation.SpecialParkingDate;
@@ -258,10 +255,17 @@ public class ParkingHandler {
 						res.setPaymentDueAtLot(getAmountString(rs.getString("gr_due_payment")));
 						res.setPaymentDueNow(getAmountString(rs.getString("gr_due_payment")));
 					}
-					Date dropDate = rs.getDate("drop_time");
-					if (dropDate.compareTo(new Date()) <= 0) {
+					String dropDateTimeString = rs.getString("gr_d_time");
+					Date bookingCheckinDateTime = DateUtil.longStringtoDate(dropDateTimeString);
+
+					Calendar cal = Calendar.getInstance();
+					cal.setTime(new Date());
+					cal.add(Calendar.DATE, +1);
+					Date date24 = cal.getTime();
+
+					if (date24.compareTo(bookingCheckinDateTime) > 0) {
 						res.setValidNumber(false);
-						res.setMessage("Your reservation cannot be cancelled because the drop off date has already passed.");
+						res.setMessage("Your reservation cannot be cancelled because the cancel time has already passed.");
 					}
 				} else {
 					res.setValidNumber(true);
@@ -284,13 +288,15 @@ public class ParkingHandler {
 					res.setPaymentDueAtLot(getAmountString(rs.getString("gr_due_payment")));
 					res.setPaymentDueNow(getAmountString(rs.getString("gr_due_payment")));
 
-					Date pickUpDate = rs.getDate("pick_time");
-					Date newMinPickUpDate = DateUtil.addDaysToDate(pickUpDate, 1);
-					res.setExtendMinPickUpDate(newMinPickUpDate);
+					String pickDateTimeString = rs.getString("gr_p_time");
+					Date bookingPickupDateTime = DateUtil.longStringtoDate(pickDateTimeString);
 
-					if (pickUpDate.compareTo(new Date()) <= 0) {
+					Calendar cal = Calendar.getInstance();
+					Date date = new Date();
+
+					if (bookingPickupDateTime.compareTo(date) < 0) {
 						res.setValidNumber(false);
-						res.setMessage("Your reservation cannot be extended because the pick up date has already passed.");
+						res.setMessage("Your reservation cannot be extended because the pick up time has already passed.");
 					}
 				}
 			}
