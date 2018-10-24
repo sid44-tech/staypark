@@ -290,6 +290,10 @@ body {
 	margin-top: 16px;
 }
 
+.captcha-submit-margin {
+	margin-top: 16px;
+}
+
 /* -------------------------- Main Layout CSS -------------------------- */
 
 .flex-layout {

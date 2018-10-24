@@ -5,6 +5,7 @@ import staypark.parking.beans.general.ContactUs;
 import staypark.parking.handler.AccountHandler;
 import staypark.parking.util.AirportUtil;
 import staypark.parking.util.EmailUtil;
+import staypark.parking.util.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -59,15 +61,32 @@ public class NavBarController {
         model.addAttribute("status", "");
         model.addAttribute("contactUsMessage", new ContactUs());
         model.addAttribute("messageVisible", "bu-sent-div");
+        model.addAttribute("captchaFailed", "false");
 	    return "contact-us";
     }
 
     @PostMapping("/contact-us")
-    public String contactUsPost(Model model, @ModelAttribute ContactUs contactUsMessage, @RequestHeader HttpHeaders headers) {
-        model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
-        model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
-	    model.addAttribute("status", "bu-sent");
-        model.addAttribute("contactUsMessage", new ContactUs());
+    public String contactUsPost(Model model, @ModelAttribute ContactUs contactUsMessage, @RequestHeader HttpHeaders headers, HttpServletRequest request) {
+	    String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+	    String ip = "";
+	    if (headers != null && headers.get("x-forwarded-for") != null && headers.get("x-forwarded-for").get(0) != null) {
+            ip = headers.get("x-forwarded-for").get(0);
+        }
+        boolean captchaPassed = SecurityUtil.checkCaptcha(gRecaptchaResponse, ip);
+        if (!captchaPassed) {
+            model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
+            model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
+            model.addAttribute("contactUsMessage", contactUsMessage);
+            model.addAttribute("messageVisible", "bu-sent-div");
+            model.addAttribute("captchaFailed", "true");
+            return "contact-us";
+        } else {
+            model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
+            model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
+            model.addAttribute("status", "bu-sent");
+            model.addAttribute("contactUsMessage", new ContactUs());
+        }
+
         try {
             String BODY = EmailUtil.CONTACT_US_BODY
                     .replace("[EMAIL]", contactUsMessage.getEmail())
@@ -101,7 +120,7 @@ public class NavBarController {
     }
 
     @PostMapping("/affiliates")
-    public String affiliateRegister(Model model, @RequestPart(value = "hotelLogo", required = false) MultipartFile hotelLogo, @ModelAttribute AffiliateRegister affiliate, @RequestHeader HttpHeaders headers) {
+    public String affiliateRegister(Model model, @RequestPart(value = "hotelLogo", required = false) MultipartFile hotelLogo, @ModelAttribute AffiliateRegister affiliate, @RequestHeader HttpHeaders headers, HttpServletRequest request) {
         model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
         model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
         model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
@@ -110,6 +129,18 @@ public class NavBarController {
         model.addAttribute("states", AirportUtil.getStates(1));
         model.addAttribute("cities", AirportUtil.getCities(1));
         boolean imageError = false;
+
+        String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+        String ip = "";
+        if (headers != null && headers.get("x-forwarded-for") != null && headers.get("x-forwarded-for").get(0) != null) {
+            ip = headers.get("x-forwarded-for").get(0);
+        }
+        boolean captchaPassed = SecurityUtil.checkCaptcha(gRecaptchaResponse, ip);
+        if (!captchaPassed) {
+            model.addAttribute("affiliate", affiliate);
+            model.addAttribute("captchaFailed", "true");
+            return "affiliates";
+        }
 
         if (!hotelLogo.getOriginalFilename().equals("")) {
             if (hotelLogo.getSize() > 1000000) {

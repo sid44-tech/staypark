@@ -4,6 +4,7 @@ import staypark.parking.beans.security.AuthProfile;
 import staypark.parking.beans.user.UserRegister;
 import staypark.parking.handler.AccountHandler;
 import staypark.parking.util.AirportUtil;
+import staypark.parking.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
@@ -56,7 +57,20 @@ public class CustomerAccessController {
     }
 
     @PostMapping("/signup")
-    public String signupRegistered(Model model, @ModelAttribute UserRegister user, @RequestHeader HttpHeaders headers) {
+    public String signupRegistered(Model model, @ModelAttribute UserRegister user, @RequestHeader HttpHeaders headers, HttpServletRequest request) {
+        String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+        String ip = "";
+        if (headers != null && headers.get("x-forwarded-for") != null && headers.get("x-forwarded-for").get(0) != null) {
+            ip = headers.get("x-forwarded-for").get(0);
+        }
+        boolean captchaPassed = SecurityUtil.checkCaptcha(gRecaptchaResponse, ip);
+        if (!captchaPassed) {
+            model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
+            model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
+            model.addAttribute("user", user);
+            model.addAttribute("captchaFailed", "true");
+            return "signup";
+        }
         model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
         model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
         model.addAttribute("user", new UserRegister());
