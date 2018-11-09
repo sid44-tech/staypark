@@ -13,7 +13,9 @@ import staypark.parking.beans.user.UserRegister;
 import staypark.parking.util.DBUtil;
 import staypark.parking.util.DateUtil;
 import staypark.parking.util.EmailUtil;
+import staypark.parking.util.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
@@ -173,6 +175,171 @@ public class AccountHandler {
             "from dbstaypark.gp_affiliate_login as login " +
             "left join dbstaypark.gp_room as room on room.rm_aff_id = login.gal_id " +
             "where login.gal_email = ? ";
+
+    private final static String PASSWORD_EMAIL =
+            "You have submitted a request to reset your password.  Click the below link to reset your password. " +
+                    "If you did not request this password reset, you can ignore this email. This link will expire in 24 hours.\n\n";
+
+
+
+    private final static String UPDATE_PASSWORD_TOKEN =
+            "replace into dbstaypark.gp_user_password_reset (EMAIL, TOKEN, EXPIRES) values (?, ?, NOW() + INTERVAL 24 HOUR)";
+    private final static String GET_USER_PASSWORD_TOKEN =
+            " select u.username from dbstaypark.gp_user_password_reset as upr " +
+                    " left join dbstaypark.gp_user_register as u on upr.email = u.email " +
+                    " where upr.token = ? ";
+    private final static String DELETE_PASSWORD_TOKEN =
+            "delete from dbstaypark.gp_user_password_reset where token = ? ";
+    private final static String CHECK_PASSWORD_TOKEN =
+            " select * from dbstaypark.gp_user_password_reset " +
+                    " where token = ? and NOW() < expires ";
+    private final static String PASSWORD_UPDATE = " update dbstaypark.gp_user_register "
+            + " set password = ? where UPPER(username) = UPPER(?) ";
+
+
+
+
+
+    public String resetPassword(final String email) {
+        if (!checkEmailExists(email)) {
+            return "This email address is not associated with a user.";
+        }
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+        String token = UUID.randomUUID().toString();
+
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(UPDATE_PASSWORD_TOKEN);
+            ps.setString(1, email);
+            ps.setString(2, token);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return "Error resetting password.";
+        } finally {
+            DBUtil.closeResources(conn, ps, null);
+        }
+
+        String url = "https://www.staypark.com/setpassword?req=" + token;
+        try {
+            EmailUtil.sendEmail(email, "Password Reset", PASSWORD_EMAIL + url);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        return "Success. Check email for further intstructions.";
+    }
+
+    public String changePasswordWithToken(final String password, final String token) {
+        String username = getUsernameForToken(token);
+        if (username == null) {
+            return "Unable to change password. Please contact support.";
+        }
+
+        boolean success = changePasswordNoCheck(username, password);
+
+        if (success) {
+            clearPasswordToken(token);
+            return "Password succesfully changed.";
+        } else {
+            return "Unable to change password.  Please contact support.";
+        }
+    }
+
+    public boolean changePasswordNoCheck(final String username, final String password) {
+        boolean success = false;
+        String passwordHash = encryptPassword(password);
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(PASSWORD_UPDATE);
+            ps.setString(1, passwordHash);
+            ps.setString(2, username);
+            int rows = ps.executeUpdate();
+            if (rows > 0) {
+                success = true;
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            DBUtil.closeResources(conn, ps, null);
+        }
+
+        return success;
+    }
+
+    private void clearPasswordToken(final String token) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(DELETE_PASSWORD_TOKEN);
+            ps.setString(1, token);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            DBUtil.closeResources(conn, ps, null);
+        }
+    }
+
+    private String getUsernameForToken(final String token) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String username = null;
+
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(GET_USER_PASSWORD_TOKEN);
+            ps.setString(1, token);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                username = rs.getString("username");
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            DBUtil.closeResources(conn, ps, rs);
+        }
+
+        return username;
+    }
+
+    public String checkValidToken(final String token) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        boolean validToken = false;
+
+        try {
+            conn = DBUtil.getConnection();
+            ps = conn.prepareStatement(CHECK_PASSWORD_TOKEN);
+            ps.setString(1, token);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                validToken = true;
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            DBUtil.closeResources(conn, ps, rs);
+        }
+
+        if (!validToken) {
+            return "false";
+        }
+
+        return "true";
+    }
+
+
+
 
     public UserProfile getUserProfile(final String username) {
         UserProfile up = new UserProfile();

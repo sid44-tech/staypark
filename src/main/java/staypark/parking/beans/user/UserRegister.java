@@ -15,4 +15,7 @@ public class UserRegister {
     private String state;
     private String zip;
     private String address;
+    private String token;
+    private String error;
+    private String req;
 }

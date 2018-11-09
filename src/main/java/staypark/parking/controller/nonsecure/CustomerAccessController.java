@@ -12,10 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -81,7 +78,28 @@ public class CustomerAccessController {
 
     @GetMapping("/forgot")
     public String forgot(Model model, @RequestHeader HttpHeaders headers) {
-
+        model.addAttribute("error", "");
         return "forgot";
+    }
+
+    @PostMapping("/forgot")
+    public String forgotPost(Model model, @ModelAttribute UserRegister user, @RequestHeader HttpHeaders headers, HttpServletRequest request) {
+        String ret = accountHandler.resetPassword(user.getEmail());
+        model.addAttribute("error", ret);
+        return "forgot";
+    }
+
+    @GetMapping("/setpassword")
+    public String setnewpassword(Model model, @RequestHeader HttpHeaders headers) {
+        model.addAttribute("message", "");
+        return "setpassword";
+    }
+
+    @PostMapping("/setpassword")
+    public String setnewpasswordPost(Model model, @RequestParam(name="req", required = true) String req,
+                                 @ModelAttribute UserRegister user, @RequestHeader HttpHeaders headers, HttpServletRequest reques) {
+        String message = accountHandler.changePasswordWithToken(user.getPassword(), req);
+        model.addAttribute("message", message);
+        return "setpassword";
     }
 }

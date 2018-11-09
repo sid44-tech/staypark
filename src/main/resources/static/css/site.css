@@ -1327,8 +1327,7 @@ body {
 }
 
 .login-error {
-	display: none;
-	color: #FF0000;
+	color: #000000;
 	font-family: 'Roboto', sans-serif;
 	font-size: 14px;
 	font-weight: normal;
