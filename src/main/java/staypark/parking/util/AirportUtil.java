@@ -338,7 +338,7 @@ public class AirportUtil {
 		BigDecimal totalCost = new BigDecimal(0);
 		Date currentDate = startDate;
 
-		Map<Date, Integer> bookedCountMap = getReservationForRangeCountbyHotel(hotelId, startDate, endDate, conn);
+		Map<String, Integer> bookedCountMap = getReservationForRangeCountbyHotel(hotelId, startDate, endDate, conn);
 		Map<String, SpecialParkingDate> spdateMap = checkSpecialParkingForDateRange(hotelId, startDate, endDate, conn);
 		Map<Integer, SpecialParkingDay> spdayMap = checkSpecialParkingForDay(hotelId, conn);
 
@@ -362,8 +362,8 @@ public class AirportUtil {
 		return totalCost;
 	}
 
-	public static Map<Date, Integer> getReservationForRangeCountbyHotel(final int hotelId, final Date startDate, final Date endDate, final Connection conn) {
-		Map<Date, Integer> map = new HashMap<>();
+	public static Map<String, Integer> getReservationForRangeCountbyHotel(final int hotelId, final Date startDate, final Date endDate, final Connection conn) {
+		Map<String, Integer> map = new HashMap<>();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
@@ -378,7 +378,7 @@ public class AirportUtil {
 			ps.setDate(3, new java.sql.Date(endDate.getTime()));
 			rs = ps.executeQuery();
 			while (rs.next()) {
-				map.put(rs.getDate("rd_st_date"), rs.getInt("count"));
+				map.put(DateUtil.formatDBDate(rs.getDate("rd_st_date")), rs.getInt("count"));
 			}
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);

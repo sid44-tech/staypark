@@ -146,23 +146,23 @@ public class ParkingHandler {
 		BigDecimal totalCost = new BigDecimal(0);
 		Date currentDate = startDate;
 
-		Map<Date, Integer> bookedCountMap = AirportUtil.getReservationForRangeCountbyHotel(hotel.getHotelId(), startDate, endDate, conn);
+		Map<String, Integer> bookedCountMap = AirportUtil.getReservationForRangeCountbyHotel(hotel.getHotelId(), startDate, endDate, conn);
 		Map<String, SpecialParkingDate> spdateMap = AirportUtil.checkSpecialParkingForDateRange(hotel.getHotelId(), startDate, endDate, conn);
 		Map<Integer, SpecialParkingDay> spdayMap = AirportUtil.checkSpecialParkingForDay(hotel.getHotelId(), conn);
 		int minimumDays = AirportUtil.getMinimumParkingDays(hotel.getHotelId(), conn);
 
 		for (int i = 0; i < totalDays; i++) {
 			currentDate = DateUtil.addDaysToDate(currentDate, i);
+            String strCurDate = DateUtil.formatDBDate(currentDate);
 			int bookedCount = 0;
-			if (bookedCountMap.get(currentDate) != null) {
-				bookedCount = bookedCountMap.get(currentDate);
+			if (bookedCountMap.get(strCurDate) != null) {
+				bookedCount = bookedCountMap.get(strCurDate);
 				if (hotel.getNumberParkingSpaces() <= bookedCount) {
 					hotel.setSoldout(true);
 				}
 			}
 
 			//Calculate cost for day if day is a special date
-			String strCurDate = DateUtil.formatDBDate(currentDate);
 			if (spdateMap.get(strCurDate) != null) {
 				totalCost = totalCost.add(spdateMap.get(strCurDate).getCost());
 				if (spdateMap.get(strCurDate).getNumberSpaces() <= bookedCount) {
