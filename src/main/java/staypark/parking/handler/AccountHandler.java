@@ -1,6 +1,5 @@
 package staypark.parking.handler;
 
-import staypark.parking.beans.*;
 import staypark.parking.beans.affiliate.AffiliateFinancialRecord;
 import staypark.parking.beans.affiliate.AffiliateFinancials;
 import staypark.parking.beans.affiliate.AffiliateRegister;
@@ -181,7 +180,6 @@ public class AccountHandler {
                     "If you did not request this password reset, you can ignore this email. This link will expire in 24 hours.\n\n";
 
 
-
     private final static String UPDATE_PASSWORD_TOKEN =
             "replace into dbstaypark.gp_user_password_reset (EMAIL, TOKEN, EXPIRES) values (?, ?, NOW() + INTERVAL 24 HOUR)";
     private final static String GET_USER_PASSWORD_TOKEN =
@@ -195,9 +193,6 @@ public class AccountHandler {
                     " where token = ? and NOW() < expires ";
     private final static String PASSWORD_UPDATE = " update dbstaypark.gp_user_register "
             + " set password = ? where UPPER(username) = UPPER(?) ";
-
-
-
 
 
     public String resetPassword(final String email) {

@@ -302,6 +302,14 @@ body {
 	flex-direction: column;
 }
 
+/* -------------------------- AD Layout CSS -------------------------- */
+
+.ad-div {
+	margin: 0 auto;
+	margin-top: 32px;
+	margin-bottom: 24px;
+}
+
 /* -------------------------- Header CSS -------------------------- */
 
 .header_container {
@@ -1267,8 +1275,8 @@ body {
 
 .p-results-min-days-container {
 	width: 100%;
-	text-align: right;
-	margin-top: 16px;
+	text-align: left;
+	margin-bottom: 16px;
 }
 
 .p-results-min-days {

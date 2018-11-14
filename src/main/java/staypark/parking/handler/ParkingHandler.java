@@ -39,10 +39,9 @@ public class ParkingHandler {
 
 	private static String GET_PARKING_IMAGES_FOR_HOTEL =
 			"select * " +
-			"from dbstaypark.gp_htl_day_range_cost as hotel " +
-			"left join dbstaypark.gp_parking_info as dep on dep.gpi_id = hotel.drc_htl_id " +
+			"from dbstaypark.gp_parking_info as dep " +
 			"left join dbstaypark.gp_parking_image as img on img.gppi_p_id = dep.gpi_id " +
-			"where gpi_id=? and drc_status = 'Active' ";
+			"where gpi_id=? and gppi_status = 'Active' ";
 
 	private static String CHECK_ORDER_ID =
 			"select * from dbstaypark.gp_reservation as res " +

@@ -33,11 +33,11 @@
 							<button class="btn btn-danger btn-sm" type="button" aria-expanded="false" th:case="${true}" disabled>SOLD OUT</button>
 						</div>
 					</div>
-					<div th:switch="${hotel.minimumDaysEnabled}">
-						<div class="p-results-min-days-container">
-							<div class='col' th:case="${true}">
-								<span class="p-results-min-days" th:text="${hotel.minimumDaysMessage}"></span>
-							</div>
+				</div>
+				<div th:if="${hotel.minimumDaysEnabled == true}">
+					<div class="p-results-min-days-container row">
+						<div class='col'>
+							<span class="p-results-min-days" th:text="${hotel.minimumDaysMessage}"></span>
 						</div>
 					</div>
 				</div>
