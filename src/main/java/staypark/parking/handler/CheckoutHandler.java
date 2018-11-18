@@ -355,6 +355,16 @@ public class CheckoutHandler {
     }
     
     public Payment handleBookingSubmit(final ParkingCheckout checkout, final String username) {
+        if (checkout.getDropOffDate() == null || checkout.getDropOffDate().trim().isEmpty() ||
+                checkout.getDropOffTime() == null || checkout.getDropOffTime().trim().isEmpty() ||
+                checkout.getPickUpDate() == null || checkout.getPickUpDate().trim().isEmpty() ||
+                checkout.getPickUpTime() == null || checkout.getPickUpTime().trim().isEmpty()) {
+            Payment p = new Payment();
+            p.setSuccess(false);
+            p.setPaymentResponse("Check in or check out date is not selected.  Please go back to the search page and select dates.");
+            return p;
+        }
+
     	RoomParkInput input = new RoomParkInput();
     	input.setHotelId(Integer.valueOf(checkout.getHotelId()));
     	input.setDropOffDate(checkout.getDropOffDate());
