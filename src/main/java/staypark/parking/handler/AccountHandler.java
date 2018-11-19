@@ -920,6 +920,9 @@ public class AccountHandler {
             return " > DATE_SUB(now(), INTERVAL 7 DAY)";
         } else if (type.equals("PREVIOUS_MONTH")) {
             return " > DATE_SUB(now(), INTERVAL 1 MONTH)";
+        } else if (type.equals("PREVIOUS_CAL_MONTH")) {
+            return " BETWEEN DATE_FORMAT(NOW() - INTERVAL 1 MONTH, '%Y-%m-01 00:00:00') " +
+                    "AND DATE_FORMAT(LAST_DAY(NOW() - INTERVAL 1 MONTH), '%Y-%m-%d 23:59:59') ";
         } else if (type.equals("PREVIOUS_6_MONTHS")) {
             return " > DATE_SUB(now(), INTERVAL 6 MONTH)";
         } else if (type.equals("SELECT")) {
