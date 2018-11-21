@@ -338,28 +338,27 @@ public class AirportUtil {
 		BigDecimal totalCost = new BigDecimal(0);
 		Date currentDate = startDate;
 
-		Map<String, Integer> bookedCountMap = getReservationForRangeCountbyHotel(hotelId, startDate, endDate, conn);
-		Map<String, SpecialParkingDate> spdateMap = checkSpecialParkingForDateRange(hotelId, startDate, endDate, conn);
-		Map<Integer, SpecialParkingDay> spdayMap = checkSpecialParkingForDay(hotelId, conn);
+		Map<String, SpecialParkingDate> spdateMap = AirportUtil.checkSpecialParkingForDateRange(hotelId, startDate, endDate, conn);
+		Map<Integer, SpecialParkingDay> spdayMap = AirportUtil.checkSpecialParkingForDay(hotelId, conn);
 
+		Date initialDate = new Date(currentDate.getTime());
 		for (int i = 0; i < totalDays; i++) {
-			currentDate = DateUtil.addDaysToDate(currentDate, i);
+			currentDate = DateUtil.addDaysToDate(initialDate, i);
+            String strCurDate = DateUtil.formatDBDate(currentDate);
 
 			//Calculate cost for day if day is a special date
-			if (spdateMap.get(currentDate.toString()) != null) {
-				totalCost = totalCost.add(spdateMap.get(currentDate).getCost());
-				//Calculate cost for day if day is a special day (mon, tues, etc)
+			if (spdateMap.get(strCurDate) != null) {
+				totalCost = totalCost.add(spdateMap.get(strCurDate).getCost());
+			//Calculate cost for day if day is a special day (mon, tues, etc)
 			} else if (spdayMap.get(currentDate) != null) {
 				totalCost = totalCost.add(spdayMap.get(currentDate).getCost());
-				//Calculate cost for day if it doesn't have any special circumstances
+			//Calculate cost for day if it doesn't have any special circumstances
 			} else {
 				totalCost = totalCost.add(dailyFee);
 			}
 		}
 
-		totalCost = totalCost.setScale(2);
-
-		return totalCost;
+		return totalCost.setScale(2);
 	}
 
 	public static Map<String, Integer> getReservationForRangeCountbyHotel(final int hotelId, final Date startDate, final Date endDate, final Connection conn) {
@@ -402,7 +401,7 @@ public class AirportUtil {
 		}
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-
+		
 		try {
 			ps = conn.prepareStatement(GET_SPECIAL_DATE_PARKING_RANGE_INFO);
 			ps.setInt(1,  hotelId);

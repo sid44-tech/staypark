@@ -836,13 +836,15 @@ public class CheckoutHandler {
             spdayMap = AirportUtil.checkSpecialParkingForDay(hotelId, conn);
 
             Date currentDate = startDate;
+            Date initialDate = new Date(currentDate.getTime());
             for (int i = 0; i < totalDays; i++) {
-                currentDate = DateUtil.addDaysToDate(currentDate, i);
-
+                currentDate = DateUtil.addDaysToDate(initialDate, i);
+                String strCurDate = DateUtil.formatDBDate(currentDate);
+                
                 BigDecimal currentDayCost;
                 //Calculate cost for day if day is a special date
-                if (spdateMap.get(currentDate) != null) {
-                    currentDayCost = spdateMap.get(currentDate).getCost();
+                if (spdateMap.get(strCurDate) != null) {
+                    currentDayCost = spdateMap.get(strCurDate).getCost();
                     //Calculate cost for day if day is a special day (mon, tues, etc)
                 } else if (spdayMap.get(currentDate) != null) {
                     currentDayCost = spdayMap.get(currentDate).getCost();

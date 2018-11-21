@@ -94,7 +94,7 @@
     })();
 
     $(document).ready(function(){
-        var dropoff_date_input=$('input[name="drop_off_date"]'); //our date input has the name "date"
+        var dropoff_date_input=$('input[name="drop_off_date"]');
 
         dropoff_date_input.datepicker({
             format: 'mm/dd/yyyy',
@@ -107,7 +107,7 @@
         dropoff_date_input.val(todayString());
         dropoff_date_input.datepicker("setDate", new Date());
 
-        var pickup_date_input=$('input[name="pick_up_date"]'); //our date input has the name "date"
+        var pickup_date_input=$('input[name="pick_up_date"]');
         pickup_date_input.datepicker({
             format: 'mm/dd/yyyy',
             todayHighlight: true,

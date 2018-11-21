@@ -150,9 +150,11 @@ public class ParkingHandler {
 		Map<Integer, SpecialParkingDay> spdayMap = AirportUtil.checkSpecialParkingForDay(hotel.getHotelId(), conn);
 		int minimumDays = AirportUtil.getMinimumParkingDays(hotel.getHotelId(), conn);
 
+		Date initialDate = new Date(currentDate.getTime());
 		for (int i = 0; i < totalDays; i++) {
-			currentDate = DateUtil.addDaysToDate(currentDate, i);
+			currentDate = DateUtil.addDaysToDate(initialDate, i);
             String strCurDate = DateUtil.formatDBDate(currentDate);
+            
 			int bookedCount = 0;
 			if (bookedCountMap.get(strCurDate) != null) {
 				bookedCount = bookedCountMap.get(strCurDate);
