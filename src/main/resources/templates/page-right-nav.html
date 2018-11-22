@@ -170,11 +170,11 @@
                 var curDate = new Date();
                 curDate.setHours(0,0,0,0);
                 pDate.setHours(0,0,0,0);
-                if (pDate.getTime() != curDate.getTime()) {
+                // if (pDate.getTime() != curDate.getTime()) {
                     dDate.setDate(dDate);
                     dropOffDate.val(dateToStringMDY(pDate));
                     dropOffDate.datepicker("setDate", pDate);
-                }
+                // }
             }
         });
     }
