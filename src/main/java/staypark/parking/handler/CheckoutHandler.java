@@ -828,6 +828,7 @@ public class CheckoutHandler {
 		}
         int totalDays = AirportUtil.getNumberOfParkingDays(startDate, endDate, safeCheckout.getDropOffTime(), safeCheckout.getPickUpTime());
         int hotelId = Integer.valueOf(safeCheckout.getHotelId());
+        int affiliateId = airportHandler.getAffiliateIdByParkingId(hotelId);
 
         Map<String, SpecialParkingDate> spdateMap;
         Map<Integer, SpecialParkingDay> spdayMap;
@@ -853,7 +854,7 @@ public class CheckoutHandler {
                     currentDayCost = safeCheckout.getStandardDailyFee();
                 }
 
-                insertReservationDetailRecord(conn, hotelId, currentDate, DateUtil.addDaysToDate(startDate, totalDays), orderId, currentDayCost);
+                insertReservationDetailRecord(conn, affiliateId, currentDate, DateUtil.addDaysToDate(startDate, totalDays), orderId, currentDayCost);
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -863,12 +864,12 @@ public class CheckoutHandler {
         return true;
     }
 
-    private void insertReservationDetailRecord(final Connection conn, final int hotelId, final Date startDate, final Date endDate,
+    private void insertReservationDetailRecord(final Connection conn, final int affiliateId, final Date startDate, final Date endDate,
                                                final String orderId, final BigDecimal cost) {
         PreparedStatement ps = null;
         try {
             ps = conn.prepareStatement(INSERT_RESERVATION_DETAIL);
-            ps.setInt(1, hotelId);
+            ps.setInt(1, affiliateId);
             ps.setDate(2, new java.sql.Date(startDate.getTime()));
             ps.setDate(3, new java.sql.Date(endDate.getTime()));
             ps.setInt(4, Integer.valueOf(orderId));
