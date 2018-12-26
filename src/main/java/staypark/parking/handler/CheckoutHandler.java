@@ -838,7 +838,7 @@ public class CheckoutHandler {
 
             Date currentDate = startDate;
             Date initialDate = new Date(currentDate.getTime());
-            for (int i = 0; i < totalDays; i++) {
+            for (int i = 0; i <= totalDays; i++) {
                 currentDate = DateUtil.addDaysToDate(initialDate, i);
                 String strCurDate = DateUtil.formatDBDate(currentDate);
                 

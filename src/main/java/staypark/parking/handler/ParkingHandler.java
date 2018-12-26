@@ -51,6 +51,8 @@ public class ParkingHandler {
 	private static String CANCEL_ORDER =
 			"update dbstaypark.gp_reservation set reservation_status = 'C', gr_cancel_date = now() where order_id = ? or extn_order_id = ?";
 
+	private static String DELETE_DETAIL_RECORDS = "delete from dbstaypark.gp_reservation_dtls where rd_order_id = ? ";
+
 	public List<HotelInformation> getParkingSearchResults(final String airportCode, final String startDateStr, final String endDateStr,
 			final String startTimeStr, final String endTimeStr, final String sort) {
 		Date startDate = null;
@@ -358,10 +360,28 @@ public class ParkingHandler {
 		}
 
 		if (success) {
+			deleteDetailRecords(res.getCancelReservationNumber());
 			sendCancelEmails(res);
 		}
 
 		return false;
+	}
+
+	private void deleteDetailRecords(final String orderId) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		int orderNumeric = Integer.valueOf(orderId);
+
+		try {
+			conn = DBUtil.getConnection();
+			ps = conn.prepareStatement(DELETE_DETAIL_RECORDS);
+			ps.setInt(1, orderNumeric);
+			ps.executeUpdate();
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		} finally {
+			DBUtil.closeResources(conn, ps, null);
+		}
 	}
 
 	private void sendCancelEmails(final ChangeReservation res) {
