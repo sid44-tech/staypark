@@ -26,6 +26,7 @@ public class EmailUtil {
     static final int PORT = 587;
 
     public static boolean sendEmail(final String to, final String subject, final String body) throws Exception {
+    	log.info("About to send email to " + to + " : " + subject);
 
         // Create a Properties object to contain connection configuration information.
         Properties props = System.getProperties();
@@ -54,6 +55,8 @@ public class EmailUtil {
 
             // Send the email.
             transport.sendMessage(msg, msg.getAllRecipients());
+            
+            log.info("Sent email to " + to + " : " + subject);
         } catch (Exception ex) {
             log.error("The email was not sent.");
             log.error("Error message: " + ex.getMessage());
