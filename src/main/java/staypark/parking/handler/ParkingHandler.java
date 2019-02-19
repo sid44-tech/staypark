@@ -14,6 +14,7 @@ import staypark.parking.beans.reservation.SpecialParkingDay;
 import staypark.parking.comparator.HotelRecommendedComparator;
 import staypark.parking.util.AirportUtil;
 import staypark.parking.util.EmailUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import staypark.parking.beans.general.ImageLink;
@@ -52,6 +53,9 @@ public class ParkingHandler {
 			"update dbstaypark.gp_reservation set reservation_status = 'C', gr_cancel_date = now() where order_id = ? or extn_order_id = ?";
 
 	private static String DELETE_DETAIL_RECORDS = "delete from dbstaypark.gp_reservation_dtls where rd_order_id = ? ";
+
+	@Autowired
+	private AirportHandler airportHandler;
 
 	public List<HotelInformation> getParkingSearchResults(final String airportCode, final String startDateStr, final String endDateStr,
 			final String startTimeStr, final String endTimeStr, final String sort) {
@@ -147,7 +151,9 @@ public class ParkingHandler {
 		BigDecimal totalCost = new BigDecimal(0);
 		Date currentDate = startDate;
 
-		Map<String, Integer> bookedCountMap = AirportUtil.getReservationForRangeCountbyHotel(hotel.getHotelId(), startDate, endDate, conn);
+		int affiliateId = airportHandler.getAffiliateIdByParkingId(hotel.getHotelId());
+
+		Map<String, Integer> bookedCountMap = AirportUtil.getReservationForRangeCountbyHotel(affiliateId, startDate, endDate, conn);
 		Map<String, SpecialParkingDate> spdateMap = AirportUtil.checkSpecialParkingForDateRange(hotel.getHotelId(), startDate, endDate, conn);
 		Map<Integer, SpecialParkingDay> spdayMap = AirportUtil.checkSpecialParkingForDay(hotel.getHotelId(), conn);
 		int minimumDays = AirportUtil.getMinimumParkingDays(hotel.getHotelId(), conn);
