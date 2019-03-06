@@ -33,7 +33,7 @@ public class CheckoutController {
                                @RequestParam(name="roomId", required = false) String roomId,
                                @RequestParam(name="hotelArrivalDateMDY", required = false) String hotelArrivalDateMDY,
                                @RequestParam(name="hotelDepartureDateMDY", required = false) String hotelDepartureDateMDY,
-                               @RequestParam(name="endHotelArrivalDateMDY", required = false) String orderId,
+                               @RequestParam(name="orderId", required = false) String orderId,
                                @RequestParam(name="endHotelDepartureDateMDY", required = false) String endHotelDepartureDateMDY,
                                @RequestParam(name="endHotelArrivalDateMDY", required = false) String endHotelArrivalDateMDY,
                                @RequestParam(name="rooms", required = false) String rooms,
