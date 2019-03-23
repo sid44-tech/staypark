@@ -69,6 +69,16 @@
     </div>
     <div class="col-md-3">
         <div class="row">
+            <div class="col pb-label-label-font">Access Fee</div>
+        </div>
+        <div class="row">
+            <div id="accessFee" class="col pb-label-money-font" th:text="${checkout.acFee} + ' USD'"></div>
+        </div>
+    </div>
+</div>
+<div class="row pb-label-row">
+    <div class="col-md-3">
+        <div class="row">
             <div class="col pb-label-label-font">Sales Tax</div>
         </div>
         <div class="row">

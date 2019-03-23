@@ -242,9 +242,13 @@ public class CheckoutHandler {
                 pc.setSalesTax(salesTax.toString());
                 
                 //Get AC Fee.  I don't really know what this is.
+                //03-23-19 I know what this is now :).  Its access fee and some facilities charge it.
                 BigDecimal acFee = getACFee(rs.getInt("gpi_ac_chk"), rs.getString("gpi_ac_fee"));
                 pc.setAcFee(acFee.toString());
-                
+                if (rs.getInt("gpi_ac_chk") == 1) {
+                    pc.setAcFeeFlag(true);
+                }
+
                 BigDecimal grandTotal = getGrandTotal(baseTotalCost, serviceFee, salesTax, acFee);
                 pc.setGrandTotal(grandTotal.toString());
 
@@ -513,9 +517,8 @@ public class CheckoutHandler {
     }
     
     private BigDecimal getACFee(final int acFlag, final String acAmountStr) {
-    	if (acFlag == 1 && acAmountStr != null && acAmountStr.trim().length() == 0) {
+    	if (acFlag == 1 && acAmountStr != null && acAmountStr.trim().length() > 0) {
     		return new BigDecimal(Double.parseDouble(acAmountStr)).setScale(2, RoundingMode.DOWN);
-    		
     	}
     	
     	return new BigDecimal(0).setScale(2, RoundingMode.DOWN);

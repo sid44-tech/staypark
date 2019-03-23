@@ -18,6 +18,7 @@ public class ParkingCheckout {
     private String baseParkingFee;
     private String baseRate;
     private String serviceFee;
+    private boolean acFeeFlag = false;
     private String acFee;
     private String salesTax;
     private String grandTotal;
