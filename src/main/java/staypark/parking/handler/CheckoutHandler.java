@@ -945,7 +945,7 @@ public class CheckoutHandler {
         body = body.replace("[BASE_RATE]", safeCheckout.getBaseRate() + " USD");
         body = body.replace("[SERVICE_FEE]", safeCheckout.getServiceFee() + " USD");
 
-        if (safeCheckout.getAcFee() != null && safeCheckout.getAcFee().trim().equals("0.00")) {
+        if (safeCheckout.getAcFee() != null && !safeCheckout.getAcFee().trim().equals("0.00")) {
             body = body.replace("[CONFIRM_ACCESS_FEE]", EmailUtil.CONFIRM_ACCESS_FEE);
             body = body.replace("[AC_FEE]", safeCheckout.getAcFee() + " USD");
         } else {
