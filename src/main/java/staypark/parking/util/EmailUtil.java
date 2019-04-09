@@ -134,7 +134,7 @@ public class EmailUtil {
     public static String CONFIRM_BOOKING_EMAIL = 
             "<table width='100%' style='border:#DCDCDC solid; padding: 16px 8px 16px 8px' cellspacing='0' cellpadding='0'>" +
             "<tr>" +
-            "<td><img src='http://www.staypark.com/images/logo.png' width='165' height='61' /></td>" +
+            "<td><img src='https://www.staypark.com/images/logo_final.png' width='165' height='61' /></td>" +
             "<td></td>" +
             "</tr>" +
             "<tr>" +
@@ -348,7 +348,7 @@ public class EmailUtil {
     public static String CANCEL_BOOKING_EMAIL =
             "<table width='100%' style='border:#DCDCDC solid; padding: 16px 8px 16px 8px' cellspacing='0' cellpadding='0'>" +
             "<tr>" +
-            "<td><img src='http://www.staypark.com/images/logo.png' width='165' height='61' /></td>" +
+            "<td><img src='https://www.staypark.com/images/logo_final.png' width='165' height='61' /></td>" +
             "<td></td>" +
             "</tr>" +
             "<tr>" +
