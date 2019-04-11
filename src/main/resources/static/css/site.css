@@ -294,6 +294,12 @@ body {
 	margin-top: 16px;
 }
 
+.btn-disabled {
+	background-color: darkgray;
+	border-color: darkgray;
+	color: white;
+}
+
 /* -------------------------- Main Layout CSS -------------------------- */
 
 .flex-layout {

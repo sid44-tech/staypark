@@ -28,9 +28,14 @@
 						<span th:text="${hotel.totalCost}"></span> <span th:text="${hotel.currencyType}"></span>
 					</div>
 					<div class="col align-right">
-						<div th:switch="${hotel.soldout}">
-							<button th:id="${hotel.hotelId}" class="btn btn-success btn-sm" type="button" aria-expanded="false" th:case="${false}" onclick="checkout(this)">BOOK NOW</button>
-							<button class="btn btn-danger btn-sm" type="button" aria-expanded="false" th:case="${true}" disabled>SOLD OUT</button>
+						<div th:if="${hotel.minimumDaysEnabled == true}">
+							<button th:id="${hotel.hotelId}" class="btn btn-sm btn-disabled" type="button" aria-expanded="false" disabled="true">BOOK NOW</button>
+						</div>
+						<div th:if="${hotel.minimumDaysEnabled == false}">
+							<div th:switch="${hotel.soldout}">
+								<button th:id="${hotel.hotelId}" class="btn btn-success btn-sm" type="button" aria-expanded="false" th:case="${false}" onclick="checkout(this)">BOOK NOW</button>
+								<button class="btn btn-danger btn-sm" type="button" aria-expanded="false" th:case="${true}" disabled>SOLD OUT</button>
+							</div>
 						</div>
 					</div>
 				</div>
