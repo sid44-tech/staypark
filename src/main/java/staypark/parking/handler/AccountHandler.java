@@ -110,12 +110,14 @@ public class AccountHandler {
     private String UPDATE_PASSWORD_AFFILIATE = "update dbstaypark.gp_affiliate_login set gal_password = ? where gal_email = ? ";
 
     private String GET_RESERVATIONS_FOR_AFFILIATE =
+            //drop_time
             "select * from ( " +
-            "select gr_id as id, order_id as order_id, gr_reservation_date as res_date, gr_payment as pay_status, gr_email as email, concat(gr_fname, ' ',gr_lname) as owner_name, 'P' as type " +
+            "select gr_id as id, order_id as order_id, drop_time as res_date, gr_payment as pay_status, gr_email as email, concat(gr_fname, ' ',gr_lname) as owner_name, 'P' as type " +
             "from dbstaypark.gp_reservation " +
             "where gr_aff_id = ? " +
             "union " +
-            "select bk_id as id , bk_order_id as order_id, bk_rsvn_date as res_date, bk_payment_status as pay_status, bk_email as email, owner_name as owner_name, 'RP' as type " +
+                    //bk_chkin_date
+            "select bk_id as id , bk_order_id as order_id, bk_chkin_date as res_date, bk_payment_status as pay_status, bk_email as email, owner_name as owner_name, 'RP' as type " +
             "from dbstaypark.gp_hotel_parking_reservation " +
             "where bk_aff_id = ?) as res " +
             "[RANGE_REPLACE] " +
@@ -139,24 +141,24 @@ public class AccountHandler {
                     "where bk_order_id = ? ";
 
     private static String GET_FINANCIALS_BY_AFFILIATE =
-            "select * from (select gr_reservation_date as res_date, order_id as order_id, gr_fname as fname, gr_lname as lname, gr_b_fee as base_fee, gr_s_tax as sales_tax, 'P' as type " +
+            "select * from (select drop_time as res_date, order_id as order_id, gr_fname as fname, gr_lname as lname, gr_b_fee as base_fee, gr_s_tax as sales_tax, 'P' as type " +
             "from dbstaypark.gp_reservation " +
-            "where gr_aff_id = ? and gr_reservation_date [RANGE_REPLACE] " +
+            "where gr_aff_id = ? and drop_time [RANGE_REPLACE] " +
             "union " +
-            "select bk_rsvn_date as res_date, bk_order_id as order_id, bk_first_name as fname, bk_last_name as lname, bk_base_rate as base_fee, bk_drc_sl_tax as sales_tax, bk_parking_type as type " +
+            "select bk_chkin_date as res_date, bk_order_id as order_id, bk_first_name as fname, bk_last_name as lname, bk_base_rate as base_fee, bk_drc_sl_tax as sales_tax, bk_parking_type as type " +
             "from dbstaypark.gp_hotel_parking_reservation " +
-            "where bk_aff_id = ? and bk_rsvn_date [RANGE_REPLACE] " +
+            "where bk_aff_id = ? and bk_chkin_date [RANGE_REPLACE] " +
             ") as temp " +
             "order by res_date desc ";
 
     private static String GET_FINANCIALS_FILTER_TOTAL =
             "select round(sum(gr_b_fee), 2) as base_fee_total, round(sum(gr_s_tax), 2) as sales_tax_total, 'P' as type " +
             "from dbstaypark.gp_reservation " +
-            "where gr_aff_id = ? and gr_reservation_date [RANGE_REPLACE] " +
+            "where gr_aff_id = ? and drop_time [RANGE_REPLACE] " +
             "union " +
             "select round(sum(bk_base_rate), 2) as base_fee_total, round(sum(bk_drc_sl_tax), 2) as sales_tax_total, bk_parking_type as type " +
             "from dbstaypark.gp_hotel_parking_reservation " +
-            "where bk_aff_id = ? and bk_rsvn_date [RANGE_REPLACE] " +
+            "where bk_aff_id = ? and bk_chkin_date [RANGE_REPLACE] " +
             "group by bk_parking_type ";
 
     private static String GET_FINANCIALS_ALL_TOTAL =
