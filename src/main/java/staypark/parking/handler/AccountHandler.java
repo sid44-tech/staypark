@@ -114,12 +114,12 @@ public class AccountHandler {
             "select * from ( " +
             "select gr_id as id, order_id as order_id, drop_time as res_date, gr_payment as pay_status, gr_email as email, concat(gr_fname, ' ',gr_lname) as owner_name, 'P' as type " +
             "from dbstaypark.gp_reservation " +
-            "where gr_aff_id = ? " +
+            "where gr_aff_id = ? and reservation_status = 'A' " +
             "union " +
                     //bk_chkin_date
             "select bk_id as id , bk_order_id as order_id, bk_chkin_date as res_date, bk_payment_status as pay_status, bk_email as email, owner_name as owner_name, 'RP' as type " +
             "from dbstaypark.gp_hotel_parking_reservation " +
-            "where bk_aff_id = ?) as res " +
+            "where bk_aff_id = ? and bk_reservation_status = 'A') as res " +
             "[RANGE_REPLACE] " +
             "order by res.res_date desc, res.id desc " +
             "limit 0, 50 ";
@@ -629,8 +629,9 @@ public class AccountHandler {
         }
 
         try {
+            String sql = GET_RESERVATIONS_FOR_AFFILIATE.replace("[RANGE_REPLACE]", getRangeWhereClause(range));
             conn = DBUtil.getConnection();
-            ps = conn.prepareStatement(GET_RESERVATIONS_FOR_AFFILIATE.replace("[RANGE_REPLACE]", getRangeWhereClause(range)));
+            ps = conn.prepareStatement(sql);
             ps.setInt(1, affId);
             ps.setInt(2, affId);
             if (range != null && range.equals("SELECT")) {
@@ -736,7 +737,11 @@ public class AccountHandler {
 
         try {
             conn = DBUtil.getConnection();
-            ps = conn.prepareStatement(GET_FINANCIALS_BY_AFFILIATE.replace("[RANGE_REPLACE]", " IS NOT NULL "));
+
+            String sql = GET_FINANCIALS_BY_AFFILIATE.replace("[RANGE_REPLACE]", " IS NOT NULL ")
+                    .replace("[RANGE2_REPLACE_PARK]", "")
+                    .replace("[RANGE2_REPLACE_HOTEL]", "");
+            ps = conn.prepareStatement(sql);
             ps.setInt(1, affId);
             ps.setInt(2, affId);
             rs = ps.executeQuery();
@@ -899,22 +904,22 @@ public class AccountHandler {
 
     private String getRangeWhereClause(final String type) {
         if (type == null || type.isEmpty()) {
-            return "where res_date > DATE_SUB(now(), INTERVAL 7 DAY)";
+            return "where res_date > DATE_SUB(now(), INTERVAL 7 DAY) and res_date <= now()";
         } else if (type.equals("TODAY")) {
             return "where res_date = now()";
         } else if (type.equals("YESTERDAY")) {
-            return "where res_date > DATE_SUB(now(), INTERVAL 1 DAY)";
+            return "where res_date > DATE_SUB(now(), INTERVAL 1 DAY) and res_date <= now()";
         } else if (type.equals("PREVIOUS_WEEK")) {
-            return "where res_date > DATE_SUB(now(), INTERVAL 7 DAY)";
+            return "where res_date > DATE_SUB(now(), INTERVAL 7 DAY) and res_date <= now()";
         } else if (type.equals("PREVIOUS_MONTH")) {
-            return "where res_date > DATE_SUB(now(), INTERVAL 1 MONTH)";
+            return "where res_date > DATE_SUB(now(), INTERVAL 1 MONTH) and res_date <= now()";
         } else if (type.equals("PREVIOUS_6_MONTHS")) {
-            return "where res_date > DATE_SUB(now(), INTERVAL 6 MONTH)";
+            return "where res_date > DATE_SUB(now(), INTERVAL 6 MONTH) and res_date <= now()";
         } else if (type.equals("SELECT")) {
             return "where res_date >= ? and res_date <= ? ";
         }
 
-        return "where res_date > DATE_SUB(now(), INTERVAL 7 DAY)";
+        return "where res_date > DATE_SUB(now(), INTERVAL 7 DAY) and res_date <= now()";
     }
 
     private String getRangeWhereClauseForFinancials(final String type) {
