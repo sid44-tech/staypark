@@ -143,11 +143,11 @@ public class AccountHandler {
     private static String GET_FINANCIALS_BY_AFFILIATE =
             "select * from (select drop_time as res_date, order_id as order_id, gr_fname as fname, gr_lname as lname, gr_b_fee as base_fee, gr_s_tax as sales_tax, 'P' as type " +
             "from dbstaypark.gp_reservation " +
-            "where gr_aff_id = ? and drop_time [RANGE_REPLACE] " +
+            "where gr_aff_id = ? and reservation_status = 'A' and drop_time [RANGE_REPLACE] [RANGE2_REPLACE_PARK] " +
             "union " +
             "select bk_chkin_date as res_date, bk_order_id as order_id, bk_first_name as fname, bk_last_name as lname, bk_base_rate as base_fee, bk_drc_sl_tax as sales_tax, bk_parking_type as type " +
             "from dbstaypark.gp_hotel_parking_reservation " +
-            "where bk_aff_id = ? and bk_chkin_date [RANGE_REPLACE] " +
+            "where bk_aff_id = ? and bk_reservation_status = 'A' and bk_chkin_date [RANGE_REPLACE] [RANGE2_REPLACE_HOTEL] " +
             ") as temp " +
             "order by res_date desc ";
 
@@ -682,10 +682,16 @@ public class AccountHandler {
         }
 
         String whereClauseRange = getRangeWhereClauseForFinancials(range);
+        String whereClauseRangeEndParking = getRangeWhereClauseForFinancialsEndParking(range);
+        String whereClauseRangeEndHotel = getRangeWhereClauseForFinancialsEndHotel(range);
 
         Connection conn = DBUtil.getConnection();
         try {
-            ps = conn.prepareStatement(GET_FINANCIALS_BY_AFFILIATE.replace("[RANGE_REPLACE]", whereClauseRange));
+            String sqlStatement = GET_FINANCIALS_BY_AFFILIATE
+                    .replace("[RANGE_REPLACE]", whereClauseRange)
+                    .replace("[RANGE2_REPLACE_PARK]", whereClauseRangeEndParking)
+                    .replace("[RANGE2_REPLACE_HOTEL]", whereClauseRangeEndHotel);
+            ps = conn.prepareStatement(sqlStatement);
             ps.setInt(1, affId);
             ps.setInt(2, affId);
             rs = ps.executeQuery();
@@ -932,6 +938,50 @@ public class AccountHandler {
         }
 
         return " > DATE_SUB(now(), INTERVAL 7 DAY)";
+    }
+
+    private String getRangeWhereClauseForFinancialsEndParking(final String type) {
+        if (type == null || type.isEmpty()) {
+            return " and drop_time <= now()";
+        } else if (type.equals("TODAY")) {
+            return "";
+        } else if (type.equals("YESTERDAY")) {
+            return " and drop_time <= now()";
+        } else if (type.equals("PREVIOUS_WEEK")) {
+            return " and drop_time <= now()";
+        } else if (type.equals("PREVIOUS_MONTH")) {
+            return " and drop_time <= now()";
+        } else if (type.equals("PREVIOUS_CAL_MONTH")) {
+            return "";
+        } else if (type.equals("PREVIOUS_6_MONTHS")) {
+            return " and drop_time <= now()";
+        } else if (type.equals("SELECT")) {
+            return " >= ? and res_date <= ? ";
+        }
+
+        return " and drop_time <= now()";
+    }
+
+    private String getRangeWhereClauseForFinancialsEndHotel(final String type) {
+        if (type == null || type.isEmpty()) {
+            return " and bk_chkin_date <= now()";
+        } else if (type.equals("TODAY")) {
+            return "";
+        } else if (type.equals("YESTERDAY")) {
+            return " and bk_chkin_date <= now()";
+        } else if (type.equals("PREVIOUS_WEEK")) {
+            return " and bk_chkin_date <= now()";
+        } else if (type.equals("PREVIOUS_MONTH")) {
+            return " and bk_chkin_date <= now()";
+        } else if (type.equals("PREVIOUS_CAL_MONTH")) {
+            return "";
+        } else if (type.equals("PREVIOUS_6_MONTHS")) {
+            return " and bk_chkin_date <= now()";
+        } else if (type.equals("SELECT")) {
+            return " >= ? and res_date <= ? ";
+        }
+
+        return " and bk_chkin_date <= now()";
     }
 
     private String getBookingTypeText(final String type) {
