@@ -702,7 +702,7 @@ public class AccountHandler {
                 f.setSalesTax(rs.getString("sales_tax") + " USD");
                 f.setCustomerName(rs.getString("fname") + " " + rs.getString("lname"));
                 f.setOrderNumber(rs.getString("order_id"));
-                f.setReservationDate(DateUtil.formatDate(rs.getDate("res_date")));
+                f.setReservationDate(rs.getString("res_date"));
                 f.setType(getFinancialRecordType(rs.getString("type")));
                 if (checkIfValidFinancialType(type, f.getType())) {
                     financials.addDetailRecord(f);
