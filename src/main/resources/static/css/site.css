@@ -1155,6 +1155,16 @@ body {
 	max-width: 337px;
 }
 
+.p-ad-results-custom {
+	margin: 0 auto;
+	margin-bottom: 24px;
+	background-color: transparent;
+	box-shadow: 0 0px 0px rgba(0,0,0,0), 0 0px 0px rgba(0,0,0,0);
+	border: none;
+	min-width: 337px;
+	max-width: 337px;
+}
+
 .p-results-cardbody-font {
 	font-family: 'Roboto', sans-serif;
 	font-size: 10px;
@@ -1606,4 +1616,11 @@ body {
 
 .fr-rooms-padding {
 	padding-top: 8px;
+}
+
+
+/* -------------------------- AD CSS -------------------------- */
+
+.ad-spacing {
+	height: 16px;
 }

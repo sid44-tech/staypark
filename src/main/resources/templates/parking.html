@@ -19,56 +19,73 @@
 	    </div>
   	</div>
 	<div class="row">
-		<div class="card col-sm p-results-custom no-padding" th:each="hotel : ${hotels}">
-			<img class="card-img-top p-results-card-img-top" th:src="${hotel.logoImage}" alt="Card image cap">
-			<div class="p-results-header-image-cover"></div>
-			<div class="card-body p-results-cardbody-font">
-				<div class="row p-results-moneymargin">
-					<div class="col p-results-cardbody-cost-font">
-						<span th:text="${hotel.totalCost}"></span> <span th:text="${hotel.currencyType}"></span>
-					</div>
-					<div class="col align-right">
-						<div th:if="${hotel.minimumDaysEnabled == true}">
-							<button th:id="${hotel.hotelId}" class="btn btn-sm btn-disabled" type="button" aria-expanded="false" disabled="true">BOOK NOW</button>
+		<div th:class="${hotel.cssClass}" th:each="hotel : ${hotels}">
+			<div th:if="${hotel.ad == false}">
+				<img class="card-img-top p-results-card-img-top" th:src="${hotel.logoImage}" alt="Card image cap">
+				<div class="p-results-header-image-cover"></div>
+				<div class="card-body p-results-cardbody-font">
+					<div class="row p-results-moneymargin">
+						<div class="col p-results-cardbody-cost-font">
+							<span th:text="${hotel.totalCost}"></span> <span th:text="${hotel.currencyType}"></span>
 						</div>
-						<div th:if="${hotel.minimumDaysEnabled == false}">
-							<div th:switch="${hotel.soldout}">
-								<button th:id="${hotel.hotelId}" class="btn btn-success btn-sm" type="button" aria-expanded="false" th:case="${false}" onclick="checkout(this)">BOOK NOW</button>
-								<button class="btn btn-danger btn-sm" type="button" aria-expanded="false" th:case="${true}" disabled>SOLD OUT</button>
+						<div class="col align-right">
+							<div th:if="${hotel.minimumDaysEnabled == true}">
+								<button th:id="${hotel.hotelId}" class="btn btn-sm btn-disabled" type="button" aria-expanded="false" disabled="true">BOOK NOW</button>
+							</div>
+							<div th:if="${hotel.minimumDaysEnabled == false}">
+								<div th:switch="${hotel.soldout}">
+									<button th:id="${hotel.hotelId}" class="btn btn-success btn-sm" type="button" aria-expanded="false" th:case="${false}" onclick="checkout(this)">BOOK NOW</button>
+									<button class="btn btn-danger btn-sm" type="button" aria-expanded="false" th:case="${true}" disabled>SOLD OUT</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div th:if="${hotel.minimumDaysEnabled == true}">
+						<div class="p-results-min-days-container row">
+							<div class='col'>
+								<span class="p-results-min-days" th:text="${hotel.minimumDaysMessage}"></span>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col">
+							<span class="p-results-card-label" th:text="${hotel.hotelTitle}"></span>
+							<br><br>
+							<span class="p-results-card-label">Distance: <span class="p-results-card-text" th:text="${hotel.airportDistance}"></span><span class="p-results-card-text"> miles</span></span>
+							<br><br>
+							<span class="p-results-card-label">Shuttle Frequency: <span class="p-results-card-text" th:text="${hotel.shuttleFrequency}"></span></span>
+							<br><br>
+							<div class="row">
+								<img data-toggle="modal" data-target="#p_results_image_modal" onclick="showModal(this)" th:each="il : ${hotel.parkingImageLinks}" th:src="${il.smallImageLink}" class="col p-results-image"/>
+							</div>
+							<div class="p-results-map-div">
+								<button class="btn btn-info btn-sm" type="button" aria-expanded="false" th:onclick="'javascript:viewmap(' + ${hotel.latitude} + ', ' + ${hotel.longitude} + ')'">VIEW MAP</button>
+							</div>
+							<div id="expand_button" onclick="updateExpand(this)" class="p-results-expand pointer p-results-toggle-custom" data-toggle="collapse" th:attr="data-target='#parking-description' + ${hotel.hotelId}" aria-expanded="false" aria-controls="collapseExample">
+								Show More Details
+							</div>
+							<div class="collapse" th:id="'parking-description' + ${hotel.hotelId}">
+								<br>
+								<span th:utext="${hotel.parkingDescription}"></span>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div th:if="${hotel.minimumDaysEnabled == true}">
-					<div class="p-results-min-days-container row">
-						<div class='col'>
-							<span class="p-results-min-days" th:text="${hotel.minimumDaysMessage}"></span>
-						</div>
-					</div>
+			</div>
+			<div th:if="${hotel.ad == true}">
+				<br>
+				<div>
+					<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+					<!-- test -->
+					<ins class="adsbygoogle"
+						 style="display:inline-block;width:320px;height:50px"
+						 data-ad-client="ca-pub-1228458748950344"
+						 data-ad-slot="2856149971"></ins>
+					<script>
+						(adsbygoogle = window.adsbygoogle || []).push({});
+					</script>
 				</div>
-				<div class="row">
-					<div class="col">
-						<span class="p-results-card-label" th:text="${hotel.hotelTitle}"></span>
-						<br><br>
-						<span class="p-results-card-label">Distance: <span class="p-results-card-text" th:text="${hotel.airportDistance}"></span><span class="p-results-card-text"> miles</span></span>
-						<br><br>
-						<span class="p-results-card-label">Shuttle Frequency: <span class="p-results-card-text" th:text="${hotel.shuttleFrequency}"></span></span>
-						<br><br>
-						<div class="row">
-							<img data-toggle="modal" data-target="#p_results_image_modal" onclick="showModal(this)" th:each="il : ${hotel.parkingImageLinks}" th:src="${il.smallImageLink}" class="col p-results-image"/>
-						</div>
-						<div class="p-results-map-div">
-							<button class="btn btn-info btn-sm" type="button" aria-expanded="false" th:onclick="'javascript:viewmap(' + ${hotel.latitude} + ', ' + ${hotel.longitude} + ')'">VIEW MAP</button>
-						</div>
-						<div id="expand_button" onclick="updateExpand(this)" class="p-results-expand pointer p-results-toggle-custom" data-toggle="collapse" th:attr="data-target='#parking-description' + ${hotel.hotelId}" aria-expanded="false" aria-controls="collapseExample">
-							Show More Details
-						</div>
-						<div class="collapse" th:id="'parking-description' + ${hotel.hotelId}">
-							<br>
-							<span th:utext="${hotel.parkingDescription}"></span>
-						</div>
-					</div>
-				</div>
+				<div class="ad-div" id="amzn-assoc-ad-c5e1c4f0-9e33-47d6-9a21-ef1597b7e77c"></div><script async src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=c5e1c4f0-9e33-47d6-9a21-ef1597b7e77c"></script>
 			</div>
 		</div>
 

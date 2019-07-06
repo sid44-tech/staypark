@@ -39,4 +39,8 @@ public class HotelInformation {
 
     private boolean minimumDaysEnabled = false;
     private String minimumDaysMessage = "";
+
+    private boolean ad = false;
+
+    private String cssClass = "card col-sm p-results-custom no-padding";
 }
