@@ -84,17 +84,17 @@ public class ParkingHandler {
 
 		sortHotels(hotels, sort);
 
-		if (hotels.size() > 2) {
-			HotelInformation hotel = new HotelInformation();
-			hotel.setAd(true);
-			hotel.setCssClass("card col-sm p-ad-results-custom no-padding");
-			hotels.add(2, hotel);
-		} else {
-			HotelInformation hotel = new HotelInformation();
-			hotel.setCssClass("card col-sm p-ad-results-custom no-padding");
-			hotel.setAd(true);
-			hotels.add(hotel);
-		}
+//		if (hotels.size() > 2) {
+//			HotelInformation hotel = new HotelInformation();
+//			hotel.setAd(true);
+//			hotel.setCssClass("card col-sm p-ad-results-custom no-padding");
+//			hotels.add(2, hotel);
+//		} else {
+//			HotelInformation hotel = new HotelInformation();
+//			hotel.setCssClass("card col-sm p-ad-results-custom no-padding");
+//			hotel.setAd(true);
+//			hotels.add(hotel);
+//		}
 
 		return hotels;
 	}
