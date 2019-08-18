@@ -373,7 +373,7 @@ body {
 }
 
 .logo-width {
-	width: 180px;
+	width: 150px;
 }
 
 .support-width {
@@ -382,7 +382,7 @@ body {
 
 @media (min-width: 600px) {
 	.logo-width {
-		width: 275px;
+		width: 225px;
 	}
 }
 
