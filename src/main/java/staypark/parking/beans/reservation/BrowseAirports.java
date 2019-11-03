@@ -8,6 +8,7 @@ import lombok.Data;
 @Data
 public class BrowseAirports {
 	private String state = "";
+	private String id = "";
 	private List<AirportBean> airports = new ArrayList<>();
 	
 	public void addAirport(final AirportBean airport) {

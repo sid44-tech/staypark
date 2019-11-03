@@ -7,7 +7,7 @@
 	<span class="section-title">Browse Airport Parking</span>
 	<div class="ba-state-block" th:each="stateAirport : ${stateAirports}">
 		<img class="airplane-icon" src="/images/airport_icon_md.png">
-		<span class="ba-state-title" th:text="${stateAirport.state}"></span>
+		<span class="ba-state-title" th:text="${stateAirport.state}" th:id="${stateAirport.id}"></span>
 		<div  th:each="airport : ${stateAirport.airports}">
 			<a style="text-decoration : none" th:href="${airport.link}">
 				<div class="ba-airport-block">

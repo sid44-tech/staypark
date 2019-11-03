@@ -109,6 +109,7 @@ public class AirportHandler {
     	Collections.sort(list);
     	
     	String currentTitle = list.get(0).getTitle();
+    	String currentId = list.get(0).getCode();
     	BrowseAirports ba = new BrowseAirports();
     	
     	for (int i = 0; i < list.size(); i++) {
@@ -121,6 +122,7 @@ public class AirportHandler {
                 ba.addAirport(ab);
     		} else {
                 ba.setState(currentTitle);
+                ba.setId(currentId);
                 AIRPORT_INFO_BY_STATE.add(ba);
 
                 ba = new BrowseAirports();
@@ -133,6 +135,7 @@ public class AirportHandler {
                 ba.addAirport(ab);
 
     			currentTitle = list.get(i).getTitle();
+                currentId = list.get(i).getCode();
     		}
     	}
     	

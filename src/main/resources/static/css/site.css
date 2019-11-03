@@ -76,6 +76,15 @@ body {
     margin-bottom: 20px;
 }
 
+.section-title-white {
+	font-family: 'Roboto', sans-serif;
+	font-size: 16px;
+	font-weight: bold;
+	color: #000000;
+	display: inline-block;
+	margin-bottom: 20px;
+}
+
 .section-title-no-underline {
 	font-family: 'Roboto', sans-serif;
 	font-size: 15px;
@@ -147,6 +156,10 @@ body {
 
 .gray-bg {
 	background-color: #e2e1e0;
+}
+
+.green-bg {
+	background-color: #71a40a;
 }
 
 .form-div-container {
@@ -548,6 +561,11 @@ body {
 	background-color: #FFFFFF;
 }
 
+.homepage-top-locations {
+	width:100%;
+	background-color: #71a40b;
+}
+
 .homepage-text-container {
 	padding-top: 35px;
 	padding-bottom: 35px;
@@ -556,6 +574,20 @@ body {
 .homepage-text-section-custom {
 	margin-bottom: 24px;
 }
+
+.homepage-airports-text-section-custom {
+	font-size: 13px;
+	color: #FFFFFF;
+}
+
+.homepage-airports-text-section-custom a:link {
+	color: #FFFFFF;
+}
+
+.homepage-airports-text-section-custom a:visited {
+	color: #FFFFFF;
+}
+
 
 #homepage_image_carousel .carousel-item-image {
 	height: 550px;
