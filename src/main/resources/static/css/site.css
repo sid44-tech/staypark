@@ -417,6 +417,15 @@ body {
 	}
 }
 
+.covid {
+	max-width: 1150px;
+	margin: 0 auto;
+	padding: 8px 16px 8px 16px;
+	font-size: 12px;
+	color: #dc3545;
+	font-weight: bold;
+}
+
 /* -------------------------- Navigation Bar CSS -------------------------- */
 
 .navbar-container {

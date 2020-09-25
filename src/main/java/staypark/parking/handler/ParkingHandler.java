@@ -25,8 +25,6 @@ import staypark.parking.util.DBUtil;
 import staypark.parking.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.validation.constraints.Email;
-
 @Service
 @Slf4j
 public class ParkingHandler {
