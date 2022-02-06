@@ -52,14 +52,13 @@ public class PaymentHandler {
 
 	public PaymentResponse doPayment(final String cardNuber, final String cvv, final String expirationMonth, final String expirationYear, final BigDecimal amount,
 									 final String firstName, final String lastName, final String address, final String state, final String zip) {
-
+		PaymentResponse pr = new PaymentResponse();
 		String tempId = UUID.randomUUID().toString();
 		String refLog = "payRef=\"" + tempId + "\", ";
 		String endpointLog = "endpoint=\"PaymentHandler.doPayment(..)\", ";
 		String nameLog = "name=\"" + firstName + " " + lastName + "\", ";
 		String amountLog = "amount=\"" + amount.toString() + "\"";
 		log.info(refLog + endpointLog + nameLog + amountLog);
-		PaymentResponse pr = new PaymentResponse();
 
 		//Common code to set for all requests
 		ApiOperationBase.setEnvironment(Environment.PRODUCTION);
@@ -92,41 +91,45 @@ public class PaymentHandler {
 		customerType.setZip(zip);
 		txnRequest.setBillTo(customerType);
 
-		// Make the API Request
-		CreateTransactionRequest apiRequest = new CreateTransactionRequest();
-		apiRequest.setTransactionRequest(txnRequest);
-		CreateTransactionController controller = new CreateTransactionController(apiRequest);
-		controller.execute();
+		try {
+			// Make the API Request
+			CreateTransactionRequest apiRequest = new CreateTransactionRequest();
+			apiRequest.setTransactionRequest(txnRequest);
+			CreateTransactionController controller = new CreateTransactionController(apiRequest);
+			controller.execute();
 
-		CreateTransactionResponse response = controller.getApiResponse();
+			CreateTransactionResponse response = controller.getApiResponse();
 
-		if (response!=null) {
-			String resultLog = "resultCode=\"" + response.getMessages().getResultCode() + "\", ";
-			String responseLog = "responseCode=\"" + response.getTransactionResponse().getResponseCode() + "\", ";
+			if (response != null) {
+				String resultLog = "resultCode=\"" + response.getMessages().getResultCode() + "\", ";
+				String responseLog = "responseCode=\"" + response.getTransactionResponse().getResponseCode() + "\", ";
 
-			if (response.getMessages().getResultCode() == MessageTypeEnum.OK) {
-				TransactionResponse result = response.getTransactionResponse();
-				if (result.getResponseCode().equals("1")) {
-					pr.setSuccess(true);
-					pr.setResponseText("Payment Successful");
-					pr.setTrackingNumber(result.getTransId());
-					pr.setTransactionKey(result.getResponseCode());
-					String responseTextLog = "responseText=\"Payment Successful\"";
-					log.info(refLog + resultLog + responseLog + responseTextLog);
+				if (response.getMessages().getResultCode() == MessageTypeEnum.OK) {
+					TransactionResponse result = response.getTransactionResponse();
+					if (result.getResponseCode().equals("1")) {
+						pr.setSuccess(true);
+						pr.setResponseText("Payment Successful");
+						pr.setTrackingNumber(result.getTransId());
+						pr.setTransactionKey(result.getResponseCode());
+						String responseTextLog = "responseText=\"Payment Successful\"";
+						log.info(refLog + resultLog + responseLog + responseTextLog);
+					} else {
+						pr.setSuccess(false);
+						pr.setResponseText(getErrorFromResponse(result));
+						String responseTextLog = "responseText=\"" + getErrorFromResponse(result) + "\"";
+						log.info(refLog + resultLog + responseLog + responseTextLog);
+					}
 				} else {
 					pr.setSuccess(false);
-					pr.setResponseText(getErrorFromResponse(result));
-					String responseTextLog = "responseText=\"" + getErrorFromResponse(result) + "\"";
+					pr.setResponseText(getErrorFromResponse(response.getTransactionResponse()));
+					String responseTextLog = "responseText=\"" + getErrorFromResponse(response.getTransactionResponse()) + "\"";
 					log.info(refLog + resultLog + responseLog + responseTextLog);
 				}
 			} else {
-				pr.setSuccess(false);
-				pr.setResponseText(getErrorFromResponse(response.getTransactionResponse()));
-				String responseTextLog = "responseText=\"" + getErrorFromResponse(response.getTransactionResponse()) + "\"";
-				log.info(refLog + resultLog + responseLog + responseTextLog);
+				log.info(refLog + "error=\"Payment is null\"");
 			}
-		} else {
-			log.info(refLog + "error=\"Payment is null\"");
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
 		}
 
 		return pr;
