@@ -1,6 +1,8 @@
 package staypark.parking.util;
 
+import com.google.gson.Gson;
 import staypark.parking.beans.GoogleResponse;
+import staypark.parking.beans.security.CaptchaResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -10,6 +12,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.springframework.security.core.Authentication;
 
 import staypark.parking.beans.security.Principal;
@@ -51,20 +54,16 @@ public class SecurityUtil {
 			HttpEntity entity = response.getEntity();
 
 			if (entity != null) {
-				try (BufferedReader in = new BufferedReader(new InputStreamReader(entity.getContent()))) {
-					String inputLine;
-					while ((inputLine = in.readLine()) != null) {
-						if (inputLine.contains("success")) {
-							String[] arr = inputLine.split(":");
-							if (arr.length > 1) {
-								return Boolean.valueOf(arr[1].trim().replace(",", ""));
-							}
-						}
-					}
+				String jsonString = EntityUtils.toString(entity);
+				CaptchaResponse cr = new Gson().fromJson(jsonString, CaptchaResponse.class);
+
+				if (cr != null) {
+					return cr.getSuccess();
 				}
 			}
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
+			return false;
 		}
 
 		return false;

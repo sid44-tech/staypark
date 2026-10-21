@@ -516,6 +516,20 @@ public class AccountHandler {
         return found;
     }
 
+    public boolean isMaliciousUser(final UserRegister user) {
+        List<String> blacklist = Arrays.asList("bitcoin", "withdraw", "btc", "earning", "balance", "funds", "profit",
+                "deposit", "bonus", "casino", "slot", "games", "roulette", "passive", "income", "sweety", "free", "http");
+
+        for (String str : blacklist) {
+            if (user.getEmail().toLowerCase().contains(str) || user.getFirstName().toLowerCase().contains(str)
+                    || user.getLastName().toLowerCase().contains(str) || user.getUsername().toLowerCase().contains(str)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public boolean checkUsernameExists(final String username) {
         boolean found = false;
 
@@ -565,7 +579,7 @@ public class AccountHandler {
     }
 
     public String createCustomerAccount(UserRegister user) {
-        if (checkUsernameExists(user.getUsername()) || checkEmailExists(user.getEmail())) {
+        if (checkUsernameExists(user.getUsername()) || checkEmailExists(user.getEmail()) || isMaliciousUser(user)) {
             return "false";
         }
 

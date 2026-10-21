@@ -28,7 +28,16 @@ public class PaymentHandler {
 	
 	public Payment processPayment(final String currency, final String ccNumber, final String cvNumber, final String ccType,
 			final String ccName, final String ccExpMonth, final String ccExpYear, final BigDecimal amount,
-								  final String firstName, final String lastName, final String address, final String state, final String zip) {
+								  final String firstName, final String lastName, final String address, final String state, final String zip, final String email) {
+
+		if ((ccName.toLowerCase().contains("") || ccName.toLowerCase().contains("")) || (email.toLowerCase().startsWith("") && email.toLowerCase().endsWith("@gmail.com"))) {
+			Payment payment = new Payment();
+			payment.setSuccess(false);
+			payment.setPaymentResponse("Unusual credit card activity detected, please contact customer support.");
+			log.info("Unusual credit card activity detected, please contact customer support.");
+			return payment;
+		}
+
 		PaymentResponse pr = doPayment(ccNumber, cvNumber, ccExpMonth, ccExpYear, amount, firstName, lastName, address, state, zip);
 		Payment payment = new Payment();
 

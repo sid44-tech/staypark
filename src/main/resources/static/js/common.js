@@ -14,7 +14,7 @@
      if(dd<10){
          dd='0'+dd;
      }
-     if(mm<10){
+     if(mm<10){paparrd
          mm='0'+mm;
      }
      var dateStr = mm+'/'+dd+'/'+yyyy;
