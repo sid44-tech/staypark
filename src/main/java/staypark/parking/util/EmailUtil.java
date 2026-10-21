@@ -12,22 +12,15 @@ import javax.mail.internet.MimeMessage;
 
 @Slf4j
 public class EmailUtil {
-//    public static final String INFO_EMAIL = "";
-//    public static final String AFFILIATE_EMAIL = "";
-//    public static final String SUPPORT_EMAIL = "";
-    public static final String INFO_EMAIL = "support@staypark.com";
-    public static final String AFFILIATE_EMAIL = "support@staypark.com";
-    public static final String SUPPORT_EMAIL = "support@staypark.com";
-    static final String FROM = "support@staypark.com";
-    static final String FROMNAME = "StayPark Support";
+    public static final String INFO_EMAIL = "";
+    public static final String AFFILIATE_EMAIL = "";
+    public static final String SUPPORT_EMAIL = "";
+    static final String FROM = "";
+    static final String FROMNAME = "";
     static final String SMTP_USERNAME = "";
     static final String SMTP_PASSWORD = "";
     static final String HOST = "";
-    static final int PORT = 587;
-
-    //id: ses-smtp-user.20240926-095728
-    //Username: 
-    //Password: 
+    static final int PORT = 0;
 
     public static boolean sendEmail(final String to, final String subject, final String body) throws Exception {
     	log.info("About to send email to " + to + " : " + subject);

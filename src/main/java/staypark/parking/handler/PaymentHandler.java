@@ -22,9 +22,7 @@ public class PaymentHandler {
 	private static String API_LOGIN_KEY = "";
 	private static String API_TRANSACTION_KEY = "";
 	//Test Authorize.net API Information
-//	private static String API_LOGIN_KEY = "";
-//	private static String API_TRANSACTION_KEY = "";
-	//private static String key = "Simon";
+	//private static String key = "";
 	
 	public Payment processPayment(final String currency, final String ccNumber, final String cvNumber, final String ccType,
 			final String ccName, final String ccExpMonth, final String ccExpYear, final BigDecimal amount,
