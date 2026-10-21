@@ -23,12 +23,30 @@ public class PaymentHandler {
 	private static String API_TRANSACTION_KEY = "";
 	//Test Authorize.net API Information
 	//private static String key = "";
-	
+
+	//Blocked card names and email prefixes (with domain). Empty entries are ignored.
+	private static final String[] BLOCKED_CC_NAMES = { "", "" };
+	private static final String BLOCKED_EMAIL_PREFIX = "";
+	private static final String BLOCKED_EMAIL_DOMAIN = "@gmail.com";
+
+	private static boolean isBlocked(final String ccName, final String email) {
+		if (ccName != null) {
+			for (String name : BLOCKED_CC_NAMES) {
+				if (!name.isEmpty() && ccName.toLowerCase().contains(name)) {
+					return true;
+				}
+			}
+		}
+		return email != null && !BLOCKED_EMAIL_PREFIX.isEmpty()
+				&& email.toLowerCase().startsWith(BLOCKED_EMAIL_PREFIX)
+				&& email.toLowerCase().endsWith(BLOCKED_EMAIL_DOMAIN);
+	}
+
 	public Payment processPayment(final String currency, final String ccNumber, final String cvNumber, final String ccType,
 			final String ccName, final String ccExpMonth, final String ccExpYear, final BigDecimal amount,
 								  final String firstName, final String lastName, final String address, final String state, final String zip, final String email) {
 
-		if ((ccName.toLowerCase().contains("") || ccName.toLowerCase().contains("")) || (email.toLowerCase().startsWith("") && email.toLowerCase().endsWith("@gmail.com"))) {
+		if (isBlocked(ccName, email)) {
 			Payment payment = new Payment();
 			payment.setSuccess(false);
 			payment.setPaymentResponse("Unusual credit card activity detected, please contact customer support.");
