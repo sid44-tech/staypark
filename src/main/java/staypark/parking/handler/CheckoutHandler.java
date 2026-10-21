@@ -396,7 +396,7 @@ public class CheckoutHandler {
 
         Payment payment = paymentHandler.processPayment("USD", checkout.getCardNumber(), checkout.getCvv(), checkout.getCardType(),
                 checkout.getOwnerName(), checkout.getExpirationMonth(), checkout.getExpirationYear(), chargeAmount, checkout.getFirstName(),
-                checkout.getLastName(), checkout.getAddress(), checkout.getState(), checkout.getZip());
+                checkout.getLastName(), checkout.getAddress(), checkout.getState(), checkout.getZip(), checkout.getEmail());
 
         if (!payment.isSuccess()) {
             return payment;

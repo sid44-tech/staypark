@@ -25,6 +25,10 @@ public class EmailUtil {
     static final String HOST = "";
     static final int PORT = 587;
 
+    //id: ses-smtp-user.20240926-095728
+    //Username: 
+    //Password: 
+
     public static boolean sendEmail(final String to, final String subject, final String body) throws Exception {
     	log.info("About to send email to " + to + " : " + subject);
 

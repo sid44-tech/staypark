@@ -5,7 +5,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import com.mysql.cj.core.conf.PropertyDefinitions;
 import com.mysql.cj.jdbc.MysqlDataSource;
 
 import lombok.extern.slf4j.Slf4j;
@@ -23,9 +22,9 @@ public class DBUtil {
 	private final static String DATABASE_URL = "";
 
 	//OLD LIVE
-//	private final static String USER_NAME = "";
-//	private final static String PASSWORD = "";
-//	private final static String DATABASE_URL = "";
+//	private final static String USER_NAME = ;
+//	private final static String PASSWORD = ;
+//	private final static String DATABASE_URL = ;
 	
 	public static Connection getConnection() {
 		Connection conn = null;
@@ -33,9 +32,9 @@ public class DBUtil {
 		dataSource.setUser(USER_NAME);
 		dataSource.setPassword(PASSWORD);
 		dataSource.setServerName(DATABASE_URL);
-		dataSource.getModifiableProperty(PropertyDefinitions.PNAME_serverTimezone).setValue("US/Central");
 
 		try {
+			dataSource.setServerTimezone("US/Central");
 			conn = dataSource.getConnection();
 		} catch (SQLException e) {
 			log.error(e.getMessage(), e);

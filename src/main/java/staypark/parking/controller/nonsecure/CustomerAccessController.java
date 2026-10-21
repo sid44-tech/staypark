@@ -13,6 +13,8 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.thymeleaf.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -54,17 +56,18 @@ public class CustomerAccessController {
     }
 
     @PostMapping("/signup")
-    public String signupRegistered(Model model, @ModelAttribute UserRegister user, @RequestHeader HttpHeaders headers, HttpServletRequest request) {
+    public Object signupRegistered(Model model, @ModelAttribute UserRegister user, @RequestHeader HttpHeaders headers, HttpServletRequest request) {
         String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
         String ip = "";
         if (headers != null && headers.get("x-forwarded-for") != null && headers.get("x-forwarded-for").get(0) != null) {
             ip = headers.get("x-forwarded-for").get(0);
         }
         boolean captchaPassed = SecurityUtil.checkCaptcha(gRecaptchaResponse, ip);
-        if (!captchaPassed) {
+        if (StringUtils.isEmpty(gRecaptchaResponse) || !captchaPassed) {
             model.addAttribute("usDepart", AirportUtil.getDepartureLocations(1));
             model.addAttribute("canadaDepart", AirportUtil.getDepartureLocations(2));
             model.addAttribute("user", user);
+            model.addAttribute("success", "false");
             model.addAttribute("captchaFailed", "true");
             return "signup";
         }
