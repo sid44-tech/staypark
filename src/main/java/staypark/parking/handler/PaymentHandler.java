@@ -18,11 +18,9 @@ import net.authorize.api.controller.CreateTransactionController;
 @Slf4j
 public class PaymentHandler {
 
-	//Live Authorize.net API Information
+	//Payment provider API credentials
 	private static String API_LOGIN_KEY = "";
 	private static String API_TRANSACTION_KEY = "";
-	//Test Authorize.net API Information
-	//private static String key = "";
 
 	//Blocked card names and email prefixes (with domain). Empty entries are ignored.
 	private static final String[] BLOCKED_CC_NAMES = { "", "" };

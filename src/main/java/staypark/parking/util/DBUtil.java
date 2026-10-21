@@ -11,21 +11,11 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class DBUtil {
-	//TEST
-//	private final static String USER_NAME = "";
-//	private final static String PASSWORD = "";
-//	private final static String DATABASE_URL = "";
-	
-	//NEW LIVE
+	//Database connection settings
 	private final static String USER_NAME = "";
 	private final static String PASSWORD = "";
 	private final static String DATABASE_URL = "";
 
-	//OLD LIVE
-//	private final static String USER_NAME = ;
-//	private final static String PASSWORD = ;
-//	private final static String DATABASE_URL = ;
-	
 	public static Connection getConnection() {
 		Connection conn = null;
 		MysqlDataSource dataSource = new MysqlDataSource();
